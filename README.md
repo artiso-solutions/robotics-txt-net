@@ -1,2 +1,2 @@
-# roboTXT
-Simple communication library for controling the Fischertechnik RoboTXT controller from .Net
+# robotics-TXT-net
+Simple communication library for controling the Fischertechnik ROBOTICS TXT controller from .Net
