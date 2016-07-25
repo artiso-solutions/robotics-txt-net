@@ -73,7 +73,7 @@ namespace artiso.Fischertechnik.RoboTxt.Lib.xxxObsoletexxx
             byte[] cmdBytes;
             using (var memoryStream = new MemoryStream())
             {
-                ArchiveWriter.WriteUInt32(memoryStream, CommandIds.SendStartOnline);
+                ArchiveWriter.WriteInt32(memoryStream, CommandIds.SendStartOnline);
                 ArchiveWriter.WriteString(memoryStream, "Online", 64);
 
                 cmdBytes = memoryStream.ToArray();
@@ -99,12 +99,12 @@ namespace artiso.Fischertechnik.RoboTxt.Lib.xxxObsoletexxx
             byte[] sendBytes;
             using (var memoryStream = new MemoryStream())
             {
-                ArchiveWriter.WriteUInt32(memoryStream, CommandIds.SendUpdateConfig);
-                ArchiveWriter.WriteUInt16(memoryStream, ++updateConfigSequence);
-                ArchiveWriter.WriteUInt16(memoryStream, 0);
+                ArchiveWriter.WriteInt32(memoryStream, CommandIds.SendUpdateConfig);
+                ArchiveWriter.WriteInt16(memoryStream, ++updateConfigSequence);
+                ArchiveWriter.WriteInt16(memoryStream, (ushort)0);
 
                 // config dummy (Tx only)
-                ArchiveWriter.WriteUInt32(memoryStream, 0);
+                ArchiveWriter.WriteInt32(memoryStream, 0);
 
                 // motor configuration
                 ArchiveWriter.WriteBytes(memoryStream, 1, 1, 1, 1);
@@ -156,31 +156,31 @@ namespace artiso.Fischertechnik.RoboTxt.Lib.xxxObsoletexxx
             byte[] sendBytes;
             using (var memoryStream = new MemoryStream())
             {
-                ArchiveWriter.WriteUInt32(memoryStream, CommandIds.SendExchangeData);
+                ArchiveWriter.WriteInt32(memoryStream, CommandIds.SendExchangeData);
 
                 // speed
                 var motorSpeeds = new ushort[8];
                 motorSpeeds[motorIndex * 2] = speedLeft;
                 motorSpeeds[motorIndex * 2 + 1] = speedRight;
-                ArchiveWriter.WriteUInt16(memoryStream, motorSpeeds);
+                ArchiveWriter.WriteInt16(memoryStream, motorSpeeds);
 
                 // synchronization
-                ArchiveWriter.WriteUInt16(memoryStream, new ushort[4]);
+                ArchiveWriter.WriteInt16(memoryStream, new ushort[4]);
 
                 // distance
                 var motorDistances = new ushort[4];
                 motorDistances[motorIndex] = (ushort)distance;
-                ArchiveWriter.WriteUInt16(memoryStream, motorDistances);
+                ArchiveWriter.WriteInt16(memoryStream, motorDistances);
 
                 // command
                 motorConfigSequence[motorIndex]++;
-                ArchiveWriter.WriteUInt16(memoryStream, motorConfigSequence);
+                ArchiveWriter.WriteInt16(memoryStream, motorConfigSequence);
 
                 // counter reset
-                ArchiveWriter.WriteUInt16(memoryStream, new ushort[4]);
+                ArchiveWriter.WriteInt16(memoryStream, new ushort[4]);
 
                 // sound gedöns
-                ArchiveWriter.WriteUInt16(memoryStream, new ushort[4]);
+                ArchiveWriter.WriteInt16(memoryStream, new ushort[4]);
 
                 sendBytes = memoryStream.ToArray();
             }

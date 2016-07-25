@@ -30,7 +30,11 @@ namespace RoboTxtLibTests
         {
             using (var tcpControllerDriver = PrepareTcpControllerDriver())
             {
-                var queryStatusResponseMessage = tcpControllerDriver.SendCommand<QueryStatusCommandMessage, QueryStatusResponseMessage>(new QueryStatusCommandMessage());
+                var message = new QueryStatusCommandMessage();
+                var bytes = new TcpControllerDriver().GetBytesOfMessage(message);
+                Assert.AreEqual(4, bytes.Length);
+
+                var queryStatusResponseMessage = tcpControllerDriver.SendCommand<QueryStatusCommandMessage, QueryStatusResponseMessage>(message);
 
                 Assert.IsNotNull(queryStatusResponseMessage);
                 Assert.AreEqual("TX2013", queryStatusResponseMessage.Name);
@@ -43,7 +47,11 @@ namespace RoboTxtLibTests
         {
             using (var tcpControllerDriver = PrepareTcpControllerDriver())
             {
-                tcpControllerDriver.SendCommand(new StartOnlineCommandMessage());
+                var message = new StartOnlineCommandMessage();
+                var bytes = new TcpControllerDriver().GetBytesOfMessage(message);
+                Assert.AreEqual(68, bytes.Length);
+
+                tcpControllerDriver.SendCommand(message);
             }
         }
 
@@ -59,19 +67,22 @@ namespace RoboTxtLibTests
         [TestMethod]
         public void UpdateConfig()
         {
+            StartOnline();
             using (var tcpControllerDriver = PrepareTcpControllerDriver())
             {
-                tcpControllerDriver.SendCommand(new StartOnlineCommandMessage());
-
                 try
                 {
-                    tcpControllerDriver.SendCommand(new UpdateConfigCommandMessage
+                    var message = new UpdateConfigCommandMessage
                     {
                         UpdateConfigSequence = 0,
                         MotorModes = new[] { MotorMode.M1, MotorMode.M1, MotorMode.M1, MotorMode.M1 },
                         InputConfigurations = Enumerable.Repeat(new InputConfiguration { InputMode = InputMode.Resistance, IsDigital = true }, 8).ToArray(),
                         CounterModes = new[] { CounterMode.Normal, CounterMode.Normal, CounterMode.Normal, CounterMode.Normal }
-                    });
+                    };
+                    var bytes = new TcpControllerDriver().GetBytesOfMessage(message);
+                    Assert.AreEqual(96, bytes.Length);
+
+                    tcpControllerDriver.SendCommand(message);
                 }
                 finally
                 {

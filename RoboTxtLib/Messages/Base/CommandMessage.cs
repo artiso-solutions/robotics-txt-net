@@ -9,7 +9,7 @@ namespace artiso.Fischertechnik.RoboTxt.Lib.Messages.Base
             ExpectedResponseId = expectedResponseId;
 
             SerializationProperties = new List<PropertySerializationInfo>();
-            this.AddProperty("CommandId", s => ArchiveWriter.WriteUInt32(s, CommandId));
+            this.AddProperty("CommandId", s => ArchiveWriter.WriteInt32(s, CommandId));
         }
 
         public uint ExpectedResponseId { get; }

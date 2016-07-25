@@ -52,6 +52,8 @@
     <Compile Include="Messages\Base\ArchiveReader.cs" />
     <Compile Include="Messages\Base\ArchiveWriter.cs" />
     <Compile Include="Messages\CommandIds.cs" />
+    <Compile Include="Messages\ExchangeDataCommandMessage.cs" />
+    <Compile Include="Messages\ExchangeDataResponseMessage.cs" />
     <Compile Include="xxxObsoletexxx\CommunicationManager.cs" />
     <Compile Include="Messages\Base\CommandMessage.cs" />
     <Compile Include="ControllerDriver\CommunicationFailedException.cs" />

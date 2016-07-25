@@ -5,13 +5,19 @@ namespace artiso.Fischertechnik.RoboTxt.Lib.Messages.Base
 {
     public class ArchiveWriter
     {
-        public static void WriteUInt32(Stream stream, uint value)
+        public static void WriteInt32(Stream stream, uint value)
         {
             var buffer = BitConverter.GetBytes(value);
             stream.Write(buffer, 0, buffer.Length);
         }
 
-        public static void WriteUInt16(Stream stream, ushort[] values)
+        public static void WriteInt32(Stream stream, int value)
+        {
+            var buffer = BitConverter.GetBytes(value);
+            stream.Write(buffer, 0, buffer.Length);
+        }
+
+        public static void WriteInt16(Stream stream, ushort[] values)
         {
             foreach (var value in values)
             {
@@ -20,12 +26,26 @@ namespace artiso.Fischertechnik.RoboTxt.Lib.Messages.Base
             }
         }
 
-        public static void WriteUInt16(Stream stream, ushort value)
+        public static void WriteInt16(Stream stream, ushort value)
         {
             var buffer = BitConverter.GetBytes(value);
             stream.Write(buffer, 0, buffer.Length);
         }
 
+        public static void WriteInt16(Stream stream, short[] values)
+        {
+            foreach (var value in values)
+            {
+                var buffer = BitConverter.GetBytes(value);
+                stream.Write(buffer, 0, buffer.Length);
+            }
+        }
+
+        public static void WriteInt16(Stream stream, short value)
+        {
+            var buffer = BitConverter.GetBytes(value);
+            stream.Write(buffer, 0, buffer.Length);
+        }
         public static void WriteString(Stream stream, string value, int length)
         {
             foreach (var c in value)
@@ -40,7 +60,7 @@ namespace artiso.Fischertechnik.RoboTxt.Lib.Messages.Base
         public static void WriteAppendedString(Stream stream, string value)
         {
             // Trenner
-            WriteUInt16(stream, 0);
+            WriteInt16(stream, (ushort)0);
 
             // String Inhalt
             foreach (var c in value)
@@ -50,7 +70,7 @@ namespace artiso.Fischertechnik.RoboTxt.Lib.Messages.Base
             }
 
             // Null Terminierung
-            WriteUInt16(stream, 0);
+            WriteInt16(stream, (ushort)0);
         }
 
         public static void WriteNullTerminatedString(Stream stream, string value, int maxStringLength)
@@ -67,12 +87,12 @@ namespace artiso.Fischertechnik.RoboTxt.Lib.Messages.Base
             }
 
             // Null Terminierung
-            WriteUInt16(stream, 0);
+            WriteInt16(stream, (ushort)0);
 
             // Max Length auffüllen
             for (var i = value.Length; i < maxStringLength; i++)
             {
-                WriteUInt16(stream, 0);
+                WriteInt16(stream, (ushort)0);
             }
         }
 

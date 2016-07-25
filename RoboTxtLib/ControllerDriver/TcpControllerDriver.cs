@@ -105,7 +105,7 @@ namespace artiso.Fischertechnik.RoboTxt.Lib.ControllerDriver
         }
 
         [NotNull]
-        private byte[] GetBytesOfMessage([NotNull] CommandMessage message)
+        public byte[] GetBytesOfMessage([NotNull] CommandMessage message)
         {
             logger.DebugExt($"Serialize message of type {message.GetType().FullName}");
             using (var memoryStream = new MemoryStream())
