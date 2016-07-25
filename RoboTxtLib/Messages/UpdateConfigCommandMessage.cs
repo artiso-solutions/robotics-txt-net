@@ -4,9 +4,9 @@ using artiso.Fischertechnik.RoboTxt.Lib.Messages.Base;
 
 namespace artiso.Fischertechnik.RoboTxt.Lib.Messages
 {
-    public class UpdateConfiguCommandMessage : CommandMessage
+    public class UpdateConfigCommandMessage : CommandMessage
     {
-        public UpdateConfiguCommandMessage() : base(CommandIds.SendUpdateConfig, CommandIds.ReceiveUpdateConfig)
+        public UpdateConfigCommandMessage() : base(CommandIds.SendUpdateConfig, CommandIds.ReceiveUpdateConfig)
         {
             this.AddProperty("UpdateConfigSequence", stream => ArchiveWriter.WriteUInt16(stream, UpdateConfigSequence))
                 .AddProperty("Dummy1", stream => ArchiveWriter.WriteUInt16(stream, 0))

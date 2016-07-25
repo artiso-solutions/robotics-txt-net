@@ -65,13 +65,53 @@ namespace RoboTxtLibTests
 
                 try
                 {
-                    tcpControllerDriver.SendCommand(new UpdateConfiguCommandMessage
+                    tcpControllerDriver.SendCommand(new UpdateConfigCommandMessage
                     {
-                        UpdateConfigSequence = 1,
-                        MotorModes = new[] { MotorMode.M1, MotorMode.M1, MotorMode.M1, MotorMode.M1, },
+                        UpdateConfigSequence = 0,
+                        MotorModes = new[] { MotorMode.M1, MotorMode.M1, MotorMode.M1, MotorMode.M1 },
                         InputConfigurations = Enumerable.Repeat(new InputConfiguration { InputMode = InputMode.Resistance, IsDigital = true }, 8).ToArray(),
                         CounterModes = new[] { CounterMode.Normal, CounterMode.Normal, CounterMode.Normal, CounterMode.Normal }
                     });
+                }
+                finally
+                {
+                    tcpControllerDriver.SendCommand(new StopOnlineCommandMessage());
+                }
+            }
+        }
+
+        [TestMethod]
+        public void TurnRobotLeftAndRight()
+        {
+            using (var tcpControllerDriver = PrepareTcpControllerDriver())
+            {
+                tcpControllerDriver.SendCommand(new StartOnlineCommandMessage());
+
+                try
+                {
+                    tcpControllerDriver.SendCommand(new UpdateConfigCommandMessage
+                    {
+                        UpdateConfigSequence = 0,
+                        MotorModes = new[] { MotorMode.O1O2, MotorMode.O1O2, MotorMode.O1O2, MotorMode.O1O2 },
+                        InputConfigurations = Enumerable.Repeat(new InputConfiguration { InputMode = InputMode.Resistance, IsDigital = true }, 8).ToArray(),
+                        CounterModes = new[] { CounterMode.Normal, CounterMode.Normal, CounterMode.Normal, CounterMode.Normal }
+                    });
+
+                    var endTime = DateTime.Now.AddSeconds(3);
+                    //for (var t = DateTime.Now; t < endTime; t = DateTime.Now)
+                    //{
+                    //    tcpControllerDriver.SendCommand(new StartMotorLeft(0, 256, 0);
+                    //}
+                    //tcpControllerDriver.StopMotor(0);
+
+                    //Thread.Sleep(TimeSpan.FromSeconds(1));
+
+                    //endTime = DateTime.Now.AddSeconds(3);
+                    //for (var t = DateTime.Now; t < endTime; t = DateTime.Now)
+                    //{
+                    //    tcpControllerDriver.StartMotorRight(0, 256, 0);
+                    //}
+                    //tcpControllerDriver.StopMotor(0);
                 }
                 finally
                 {

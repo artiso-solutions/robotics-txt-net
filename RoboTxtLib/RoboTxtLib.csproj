@@ -71,7 +71,7 @@
     <Compile Include="Messages\Base\ResponseMessageExtensions.cs" />
     <Compile Include="Messages\StartOnlineCommandMessage.cs" />
     <Compile Include="Messages\StopOnlineCommandMessage.cs" />
-    <Compile Include="Messages\UpdateConfiguCommandMessage.cs" />
+    <Compile Include="Messages\UpdateConfigCommandMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ControllerDriver\TcpControllerDriver.cs" />
   </ItemGroup>

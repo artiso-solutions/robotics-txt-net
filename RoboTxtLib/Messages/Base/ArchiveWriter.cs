@@ -34,7 +34,7 @@ namespace artiso.Fischertechnik.RoboTxt.Lib.Messages.Base
                 stream.Write(buffer, 0, buffer.Length);
             }
 
-            stream.Write(new byte[length - value.Length], 0, length - value.Length);
+            stream.Write(new byte[length - value.Length*2], 0, length - value.Length*2);
         }
 
         public static void WriteAppendedString(Stream stream, string value)

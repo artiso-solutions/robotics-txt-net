@@ -5,7 +5,7 @@ using System.Threading;
 
 namespace RoboTxtLibTests
 {
-    [TestClass]
+    //[TestClass]
     public class SimpleTests
     {
         [TestMethod]
