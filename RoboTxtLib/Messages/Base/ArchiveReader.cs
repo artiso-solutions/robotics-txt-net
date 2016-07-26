@@ -1,7 +1,7 @@
 using System;
 using System.Text;
 
-namespace artiso.Fischertechnik.RoboTxt.Lib.Messages.Base
+namespace artiso.Fischertechnik.TxtController.Lib.Messages.Base
 {
     public class ArchiveReader
     {

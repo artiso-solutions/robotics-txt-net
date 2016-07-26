@@ -6,8 +6,8 @@
     <ProjectGuid>{13E71A85-3ED3-44FB-B178-D5B000CDE95D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RoboTxtLibTests</RootNamespace>
-    <AssemblyName>RoboTxtLibTests</AssemblyName>
+    <RootNamespace>TxtControllerLibTests</RootNamespace>
+    <AssemblyName>TxtCXontrollerLibTests</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -60,9 +60,9 @@
     <Compile Include="TcpControllerDriverTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\RoboTxtLib\RoboTxtLib.csproj">
+    <ProjectReference Include="..\RoboTxtLib\TxtControllerLib.csproj">
       <Project>{877FAE27-64DF-4C56-B2AC-5E48CF35C151}</Project>
-      <Name>RoboTxtLib</Name>
+      <Name>TxtControllerLib</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -1,9 +1,9 @@
-﻿using artiso.Fischertechnik.RoboTxt.Lib.xxxObsoletexxx;
+﻿using artiso.Fischertechnik.TxtController.Lib.xxxObsoletexxx;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Threading;
 
-namespace RoboTxtLibTests
+namespace TxtControllerLibTests
 {
     //[TestClass]
     public class SimpleTests

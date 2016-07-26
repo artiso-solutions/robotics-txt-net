@@ -1,4 +1,4 @@
-﻿using artiso.Fischertechnik.RoboTxt.Lib.Messages.Base;
+﻿using artiso.Fischertechnik.TxtController.Lib.Messages.Base;
 using JetBrains.Annotations;
 using log4net;
 using log4net.Util;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 
-namespace artiso.Fischertechnik.RoboTxt.Lib.ControllerDriver
+namespace artiso.Fischertechnik.TxtController.Lib.ControllerDriver
 {
     public class TcpControllerDriver : IDisposable
     {

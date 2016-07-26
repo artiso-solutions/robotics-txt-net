@@ -1,16 +1,18 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.25302.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoboTxtLib", "RoboTxtLib\RoboTxtLib.csproj", "{877FAE27-64DF-4C56-B2AC-5E48CF35C151}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TxtControllerLib", "RoboTxtLib\TxtControllerLib.csproj", "{877FAE27-64DF-4C56-B2AC-5E48CF35C151}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoboTxtLibTests", "RoboTxtLibTests\RoboTxtLibTests.csproj", "{13E71A85-3ED3-44FB-B178-D5B000CDE95D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TxtControllerLibTests", "RoboTxtLibTests\TxtControllerLibTests.csproj", "{13E71A85-3ED3-44FB-B178-D5B000CDE95D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9633D989-86F9-4CE2-BA1B-BA1C9EF3C4E1}"
 	ProjectSection(SolutionItems) = preProject
 		README.md = README.md
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoboCommandsLib", "RoboCommandsLib\RoboCommandsLib.csproj", "{EDBA94E9-470E-4886-AEFE-1DA892A72CC3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,6 +28,10 @@ Global
 		{13E71A85-3ED3-44FB-B178-D5B000CDE95D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{13E71A85-3ED3-44FB-B178-D5B000CDE95D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{13E71A85-3ED3-44FB-B178-D5B000CDE95D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EDBA94E9-470E-4886-AEFE-1DA892A72CC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDBA94E9-470E-4886-AEFE-1DA892A72CC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDBA94E9-470E-4886-AEFE-1DA892A72CC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDBA94E9-470E-4886-AEFE-1DA892A72CC3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

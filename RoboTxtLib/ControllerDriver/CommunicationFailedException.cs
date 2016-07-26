@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace artiso.Fischertechnik.RoboTxt.Lib.ControllerDriver
+namespace artiso.Fischertechnik.TxtController.Lib.ControllerDriver
 {
     public class CommunicationFailedException : Exception
     {

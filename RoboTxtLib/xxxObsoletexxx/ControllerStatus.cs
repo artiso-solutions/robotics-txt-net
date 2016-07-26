@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace artiso.Fischertechnik.RoboTxt.Lib.xxxObsoletexxx
+namespace artiso.Fischertechnik.TxtController.Lib.xxxObsoletexxx
 {
     [Obsolete]
     public struct ControllerStatus

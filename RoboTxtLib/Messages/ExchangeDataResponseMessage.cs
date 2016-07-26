@@ -1,7 +1,7 @@
 using System;
-using artiso.Fischertechnik.RoboTxt.Lib.Messages.Base;
+using artiso.Fischertechnik.TxtController.Lib.Messages.Base;
 
-namespace artiso.Fischertechnik.RoboTxt.Lib.Messages
+namespace artiso.Fischertechnik.TxtController.Lib.Messages
 {
     public class ExchangeDataResponseMessage : ResponseMessage
     {

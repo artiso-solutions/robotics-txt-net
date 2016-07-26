@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using artiso.Fischertechnik.RoboTxt.Lib.ControllerDriver;
+using artiso.Fischertechnik.TxtController.Lib.ControllerDriver;
 
-namespace artiso.Fischertechnik.RoboTxt.Lib.Messages.Base
+namespace artiso.Fischertechnik.TxtController.Lib.Messages.Base
 {
     public class ResponseMessage : ControllerMessage
     {

@@ -1,8 +1,8 @@
 using System.Linq;
-using artiso.Fischertechnik.RoboTxt.Lib.Configuration;
-using artiso.Fischertechnik.RoboTxt.Lib.Messages.Base;
+using artiso.Fischertechnik.TxtController.Lib.Configuration;
+using artiso.Fischertechnik.TxtController.Lib.Messages.Base;
 
-namespace artiso.Fischertechnik.RoboTxt.Lib.Messages
+namespace artiso.Fischertechnik.TxtController.Lib.Messages
 {
     public class UpdateConfigCommandMessage : CommandMessage
     {

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace artiso.Fischertechnik.RoboTxt.Lib.Messages.Base
+namespace artiso.Fischertechnik.TxtController.Lib.Messages.Base
 {
     public abstract class CommandMessage : ControllerMessage
     {

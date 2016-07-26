@@ -7,8 +7,8 @@
     <ProjectGuid>{877FAE27-64DF-4C56-B2AC-5E48CF35C151}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>artiso.Fischertechnik.RoboTxt.Lib</RootNamespace>
-    <AssemblyName>artiso.Fischertechnik.RoboTxt.Lib</AssemblyName>
+    <RootNamespace>artiso.Fischertechnik.TxtController.Lib</RootNamespace>
+    <AssemblyName>artiso.Fischertechnik.TxtController.Lib</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -54,6 +54,7 @@
     <Compile Include="Messages\CommandIds.cs" />
     <Compile Include="Messages\ExchangeDataCommandMessage.cs" />
     <Compile Include="Messages\ExchangeDataResponseMessage.cs" />
+    <Compile Include="TxtCommands\TxtCommands.cs" />
     <Compile Include="xxxObsoletexxx\CommunicationManager.cs" />
     <Compile Include="Messages\Base\CommandMessage.cs" />
     <Compile Include="ControllerDriver\CommunicationFailedException.cs" />

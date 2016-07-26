@@ -1,12 +1,12 @@
-﻿using artiso.Fischertechnik.RoboTxt.Lib.Messages;
-using artiso.Fischertechnik.RoboTxt.Lib.Messages.Base;
+﻿using artiso.Fischertechnik.TxtController.Lib.Messages;
+using artiso.Fischertechnik.TxtController.Lib.Messages.Base;
 using System;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 
-namespace artiso.Fischertechnik.RoboTxt.Lib.xxxObsoletexxx
+namespace artiso.Fischertechnik.TxtController.Lib.xxxObsoletexxx
 {
     [Obsolete]
     public class CommunicationManager : IDisposable

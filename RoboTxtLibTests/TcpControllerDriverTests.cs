@@ -1,6 +1,6 @@
-﻿using artiso.Fischertechnik.RoboTxt.Lib.Configuration;
-using artiso.Fischertechnik.RoboTxt.Lib.ControllerDriver;
-using artiso.Fischertechnik.RoboTxt.Lib.Messages;
+﻿using artiso.Fischertechnik.TxtController.Lib.Configuration;
+using artiso.Fischertechnik.TxtController.Lib.ControllerDriver;
+using artiso.Fischertechnik.TxtController.Lib.Messages;
 using log4net;
 using log4net.Appender;
 using log4net.Layout;
@@ -9,7 +9,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
 
-namespace RoboTxtLibTests
+namespace TxtControllerLibTests
 {
     [TestClass]
     public class TcpControllerDriverTests

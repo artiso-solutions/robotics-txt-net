@@ -1,4 +1,4 @@
-namespace artiso.Fischertechnik.RoboTxt.Lib.Configuration
+namespace artiso.Fischertechnik.TxtController.Lib.Configuration
 {
     public enum InputMode
     {

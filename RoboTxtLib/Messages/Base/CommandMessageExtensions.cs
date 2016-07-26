@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using JetBrains.Annotations;
 
-namespace artiso.Fischertechnik.RoboTxt.Lib.Messages.Base
+namespace artiso.Fischertechnik.TxtController.Lib.Messages.Base
 {
     public static class CommandMessageExtensions
     {
