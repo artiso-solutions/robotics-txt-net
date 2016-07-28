@@ -7,10 +7,13 @@ namespace artiso.Fischertechnik.TxtController.Lib.Messages
     {
         public ExchangeDataResponseMessage() : base(CommandIds.ReceiveExchangeData)
         {
+            UniversalInputs = new short[8];
+            CounterInput = new short[4];
+            CounterValue = new short[4];
+
             this.AddProperty("UniversalInputs", dc => UniversalInputs = ArchiveReader.ReadInt16(dc, 8))
                 .AddProperty("CounterInput", dc => CounterInput = ArchiveReader.ReadInt16(dc, 4))
                 .AddProperty("CounterValue", dc => CounterValue = ArchiveReader.ReadInt16(dc, 4));
-
         }
 
         /// <summary>

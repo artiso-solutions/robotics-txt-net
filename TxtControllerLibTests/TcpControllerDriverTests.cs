@@ -76,17 +76,7 @@ namespace TxtControllerLibTests
             {
                 try
                 {
-                    var message = new UpdateConfigCommandMessage
-                    {
-                        UpdateConfigSequence = 0,
-                        MotorModes = new[] { MotorMode.M1, MotorMode.M1, MotorMode.M1, MotorMode.M1 },
-                        InputConfigurations = Enumerable.Repeat(new InputConfiguration { InputMode = InputMode.Resistance, IsDigital = true }, 8).ToArray(),
-                        CounterModes = new[] { CounterMode.Normal, CounterMode.Normal, CounterMode.Normal, CounterMode.Normal }
-                    };
-                    var bytes = new TcpControllerDriver(Communication.USB).GetBytesOfMessage(message);
-                    Assert.AreEqual(96, bytes.Length);
-
-                    tcpControllerDriver.SendCommand(message);
+                    SetConfigM1(tcpControllerDriver);
                 }
                 finally
                 {
@@ -104,14 +94,7 @@ namespace TxtControllerLibTests
 
                 try
                 {
-                    tcpControllerDriver.SendCommand(new UpdateConfigCommandMessage
-                    {
-                        UpdateConfigSequence = 0,
-                        MotorModes = new[] { MotorMode.O1O2, MotorMode.O1O2, MotorMode.O1O2, MotorMode.O1O2 },
-                        InputConfigurations = Enumerable.Repeat(new InputConfiguration { InputMode = InputMode.Resistance, IsDigital = true }, 8).ToArray(),
-                        CounterModes = new[] { CounterMode.Normal, CounterMode.Normal, CounterMode.Normal, CounterMode.Normal }
-                    });
-
+                    SetConfigO1O2(tcpControllerDriver);
 
                     var startMotorLeftCommand = new ExchangeDataCommandMessage
                     {
@@ -164,7 +147,6 @@ namespace TxtControllerLibTests
             }
         }
 
-
         [TestMethod]
         public void TurnRobotLeftAndRightDistance()
         {
@@ -174,14 +156,7 @@ namespace TxtControllerLibTests
 
                 try
                 {
-                    tcpControllerDriver.SendCommand(new UpdateConfigCommandMessage
-                    {
-                        UpdateConfigSequence = 0,
-                        MotorModes = new[] { MotorMode.O1O2, MotorMode.O1O2, MotorMode.O1O2, MotorMode.O1O2 },
-                        InputConfigurations = Enumerable.Repeat(new InputConfiguration { InputMode = InputMode.Resistance, IsDigital = true }, 8).ToArray(),
-                        CounterModes = new[] { CounterMode.Normal, CounterMode.Normal, CounterMode.Normal, CounterMode.Normal }
-                    });
-
+                    SetConfigO1O2(tcpControllerDriver);
 
                     var startMotorLeftCommand = new ExchangeDataCommandMessage
                     {
@@ -238,6 +213,61 @@ namespace TxtControllerLibTests
             }
         }
 
+        [TestMethod]
+        public void TurnRobotWhileButtonPressed()
+        {
+            short commandId = 0;
+            ExchangeDataResponseMessage response = new ExchangeDataResponseMessage();
+
+            using (var tcpControllerDriver = PrepareTcpControllerDriver())
+            {
+                tcpControllerDriver.SendCommand(new StartOnlineCommandMessage());
+
+                try
+                {
+                    SetConfigO1O2(tcpControllerDriver);
+
+                    var Command = new ExchangeDataCommandMessage
+                    {
+                        PwmOutputValues = new short[] { 0, 0, 0, 0, 0, 0, 0, 0 },
+                        MotorCommandId = new short[] { commandId, commandId, commandId, commandId }
+                    };
+                    commandId++;
+
+                    while (response.UniversalInputs[0] == 0)
+                    {
+                        response = tcpControllerDriver.SendCommand<ExchangeDataCommandMessage, ExchangeDataResponseMessage>(Command);
+                    }
+
+                    Command = new ExchangeDataCommandMessage
+                    {
+                        PwmOutputValues = new short[] { 256, 0, 0, 0, 0, 0, 0, 0 },
+                        MotorCommandId = new short[] { commandId, commandId, commandId, commandId }
+                    };
+                    commandId++;
+
+                    while (response.UniversalInputs[0] == 1)
+                    {
+                        response = tcpControllerDriver.SendCommand<ExchangeDataCommandMessage, ExchangeDataResponseMessage>(Command);
+                    }
+
+                    Command = new ExchangeDataCommandMessage
+                    {
+                        PwmOutputValues = new short[] { 0, 0, 0, 0, 0, 0, 0, 0 },
+                        MotorCommandId = new short[] { commandId, commandId, commandId, commandId }
+                    };
+                    commandId++;
+
+                    response = tcpControllerDriver.SendCommand<ExchangeDataCommandMessage, ExchangeDataResponseMessage>(Command);
+
+                }
+                finally
+                {
+                    tcpControllerDriver.SendCommand(new StopOnlineCommandMessage());
+                }
+            }
+        }
+
         public TestContext TestContext { get; set; }
 
         private TcpControllerDriver PrepareTcpControllerDriver()
@@ -247,6 +277,32 @@ namespace TxtControllerLibTests
             var tcpControllerDriver = new TcpControllerDriver(Communication.USB);
             tcpControllerDriver.StartCommunication();
             return tcpControllerDriver;
+        }
+
+        private void SetConfigM1(TcpControllerDriver tcpControllerDriver)
+        {
+            var message = new UpdateConfigCommandMessage
+            {
+                UpdateConfigSequence = 0,
+                MotorModes = new[] { MotorMode.M1, MotorMode.M1, MotorMode.M1, MotorMode.M1 },
+                InputConfigurations = Enumerable.Repeat(new InputConfiguration { InputMode = InputMode.Resistance, IsDigital = true }, 8).ToArray(),
+                CounterModes = new[] { CounterMode.Normal, CounterMode.Normal, CounterMode.Normal, CounterMode.Normal }
+            };
+            var bytes = new TcpControllerDriver(Communication.USB).GetBytesOfMessage(message);
+            Assert.AreEqual(96, bytes.Length);
+
+            tcpControllerDriver.SendCommand(message);
+        }
+
+        private void SetConfigO1O2(TcpControllerDriver tcpControllerDriver)
+        {
+            tcpControllerDriver.SendCommand(new UpdateConfigCommandMessage
+            {
+                UpdateConfigSequence = 0,
+                MotorModes = new[] { MotorMode.O1O2, MotorMode.O1O2, MotorMode.O1O2, MotorMode.O1O2 },
+                InputConfigurations = Enumerable.Repeat(new InputConfiguration { InputMode = InputMode.Resistance, IsDigital = true }, 8).ToArray(),
+                CounterModes = new[] { CounterMode.Normal, CounterMode.Normal, CounterMode.Normal, CounterMode.Normal }
+            });
         }
     }
 }
