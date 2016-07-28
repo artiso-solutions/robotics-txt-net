@@ -13,7 +13,9 @@ using System.Threading;
 
 namespace TxtControllerLibTests
 {
-    [TestClass]
+   using artiso.Fischertechnik.TxtController.Lib.Contracts;
+
+   [TestClass]
     public class TcpControllerDriverTests
     {
         [AssemblyInitialize]
@@ -33,7 +35,7 @@ namespace TxtControllerLibTests
             using (var tcpControllerDriver = PrepareTcpControllerDriver())
             {
                 var message = new QueryStatusCommandMessage();
-                var bytes = new TcpControllerDriver().GetBytesOfMessage(message);
+                var bytes = new TcpControllerDriver(Communication.USB).GetBytesOfMessage(message);
                 Assert.AreEqual(4, bytes.Length);
 
                 var queryStatusResponseMessage = tcpControllerDriver.SendCommand<QueryStatusCommandMessage, QueryStatusResponseMessage>(message);
@@ -50,7 +52,7 @@ namespace TxtControllerLibTests
             using (var tcpControllerDriver = PrepareTcpControllerDriver())
             {
                 var message = new StartOnlineCommandMessage();
-                var bytes = new TcpControllerDriver().GetBytesOfMessage(message);
+                var bytes = new TcpControllerDriver(Communication.USB).GetBytesOfMessage(message);
                 Assert.AreEqual(68, bytes.Length);
 
                 tcpControllerDriver.SendCommand(message);
@@ -81,7 +83,7 @@ namespace TxtControllerLibTests
                         InputConfigurations = Enumerable.Repeat(new InputConfiguration { InputMode = InputMode.Resistance, IsDigital = true }, 8).ToArray(),
                         CounterModes = new[] { CounterMode.Normal, CounterMode.Normal, CounterMode.Normal, CounterMode.Normal }
                     };
-                    var bytes = new TcpControllerDriver().GetBytesOfMessage(message);
+                    var bytes = new TcpControllerDriver(Communication.USB).GetBytesOfMessage(message);
                     Assert.AreEqual(96, bytes.Length);
 
                     tcpControllerDriver.SendCommand(message);
@@ -242,7 +244,7 @@ namespace TxtControllerLibTests
         {
             var logger = LogManager.GetLogger(typeof(TcpControllerDriverTests));
             logger.Info($"Preparing TcpControllerDriver");
-            var tcpControllerDriver = new TcpControllerDriver();
+            var tcpControllerDriver = new TcpControllerDriver(Communication.USB);
             tcpControllerDriver.StartCommunication();
             return tcpControllerDriver;
         }
