@@ -39,7 +39,7 @@ namespace artiso.Fischertechnik.TxtController.Lib.TxtCommands
                return tcpControllerDriver;
             }
 
-            tcpControllerDriver = new TcpControllerDriver();
+            tcpControllerDriver = new TcpControllerDriver(Communication.USB);
             tcpControllerDriver.StartCommunication();
             tcpControllerDriver.SendCommand(new StartOnlineCommandMessage());
             tcpControllerDriver.SendCommand(new UpdateConfigCommandMessage

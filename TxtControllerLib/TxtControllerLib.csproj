@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Contracts\Communication.cs" />
     <Compile Include="Contracts\Motor.cs" />
     <Compile Include="Contracts\Movement.cs" />
     <Compile Include="Contracts\Speed.cs" />
