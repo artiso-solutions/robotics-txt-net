@@ -1,36 +1,162 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace artiso.Fischertechnik.TxtController.Lib.TxtCommands
 {
-    public class TxtCommands
-    {
-        public static void StartMotorLeft(int MotorId, int MotorSpeed)
-        {
-            throw new NotImplementedException();
-        }
+   using System;
+   using System.ComponentModel;
+   using System.Linq;
+   using System.Threading;
 
-        public static void StartMotorRight(int MotorId, int MotorSpeed)
-        {
-            throw new NotImplementedException();
-        }
+   using artiso.Fischertechnik.TxtController.Lib.Configuration;
+   using artiso.Fischertechnik.TxtController.Lib.Contracts;
+   using artiso.Fischertechnik.TxtController.Lib.ControllerDriver;
+   using artiso.Fischertechnik.TxtController.Lib.Messages;
 
-        public static void StopMotor(int MotorId)
-        {
-            throw new NotImplementedException();
-        }
+   public static class TxtCommands
+   {
+      #region Constants and Fields
 
-        public static int[] ReadCounterValues()
-        {
-            throw new NotImplementedException();
-        }
+      private static readonly BackgroundWorker[] motorBackgroundWorkers;
 
-        public static int[] ReadInputValues()
-        {
-            throw new NotImplementedException();
-        }
-    }
+      private static TcpControllerDriver tcpControllerDriver;
+
+      #endregion
+
+      #region Constructors and Destructors
+
+      static TxtCommands()
+      {
+         motorBackgroundWorkers = new BackgroundWorker[Enum.GetValues(typeof(Motor)).Length];
+      }
+
+      #endregion
+
+      internal static TcpControllerDriver TcpControllerDriver
+      {
+         get
+         {
+            if (tcpControllerDriver != null)
+            {
+               return tcpControllerDriver;
+            }
+
+            tcpControllerDriver = new TcpControllerDriver();
+            tcpControllerDriver.StartCommunication();
+            tcpControllerDriver.SendCommand(new StartOnlineCommandMessage());
+            tcpControllerDriver.SendCommand(new UpdateConfigCommandMessage
+            {
+               UpdateConfigSequence = 0,
+               MotorModes = new[] { MotorMode.O1O2, MotorMode.O1O2, MotorMode.O1O2, MotorMode.O1O2 },
+               InputConfigurations = Enumerable.Repeat(new InputConfiguration { InputMode = InputMode.Resistance, IsDigital = true }, 8).ToArray(),
+               CounterModes = new[] { CounterMode.Normal, CounterMode.Normal, CounterMode.Normal, CounterMode.Normal }
+            });
+
+            return tcpControllerDriver;
+         }
+      }
+
+      #region Public Methods and Operators
+
+      public static int[] ReadCounterValues()
+      {
+         throw new NotImplementedException();
+      }
+
+      public static int[] ReadInputValues()
+      {
+         throw new NotImplementedException();
+      }
+
+      public static void StartMotor(Motor motor, Speed speed, Movement movement)
+      {
+         var index = (int)motor;
+         if (index > motorBackgroundWorkers.Length)
+         {
+            throw new ArgumentOutOfRangeException(nameof(motor), motor, "Motor is out of the defined range");
+         }
+
+         if (motorBackgroundWorkers[index] == null)
+         {
+            motorBackgroundWorkers[index] = new BackgroundWorker { WorkerSupportsCancellation = true };
+            motorBackgroundWorkers[index].DoWork += StartMotorDoWork;
+         }
+
+         while (motorBackgroundWorkers[index].IsBusy)
+         {
+            motorBackgroundWorkers[index].CancelAsync();
+            Thread.Sleep(10);
+         }
+
+         motorBackgroundWorkers[index].RunWorkerAsync(new MotorParameters { Motor = motor, Speed = speed, Movement = movement });
+      }
+
+      public static void StartMotorLeft(Motor motor, Speed speed)
+      {
+         StartMotor(motor, speed, Movement.Left);
+      }
+
+      public static void StartMotorRight(Motor motor, Speed speed)
+      {
+         StartMotor(motor, speed, Movement.Right);
+      }
+
+      public static void StopMotor(Motor motor)
+      {
+         var index = (int)motor;
+         if (index > motorBackgroundWorkers.Length)
+         {
+            throw new ArgumentOutOfRangeException(nameof(motor), motor, "Motor is out of the defined range");
+         }
+
+         if (motorBackgroundWorkers[index] == null)
+         {
+            return;
+         }
+
+         while (motorBackgroundWorkers[index].IsBusy)
+         {
+            motorBackgroundWorkers[index].CancelAsync();
+            Thread.Sleep(10);
+         }
+      }
+
+      #endregion
+
+      #region Methods
+
+      private static void StartMotorDoWork(object sender, DoWorkEventArgs e)
+      {
+         var worker = sender as BackgroundWorker;
+         if (worker == null)
+         {
+            return;
+         }
+
+         if (!(e.Argument is MotorParameters))
+         {
+            return;
+         }
+
+         var parameters = (MotorParameters)e.Argument;
+
+         while (!worker.CancellationPending)
+         {
+
+         }
+      }
+
+      #endregion
+
+      private struct MotorParameters
+      {
+         #region Constants and Fields
+
+         internal Motor Motor;
+
+         internal Speed Speed;
+
+         internal Movement Movement;
+
+         #endregion
+      }
+   }
 }

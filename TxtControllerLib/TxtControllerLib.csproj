@@ -49,6 +49,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Contracts\Motor.cs" />
+    <Compile Include="Contracts\Movement.cs" />
+    <Compile Include="Contracts\Speed.cs" />
     <Compile Include="Messages\Base\ArchiveReader.cs" />
     <Compile Include="Messages\Base\ArchiveWriter.cs" />
     <Compile Include="Messages\CommandIds.cs" />
