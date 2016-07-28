@@ -4,8 +4,17 @@ namespace artiso.Fischertechnik.TxtController.Lib.Messages
 {
     public class ExchangeDataCommandMessage : CommandMessage
     {
-        public ExchangeDataCommandMessage() : base(CommandIds.SendQueryStatus, CommandIds.ReceiveQueryStatus)
+        public ExchangeDataCommandMessage() : base(CommandIds.SendExchangeData, CommandIds.ReceiveExchangeData)
         {
+            PwmOutputValues = new short[] { 0, 0, 0, 0, 0, 0, 0, 0 };
+            MotorMaster = new short[] { 0, 0, 0, 0 };
+            MotorDistance = new short[] { 0, 0, 0, 0 };
+            MotorCommandId = new short[] { 0, 0, 0, 0 };
+            CounterResetCommandId = new short[] { 0, 0, 0, 0 };
+            SoundCommandId = 0;
+            SoundIndex = 0;
+            SoundRepeat = 0;
+
             this.AddProperty("PwmOutputValues", stream => ArchiveWriter.WriteInt16(stream, PwmOutputValues))
                 .AddProperty("MotorMaster", stream => ArchiveWriter.WriteInt16(stream, MotorMaster))
                 .AddProperty("MotorDistance", stream => ArchiveWriter.WriteInt16(stream, MotorDistance))
@@ -13,7 +22,8 @@ namespace artiso.Fischertechnik.TxtController.Lib.Messages
                 .AddProperty("CounterResetCommandId", stream => ArchiveWriter.WriteInt16(stream, CounterResetCommandId))
                 .AddProperty("SoundCommandId", stream => ArchiveWriter.WriteInt16(stream, SoundCommandId))
                 .AddProperty("SoundIndex", stream => ArchiveWriter.WriteInt16(stream, SoundIndex))
-                .AddProperty("SoundRepeat", stream => ArchiveWriter.WriteInt16(stream, SoundRepeat));
+                .AddProperty("SoundRepeat", stream => ArchiveWriter.WriteInt16(stream, SoundRepeat))
+                .AddProperty("Empty", stream => ArchiveWriter.WriteBytes(stream, new byte[2]));
         }
 
         /// <summary>
@@ -41,13 +51,13 @@ namespace artiso.Fischertechnik.TxtController.Lib.Messages
         /// m_pwmOutputValues can be changed without incrementing the command id. 
         /// A distance command is finished, if the m_motor_command_id in the response structure has the same value.
         /// </summary>
-        public short MotorCommandId { get; set; }
+        public short[] MotorCommandId { get; set; }
 
         /// <summary>
         /// If this values is incremented, the corresponding counter is reset. 
         /// The reset is finished, if m_counter_command_id in the response structure has the same value.
         /// </summary>
-        public short CounterResetCommandId { get; set; }
+        public short[] CounterResetCommandId { get; set; }
 
         /// <summary>
         /// This value must be incremented, whenever m_sound_index or m_sound_repeat change, or to play the same sound again.

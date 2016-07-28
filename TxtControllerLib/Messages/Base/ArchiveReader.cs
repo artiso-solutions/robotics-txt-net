@@ -26,6 +26,26 @@ namespace artiso.Fischertechnik.TxtController.Lib.Messages.Base
             return value;
         }
 
+        public static short ReadInt16(DeserializationContext deserializationContext)
+        {
+            var value = BitConverter.ToInt16(deserializationContext.Buffer, deserializationContext.CurrentPosition);
+            deserializationContext.CurrentPosition += 2;
+            return value;
+        }
+
+        public static short[] ReadInt16(DeserializationContext deserializationContext, int byteCount)
+        {
+            var result = new short[byteCount];
+
+            for (int i=0; i<byteCount; i++)
+            {
+                var value = BitConverter.ToInt16(deserializationContext.Buffer, deserializationContext.CurrentPosition);
+                result[i] = value;
+                deserializationContext.CurrentPosition += 2;
+            }
+            return result;
+        }
+
         public static string ReadString(byte[] bytes, int lengthOfString, ref int currentPosition)
         {
             var text = new string(Encoding.ASCII.GetChars(bytes, currentPosition, 16));

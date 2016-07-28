@@ -7,7 +7,9 @@ using log4net.Layout;
 using log4net.Repository.Hierarchy;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 
 namespace TxtControllerLibTests
 {
@@ -92,7 +94,7 @@ namespace TxtControllerLibTests
         }
 
         [TestMethod]
-        public void TurnRobotLeftAndRight()
+        public void TurnRobotLeftAndRightTime()
         {
             using (var tcpControllerDriver = PrepareTcpControllerDriver())
             {
@@ -108,21 +110,124 @@ namespace TxtControllerLibTests
                         CounterModes = new[] { CounterMode.Normal, CounterMode.Normal, CounterMode.Normal, CounterMode.Normal }
                     });
 
-                    var endTime = DateTime.Now.AddSeconds(3);
-                    //for (var t = DateTime.Now; t < endTime; t = DateTime.Now)
-                    //{
-                    //    tcpControllerDriver.SendCommand(new StartMotorLeft(0, 256, 0);
-                    //}
-                    //tcpControllerDriver.StopMotor(0);
 
-                    //Thread.Sleep(TimeSpan.FromSeconds(1));
+                    var startMotorLeftCommand = new ExchangeDataCommandMessage
+                    {
+                        PwmOutputValues = new short[] { 256, 0, 512, 0, 0, 0, 0, 0 },
+                        MotorCommandId = new short[] { 1, 1, 0, 0 }
+                    };
 
-                    //endTime = DateTime.Now.AddSeconds(3);
-                    //for (var t = DateTime.Now; t < endTime; t = DateTime.Now)
-                    //{
-                    //    tcpControllerDriver.StartMotorRight(0, 256, 0);
-                    //}
-                    //tcpControllerDriver.StopMotor(0);
+                    var stopMotorCommand1 = new ExchangeDataCommandMessage
+                    {
+                        PwmOutputValues = new short[] { 0, 0, 0, 0, 0, 0, 0, 0 },
+                        MotorCommandId = new short[] { 2, 2, 0, 0 }
+                    };
+
+                    var startMotorRightCommand = new ExchangeDataCommandMessage
+                    {
+                        PwmOutputValues = new short[] { 0, 256, 0, 512, 0, 0, 0, 0 },
+                        MotorCommandId = new short[] { 3, 3, 0, 0 }
+                    };
+
+                    var stopMotorCommand2 = new ExchangeDataCommandMessage
+                    {
+                        PwmOutputValues = new short[] { 0, 0, 0, 0, 0, 0, 0, 0 },
+                        MotorCommandId = new short[] { 4, 4, 0, 0 }
+                    };
+
+                    var test = tcpControllerDriver.GetBytesOfMessage(startMotorLeftCommand);
+                    Assert.AreEqual(60, tcpControllerDriver.GetBytesOfMessage(startMotorLeftCommand).Length);
+
+                    var endTime = DateTime.Now.AddSeconds(1.2);
+
+                    for (var t = DateTime.Now; t < endTime; t = DateTime.Now)
+                    {
+                        tcpControllerDriver.SendCommand(startMotorLeftCommand);
+                    }
+                    tcpControllerDriver.SendCommand(stopMotorCommand1);
+
+                    Thread.Sleep(TimeSpan.FromSeconds(1));
+
+                    endTime = DateTime.Now.AddSeconds(1);
+                    for (var t = DateTime.Now; t < endTime; t = DateTime.Now)
+                    {
+                        tcpControllerDriver.SendCommand(startMotorRightCommand);
+                    }
+                    tcpControllerDriver.SendCommand(stopMotorCommand2);
+                }
+                finally
+                {
+                    tcpControllerDriver.SendCommand(new StopOnlineCommandMessage());
+                }
+            }
+        }
+
+
+        [TestMethod]
+        public void TurnRobotLeftAndRightDistance()
+        {
+            using (var tcpControllerDriver = PrepareTcpControllerDriver())
+            {
+                tcpControllerDriver.SendCommand(new StartOnlineCommandMessage());
+
+                try
+                {
+                    tcpControllerDriver.SendCommand(new UpdateConfigCommandMessage
+                    {
+                        UpdateConfigSequence = 0,
+                        MotorModes = new[] { MotorMode.O1O2, MotorMode.O1O2, MotorMode.O1O2, MotorMode.O1O2 },
+                        InputConfigurations = Enumerable.Repeat(new InputConfiguration { InputMode = InputMode.Resistance, IsDigital = true }, 8).ToArray(),
+                        CounterModes = new[] { CounterMode.Normal, CounterMode.Normal, CounterMode.Normal, CounterMode.Normal }
+                    });
+
+
+                    var startMotorLeftCommand = new ExchangeDataCommandMessage
+                    {
+                        PwmOutputValues = new short[] { 256, 0, 512, 0, 0, 0, 0, 0 },
+                        MotorCommandId = new short[] { 1, 1, 0, 0 },
+                        MotorDistance = new short[] {  200, 200, 0,0 }
+                    };
+
+                    var stopMotorCommand1 = new ExchangeDataCommandMessage
+                    {
+                        PwmOutputValues = new short[] { 0, 0, 0, 0, 0, 0, 0, 0 },
+                        MotorCommandId = new short[] { 2, 2, 0, 0 }
+                    };
+
+                    var startMotorRightCommand = new ExchangeDataCommandMessage
+                    {
+                        PwmOutputValues = new short[] { 0, 256, 0, 512, 0, 0, 0, 0 },
+                        MotorDistance = new short[] { 200, 200, 0, 0 },
+                        MotorCommandId = new short[] { 3, 3, 0, 0 }
+                    };
+
+                    var stopMotorCommand2 = new ExchangeDataCommandMessage
+                    {
+                        PwmOutputValues = new short[] { 0, 0, 0, 0, 0, 0, 0, 0 },
+                        MotorCommandId = new short[] { 4, 4, 0, 0 }
+                    };
+
+                    var test = tcpControllerDriver.GetBytesOfMessage(startMotorLeftCommand);
+                    Assert.AreEqual(60, tcpControllerDriver.GetBytesOfMessage(startMotorLeftCommand).Length);
+
+                    var endTime = DateTime.Now.AddSeconds(4);
+
+                    for (var t = DateTime.Now; t < endTime; t = DateTime.Now)
+                    {
+                        var response = tcpControllerDriver.SendCommand<ExchangeDataCommandMessage, ExchangeDataResponseMessage>(startMotorLeftCommand);
+                        Debug.WriteLine(response.CounterValue[0]);
+                    }
+                    tcpControllerDriver.SendCommand(stopMotorCommand1);
+
+                    Thread.Sleep(TimeSpan.FromSeconds(1));
+
+                    endTime = DateTime.Now.AddSeconds(4);
+                    for (var t = DateTime.Now; t < endTime; t = DateTime.Now)
+                    {
+                        var response = tcpControllerDriver.SendCommand<ExchangeDataCommandMessage, ExchangeDataResponseMessage>(startMotorRightCommand);
+                        Debug.WriteLine(response.CounterValue[0]);
+                    }
+                    tcpControllerDriver.SendCommand(stopMotorCommand2);
                 }
                 finally
                 {

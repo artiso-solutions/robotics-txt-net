@@ -5,10 +5,12 @@ namespace artiso.Fischertechnik.TxtController.Lib.Messages
 {
     public class ExchangeDataResponseMessage : ResponseMessage
     {
-        public ExchangeDataResponseMessage() : base(CommandIds.ReceiveQueryStatus)
+        public ExchangeDataResponseMessage() : base(CommandIds.ReceiveExchangeData)
         {
-            //this.AddProperty("UniversalInputs", dc => UniversalInputs = ArchiveReader.ReadUInt16(dc, 0))
-            //    .AddProperty("CounterInput", dc => CounterInput = ArchiveReader.ReadVersion(dc,2));
+            this.AddProperty("UniversalInputs", dc => UniversalInputs = ArchiveReader.ReadInt16(dc, 8))
+                .AddProperty("CounterInput", dc => CounterInput = ArchiveReader.ReadInt16(dc, 4))
+                .AddProperty("CounterValue", dc => CounterValue = ArchiveReader.ReadInt16(dc, 4));
+
         }
 
         /// <summary>
@@ -29,17 +31,17 @@ namespace artiso.Fischertechnik.TxtController.Lib.Messages
         /// <summary>
         /// This value changes to the last m_counter_reset_command_id in the command structure after a reset command finished.
         /// </summary>
-        public short CounterCommendId { get; private set; }
+        public short CounterCommandId { get; private set; }
 
         /// <summary>
         /// This value changes to the last m_motor_command_id in the command structure after a motor distance command is finished
         /// </summary>
-        public short MotorCommendId { get; private set; }
+        public short MotorCommandId { get; private set; }
 
         /// <summary>
         /// This value changes to the last m_sound_command_id in the command structure after a sound playback finished.
         /// </summary>
-        public short SoundCommendId { get; private set; }
+        public short SoundCommandId { get; private set; }
 
         /// <summary>
         /// This array of structures contains the infrared remote control input values. 
