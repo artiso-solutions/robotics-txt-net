@@ -4,16 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RoboCommandsLib.RoboCommands
+namespace AutomationRobotCommandsLib.RoboCommands
 {
-    public class DistanceCommands
+    public class RotationCommands
     {
-        public static void MoveOutwards()
+        public static void RotateLeft()
         {
             throw new NotImplementedException();
         }
 
-        public static void MoveInwards()
+        public static void RotateRight()
         {
             throw new NotImplementedException();
         }
@@ -23,12 +23,12 @@ namespace RoboCommandsLib.RoboCommands
             throw new NotImplementedException();
         }
 
-        public static void MoveOutwards(int distance)
+        public static void RotateLeft(int distance)
         {
             throw new NotImplementedException();
         }
 
-        public static void MoveInwards(int distance)
+        public static void RotateRight(int distance)
         {
             throw new NotImplementedException();
         }

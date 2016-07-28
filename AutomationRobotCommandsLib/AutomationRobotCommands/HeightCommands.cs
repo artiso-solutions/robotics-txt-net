@@ -4,16 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RoboCommandsLib.RoboCommands
+namespace AutomationRobotCommandsLib.RoboCommands
 {
-    public class GripperCommands
+    public class HeightCommands
     {
-        public static void OpenGripper()
+        public static void MoveUp()
         {
             throw new NotImplementedException();
         }
 
-        public static void CloseGripper()
+        public static void MoveDown()
         {
             throw new NotImplementedException();
         }
@@ -23,12 +23,12 @@ namespace RoboCommandsLib.RoboCommands
             throw new NotImplementedException();
         }
 
-        public static void OpenGripper(int distance)
+        public static void MoveUp(int distance)
         {
             throw new NotImplementedException();
         }
 
-        public static void CloseGripper(int distance)
+        public static void MoveDown(int distance)
         {
             throw new NotImplementedException();
         }
