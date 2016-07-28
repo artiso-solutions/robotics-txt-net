@@ -7,8 +7,8 @@
     <ProjectGuid>{EDBA94E9-470E-4886-AEFE-1DA892A72CC3}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RoboCommandsLib</RootNamespace>
-    <AssemblyName>RoboCommandsLib</AssemblyName>
+    <RootNamespace>AutomationRobotCommandsLib</RootNamespace>
+    <AssemblyName>AutomationRobotCommandsLib</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

@@ -60,7 +60,7 @@
     <Compile Include="TcpControllerDriverTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\RoboTxtLib\TxtControllerLib.csproj">
+    <ProjectReference Include="..\TxtControllerLib\TxtControllerLib.csproj">
       <Project>{877FAE27-64DF-4C56-B2AC-5E48CF35C151}</Project>
       <Name>TxtControllerLib</Name>
     </ProjectReference>
