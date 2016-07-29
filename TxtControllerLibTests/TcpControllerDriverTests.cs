@@ -283,7 +283,7 @@ namespace TxtControllerLibTests
         {
             var message = new UpdateConfigCommandMessage
             {
-                UpdateConfigSequence = 0,
+                ConfigId = 0,
                 MotorModes = new[] { MotorMode.M1, MotorMode.M1, MotorMode.M1, MotorMode.M1 },
                 InputConfigurations = Enumerable.Repeat(new InputConfiguration { InputMode = InputMode.Resistance, IsDigital = true }, 8).ToArray(),
                 CounterModes = new[] { CounterMode.Normal, CounterMode.Normal, CounterMode.Normal, CounterMode.Normal }
@@ -298,7 +298,7 @@ namespace TxtControllerLibTests
         {
             tcpControllerDriver.SendCommand(new UpdateConfigCommandMessage
             {
-                UpdateConfigSequence = 0,
+                ConfigId = 0,
                 MotorModes = new[] { MotorMode.O1O2, MotorMode.O1O2, MotorMode.O1O2, MotorMode.O1O2 },
                 InputConfigurations = Enumerable.Repeat(new InputConfiguration { InputMode = InputMode.Resistance, IsDigital = true }, 8).ToArray(),
                 CounterModes = new[] { CounterMode.Normal, CounterMode.Normal, CounterMode.Normal, CounterMode.Normal }

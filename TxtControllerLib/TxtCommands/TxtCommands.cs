@@ -44,7 +44,7 @@ namespace artiso.Fischertechnik.TxtController.Lib.TxtCommands
             tcpControllerDriver.SendCommand(new StartOnlineCommandMessage());
             tcpControllerDriver.SendCommand(new UpdateConfigCommandMessage
             {
-               UpdateConfigSequence = 0,
+               ConfigId = 0,
                MotorModes = new[] { MotorMode.O1O2, MotorMode.O1O2, MotorMode.O1O2, MotorMode.O1O2 },
                InputConfigurations = Enumerable.Repeat(new InputConfiguration { InputMode = InputMode.Resistance, IsDigital = true }, 8).ToArray(),
                CounterModes = new[] { CounterMode.Normal, CounterMode.Normal, CounterMode.Normal, CounterMode.Normal }

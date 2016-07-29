@@ -11,7 +11,13 @@ namespace artiso.Fischertechnik.TxtController.Lib.Messages
                 .AddProperty("Version", dc => Version = ArchiveReader.ReadVersion(dc));
         }
 
+        /// <summary>
+        /// Name of the TXT controller
+        /// </summary>
         public string Name { get; private set; }
+        /// <summary>
+        /// Version code of the TXT Firmware
+        /// </summary>
         public Version Version { get; private set; }
     }
 }
