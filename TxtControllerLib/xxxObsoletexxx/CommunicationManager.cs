@@ -19,32 +19,32 @@ namespace artiso.Fischertechnik.TxtController.Lib.xxxObsoletexxx
 
         public CommunicationManager()
         {
-            ipAddress = IPAddress.Parse("192.168.7.2");
+            this.ipAddress = IPAddress.Parse("192.168.7.2");
         }
 
         public void Dispose()
         {
-            if (socket?.Connected == true)
+            if (this.socket?.Connected == true)
             {
-                socket.Close();
-                socket.Dispose();
-                socket = null;
+                this.socket.Close();
+                this.socket.Dispose();
+                this.socket = null;
             }
         }
 
         public void StartCommunication()
         {
-            socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
-            socket.Connect(ipAddress, 65000);
+            this.socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
+            this.socket.Connect(this.ipAddress, 65000);
         }
 
         public ControllerStatus QueryStatus()
         {
             var cmdBytes = BitConverter.GetBytes(CommandIds.SendQueryStatus);
-            socket.Send(cmdBytes);
+            this.socket.Send(cmdBytes);
 
             var receiveBuffer = new byte[256];
-            var length = socket.Receive(receiveBuffer);
+            var length = this.socket.Receive(receiveBuffer);
 
             if (length <= 0)
             {
@@ -79,7 +79,7 @@ namespace artiso.Fischertechnik.TxtController.Lib.xxxObsoletexxx
                 cmdBytes = memoryStream.ToArray();
             }
 
-            var receiveBuffer = ExecuteCommand(cmdBytes);
+            var receiveBuffer = this.ExecuteCommand(cmdBytes);
 
             var startIndex = 0;
             var responseId = ArchiveReader.ReadUInt32(receiveBuffer, ref startIndex);
@@ -91,7 +91,7 @@ namespace artiso.Fischertechnik.TxtController.Lib.xxxObsoletexxx
 
         public void StopOnlineMode()
         {
-            ExecuteSimpleCommand(CommandIds.SendStopOnline, CommandIds.ReceiveStopOnline);
+            this.ExecuteSimpleCommand(CommandIds.SendStopOnline, CommandIds.ReceiveStopOnline);
         }
 
         public void UpdateConfig()
@@ -100,7 +100,7 @@ namespace artiso.Fischertechnik.TxtController.Lib.xxxObsoletexxx
             using (var memoryStream = new MemoryStream())
             {
                 ArchiveWriter.WriteInt32(memoryStream, CommandIds.SendUpdateConfig);
-                ArchiveWriter.WriteInt16(memoryStream, ++updateConfigSequence);
+                ArchiveWriter.WriteInt16(memoryStream, ++this.updateConfigSequence);
                 ArchiveWriter.WriteInt16(memoryStream, (ushort)0);
 
                 // config dummy (Tx only)
@@ -127,7 +127,7 @@ namespace artiso.Fischertechnik.TxtController.Lib.xxxObsoletexxx
                 sendBytes = memoryStream.ToArray();
             }
 
-            var receiveBuffer = ExecuteCommand(sendBytes);
+            var receiveBuffer = this.ExecuteCommand(sendBytes);
             var startIndex = 0;
             var responseId = ArchiveReader.ReadUInt32(receiveBuffer, ref startIndex);
             if (responseId != CommandIds.ReceiveUpdateConfig)
@@ -138,17 +138,17 @@ namespace artiso.Fischertechnik.TxtController.Lib.xxxObsoletexxx
 
         public void StartMotorLeft(int motorIndex, ushort speed, int distance)
         {
-            StartMotor(motorIndex, speed, 0, distance);
+            this.StartMotor(motorIndex, speed, 0, distance);
         }
 
         public void StartMotorRight(int motorIndex, ushort speed, int distance)
         {
-            StartMotor(motorIndex, 0, speed, distance);
+            this.StartMotor(motorIndex, 0, speed, distance);
         }
 
         public void StopMotor(int motorIndex)
         {
-            StartMotor(motorIndex, 0, 0, 0);
+            this.StartMotor(motorIndex, 0, 0, 0);
         }
 
         private void StartMotor(int motorIndex, ushort speedLeft, ushort speedRight, int distance)
@@ -173,8 +173,8 @@ namespace artiso.Fischertechnik.TxtController.Lib.xxxObsoletexxx
                 ArchiveWriter.WriteInt16(memoryStream, motorDistances);
 
                 // command
-                motorConfigSequence[motorIndex]++;
-                ArchiveWriter.WriteInt16(memoryStream, motorConfigSequence);
+                this.motorConfigSequence[motorIndex]++;
+                ArchiveWriter.WriteInt16(memoryStream, this.motorConfigSequence);
 
                 // counter reset
                 ArchiveWriter.WriteInt16(memoryStream, new ushort[4]);
@@ -185,7 +185,7 @@ namespace artiso.Fischertechnik.TxtController.Lib.xxxObsoletexxx
                 sendBytes = memoryStream.ToArray();
             }
 
-            var receiveBuffer = ExecuteCommand(sendBytes);
+            var receiveBuffer = this.ExecuteCommand(sendBytes);
             var startIndex = 0;
             var responseId = ArchiveReader.ReadUInt32(receiveBuffer, ref startIndex);
             if (responseId != CommandIds.ReceiveExchangeData)
@@ -197,10 +197,10 @@ namespace artiso.Fischertechnik.TxtController.Lib.xxxObsoletexxx
         private void ExecuteSimpleCommand(uint command, uint expectedResponseId)
         {
             var cmdBytes = BitConverter.GetBytes(command);
-            socket.Send(cmdBytes);
+            this.socket.Send(cmdBytes);
 
             var receiveBuffer = new byte[256];
-            var length = socket.Receive(receiveBuffer);
+            var length = this.socket.Receive(receiveBuffer);
 
             if (length <= 0)
             {
@@ -217,10 +217,10 @@ namespace artiso.Fischertechnik.TxtController.Lib.xxxObsoletexxx
 
         private byte[] ExecuteCommand(byte[] queryBuffer)
         {
-            socket.Send(queryBuffer);
+            this.socket.Send(queryBuffer);
 
             var receiveBuffer = new byte[256];
-            var length = socket.Receive(receiveBuffer);
+            var length = this.socket.Receive(receiveBuffer);
 
             if (length <= 0)
             {

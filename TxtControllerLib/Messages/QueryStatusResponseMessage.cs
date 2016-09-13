@@ -7,8 +7,8 @@ namespace artiso.Fischertechnik.TxtController.Lib.Messages
     {
         public QueryStatusResponseMessage() : base(CommandIds.ReceiveQueryStatus)
         {
-            this.AddProperty("Name", dc => Name = ArchiveReader.ReadString(dc, 16))
-                .AddProperty("Version", dc => Version = ArchiveReader.ReadVersion(dc));
+            this.AddProperty("Name", dc => this.Name = ArchiveReader.ReadString(dc, 16))
+                .AddProperty("Version", dc => this.Version = ArchiveReader.ReadVersion(dc));
         }
 
         /// <summary>

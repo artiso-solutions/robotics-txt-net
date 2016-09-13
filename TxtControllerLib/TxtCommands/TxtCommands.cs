@@ -6,10 +6,10 @@ namespace artiso.Fischertechnik.TxtController.Lib.TxtCommands
    using System.Linq;
    using System.Threading;
 
-   using artiso.Fischertechnik.TxtController.Lib.Configuration;
-   using artiso.Fischertechnik.TxtController.Lib.Contracts;
-   using artiso.Fischertechnik.TxtController.Lib.ControllerDriver;
-   using artiso.Fischertechnik.TxtController.Lib.Messages;
+   using Configuration;
+   using Contracts;
+   using ControllerDriver;
+   using Messages;
 
    public static class TxtCommands
    {

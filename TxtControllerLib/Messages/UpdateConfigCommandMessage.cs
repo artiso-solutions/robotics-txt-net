@@ -8,12 +8,12 @@ namespace artiso.Fischertechnik.TxtController.Lib.Messages
     {
         public UpdateConfigCommandMessage() : base(CommandIds.SendUpdateConfig, CommandIds.ReceiveUpdateConfig)
         {
-            this.AddProperty("ConfigId", stream => ArchiveWriter.WriteInt16(stream, ConfigId))
-                .AddProperty("ExtensionId", stream => ArchiveWriter.WriteInt16(stream, ExtensionId))
+            this.AddProperty("ConfigId", stream => ArchiveWriter.WriteInt16(stream, this.ConfigId))
+                .AddProperty("ExtensionId", stream => ArchiveWriter.WriteInt16(stream, this.ExtensionId))
                 .AddProperty("DummyTxOnly", stream => ArchiveWriter.WriteInt32(stream, 0))
-                .AddProperty("MotorConfiguration", stream => ArchiveWriter.WriteBytes(stream, MotorModes.Select(motorMode => (byte)motorMode).ToArray()))
-                .AddProperty("InputConfiguration", stream => ArchiveWriter.WriteBytes(stream, InputConfigurations.SelectMany(ic => new byte[] { (byte)ic.InputMode, (byte)(ic.IsDigital ? 1 : 0), 0, 0 }).ToArray()))
-                .AddProperty("CounterConfiguration", stream => ArchiveWriter.WriteBytes(stream, CounterModes.SelectMany(cm => new byte[] { (byte)cm, 0, 0, 0 }).ToArray()))
+                .AddProperty("MotorConfiguration", stream => ArchiveWriter.WriteBytes(stream, this.MotorModes.Select(motorMode => (byte)motorMode).ToArray()))
+                .AddProperty("InputConfiguration", stream => ArchiveWriter.WriteBytes(stream, this.InputConfigurations.SelectMany(ic => new byte[] { (byte)ic.InputMode, (byte)(ic.IsDigital ? 1 : 0), 0, 0 }).ToArray()))
+                .AddProperty("CounterConfiguration", stream => ArchiveWriter.WriteBytes(stream, this.CounterModes.SelectMany(cm => new byte[] { (byte)cm, 0, 0, 0 }).ToArray()))
                 .AddProperty("DummyMotorConfig", stream => ArchiveWriter.WriteBytes(stream, new byte[32]));
         }
 

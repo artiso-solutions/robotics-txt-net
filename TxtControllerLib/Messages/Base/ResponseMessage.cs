@@ -7,7 +7,7 @@ namespace artiso.Fischertechnik.TxtController.Lib.Messages.Base
     {
         public ResponseMessage(uint commandId)
         {
-            DeserializationProperties = new List<PropertyDeserializationInfo>();
+            this.DeserializationProperties = new List<PropertyDeserializationInfo>();
             this.AddProperty("CommandId", dc =>
             {
                 var responseCommandId = ArchiveReader.ReadUInt32(dc);
@@ -17,7 +17,7 @@ namespace artiso.Fischertechnik.TxtController.Lib.Messages.Base
                         $"Did not receive expected respone id {commandId}. Received response message id {responseCommandId} instead.");
                 }
 
-                CommandId = responseCommandId;
+                this.CommandId = responseCommandId;
             });
         }
 

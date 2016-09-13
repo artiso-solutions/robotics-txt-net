@@ -6,23 +6,23 @@ namespace artiso.Fischertechnik.TxtController.Lib.Messages
     {
         public ExchangeDataCommandMessage() : base(CommandIds.SendExchangeData, CommandIds.ReceiveExchangeData)
         {
-            PwmOutputValues = new short[] { 0, 0, 0, 0, 0, 0, 0, 0 };
-            MotorMaster = new short[] { 0, 0, 0, 0 };
-            MotorDistance = new short[] { 0, 0, 0, 0 };
-            MotorCommandId = new short[] { 0, 0, 0, 0 };
-            CounterResetCommandId = new short[] { 0, 0, 0, 0 };
-            SoundCommandId = 0;
-            SoundIndex = 0;
-            SoundRepeat = 0;
+            this.PwmOutputValues = new short[] { 0, 0, 0, 0, 0, 0, 0, 0 };
+            this.MotorMaster = new short[] { 0, 0, 0, 0 };
+            this.MotorDistance = new short[] { 0, 0, 0, 0 };
+            this.MotorCommandId = new short[] { 0, 0, 0, 0 };
+            this.CounterResetCommandId = new short[] { 0, 0, 0, 0 };
+            this.SoundCommandId = 0;
+            this.SoundIndex = 0;
+            this.SoundRepeat = 0;
 
-            this.AddProperty("PwmOutputValues", stream => ArchiveWriter.WriteInt16(stream, PwmOutputValues))
-                .AddProperty("MotorMaster", stream => ArchiveWriter.WriteInt16(stream, MotorMaster))
-                .AddProperty("MotorDistance", stream => ArchiveWriter.WriteInt16(stream, MotorDistance))
-                .AddProperty("MotorCommandId", stream => ArchiveWriter.WriteInt16(stream, MotorCommandId))
-                .AddProperty("CounterResetCommandId", stream => ArchiveWriter.WriteInt16(stream, CounterResetCommandId))
-                .AddProperty("SoundCommandId", stream => ArchiveWriter.WriteInt16(stream, SoundCommandId))
-                .AddProperty("SoundIndex", stream => ArchiveWriter.WriteInt16(stream, SoundIndex))
-                .AddProperty("SoundRepeat", stream => ArchiveWriter.WriteInt16(stream, SoundRepeat))
+            this.AddProperty("PwmOutputValues", stream => ArchiveWriter.WriteInt16(stream, this.PwmOutputValues))
+                .AddProperty("MotorMaster", stream => ArchiveWriter.WriteInt16(stream, this.MotorMaster))
+                .AddProperty("MotorDistance", stream => ArchiveWriter.WriteInt16(stream, this.MotorDistance))
+                .AddProperty("MotorCommandId", stream => ArchiveWriter.WriteInt16(stream, this.MotorCommandId))
+                .AddProperty("CounterResetCommandId", stream => ArchiveWriter.WriteInt16(stream, this.CounterResetCommandId))
+                .AddProperty("SoundCommandId", stream => ArchiveWriter.WriteInt16(stream, this.SoundCommandId))
+                .AddProperty("SoundIndex", stream => ArchiveWriter.WriteInt16(stream, this.SoundIndex))
+                .AddProperty("SoundRepeat", stream => ArchiveWriter.WriteInt16(stream, this.SoundRepeat))
                 .AddProperty("Empty", stream => ArchiveWriter.WriteBytes(stream, new byte[2]));
         }
 

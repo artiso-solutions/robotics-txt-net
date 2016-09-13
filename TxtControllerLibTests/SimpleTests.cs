@@ -11,7 +11,7 @@ namespace TxtControllerLibTests
         [TestMethod]
         public void ReceiveQueryStatus()
         {
-            using (var communicationManager = PrepareCommunicationManager())
+            using (var communicationManager = this.PrepareCommunicationManager())
             {
                 var controllerStatus = communicationManager.QueryStatus();
                 Assert.IsNotNull(controllerStatus, "Expected controller status");
@@ -23,7 +23,7 @@ namespace TxtControllerLibTests
         [TestMethod]
         public void StartOnlineMode()
         {
-            using (var communicationManager = PrepareCommunicationManager())
+            using (var communicationManager = this.PrepareCommunicationManager())
             {
                 communicationManager.StartOnlineMode();
             }
@@ -32,7 +32,7 @@ namespace TxtControllerLibTests
         [TestMethod]
         public void StopOnlineMode()
         {
-            using (var communicationManager = PrepareCommunicationManager())
+            using (var communicationManager = this.PrepareCommunicationManager())
             {
                 communicationManager.StopOnlineMode();
             }
@@ -41,7 +41,7 @@ namespace TxtControllerLibTests
         [TestMethod]
         public void UpdateConfig()
         {
-            using (var communicationManager = PrepareCommunicationManager())
+            using (var communicationManager = this.PrepareCommunicationManager())
             {
                 communicationManager.StartOnlineMode();
 
@@ -59,7 +59,7 @@ namespace TxtControllerLibTests
         [TestMethod]
         public void TurnRobotLeftAndRight()
         {
-            using (var communicationManager = PrepareCommunicationManager())
+            using (var communicationManager = this.PrepareCommunicationManager())
             {
                 communicationManager.StartOnlineMode();
 

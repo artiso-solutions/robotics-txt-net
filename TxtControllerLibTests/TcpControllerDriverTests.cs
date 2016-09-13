@@ -32,7 +32,7 @@ namespace TxtControllerLibTests
         [TestMethod]
         public void ReceiveQueryStatusTcpControllerDriver()
         {
-            using (var tcpControllerDriver = PrepareTcpControllerDriver())
+            using (var tcpControllerDriver = this.PrepareTcpControllerDriver())
             {
                 var message = new QueryStatusCommandMessage();
                 var bytes = new TcpControllerDriver(Communication.USB).GetBytesOfMessage(message);
@@ -49,7 +49,7 @@ namespace TxtControllerLibTests
         [TestMethod]
         public void StartOnline()
         {
-            using (var tcpControllerDriver = PrepareTcpControllerDriver())
+            using (var tcpControllerDriver = this.PrepareTcpControllerDriver())
             {
                 var message = new StartOnlineCommandMessage();
                 var bytes = new TcpControllerDriver(Communication.USB).GetBytesOfMessage(message);
@@ -62,7 +62,7 @@ namespace TxtControllerLibTests
         [TestMethod]
         public void StopOnline()
         {
-            using (var tcpControllerDriver = PrepareTcpControllerDriver())
+            using (var tcpControllerDriver = this.PrepareTcpControllerDriver())
             {
                 tcpControllerDriver.SendCommand(new StopOnlineCommandMessage());
             }
@@ -71,12 +71,12 @@ namespace TxtControllerLibTests
         [TestMethod]
         public void UpdateConfig()
         {
-            StartOnline();
-            using (var tcpControllerDriver = PrepareTcpControllerDriver())
+            this.StartOnline();
+            using (var tcpControllerDriver = this.PrepareTcpControllerDriver())
             {
                 try
                 {
-                    SetConfigM1(tcpControllerDriver);
+                    this.SetConfigM1(tcpControllerDriver);
                 }
                 finally
                 {
@@ -88,13 +88,13 @@ namespace TxtControllerLibTests
         [TestMethod]
         public void TurnRobotLeftAndRightTime()
         {
-            using (var tcpControllerDriver = PrepareTcpControllerDriver())
+            using (var tcpControllerDriver = this.PrepareTcpControllerDriver())
             {
                 tcpControllerDriver.SendCommand(new StartOnlineCommandMessage());
 
                 try
                 {
-                    SetConfigO1O2(tcpControllerDriver);
+                    this.SetConfigO1O2(tcpControllerDriver);
 
                     var startMotorLeftCommand = new ExchangeDataCommandMessage
                     {
@@ -150,13 +150,13 @@ namespace TxtControllerLibTests
         [TestMethod]
         public void TurnRobotLeftAndRightDistance()
         {
-            using (var tcpControllerDriver = PrepareTcpControllerDriver())
+            using (var tcpControllerDriver = this.PrepareTcpControllerDriver())
             {
                 tcpControllerDriver.SendCommand(new StartOnlineCommandMessage());
 
                 try
                 {
-                    SetConfigO1O2(tcpControllerDriver);
+                    this.SetConfigO1O2(tcpControllerDriver);
 
                     var startMotorLeftCommand = new ExchangeDataCommandMessage
                     {
@@ -219,13 +219,13 @@ namespace TxtControllerLibTests
             short commandId = 0;
             ExchangeDataResponseMessage response = new ExchangeDataResponseMessage();
 
-            using (var tcpControllerDriver = PrepareTcpControllerDriver())
+            using (var tcpControllerDriver = this.PrepareTcpControllerDriver())
             {
                 tcpControllerDriver.SendCommand(new StartOnlineCommandMessage());
 
                 try
                 {
-                    SetConfigO1O2(tcpControllerDriver);
+                    this.SetConfigO1O2(tcpControllerDriver);
 
                     var Command = new ExchangeDataCommandMessage
                     {

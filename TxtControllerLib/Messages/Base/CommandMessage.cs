@@ -6,10 +6,10 @@ namespace artiso.Fischertechnik.TxtController.Lib.Messages.Base
     {
         public CommandMessage(uint commandId, uint expectedResponseId) : base(commandId)
         {
-            ExpectedResponseId = expectedResponseId;
+            this.ExpectedResponseId = expectedResponseId;
 
-            SerializationProperties = new List<PropertySerializationInfo>();
-            this.AddProperty("CommandId", s => ArchiveWriter.WriteInt32(s, CommandId));
+            this.SerializationProperties = new List<PropertySerializationInfo>();
+            this.AddProperty("CommandId", s => ArchiveWriter.WriteInt32(s, this.CommandId));
         }
 
         public uint ExpectedResponseId { get; }

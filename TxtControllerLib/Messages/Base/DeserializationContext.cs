@@ -4,8 +4,8 @@ namespace artiso.Fischertechnik.TxtController.Lib.Messages.Base
     {
         public DeserializationContext(byte[] buffer)
         {
-            Buffer = buffer;
-            CurrentPosition = 0;
+            this.Buffer = buffer;
+            this.CurrentPosition = 0;
         }
 
         public byte[] Buffer { get; }

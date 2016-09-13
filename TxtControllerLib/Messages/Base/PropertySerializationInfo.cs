@@ -7,8 +7,8 @@ namespace artiso.Fischertechnik.TxtController.Lib.Messages.Base
     {
         public PropertySerializationInfo(string name, Action<Stream> writeValue)
         {
-            Name = name;
-            WriteValue = writeValue;
+            this.Name = name;
+            this.WriteValue = writeValue;
         }
 
         public string Name { get; }

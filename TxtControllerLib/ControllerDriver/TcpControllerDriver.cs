@@ -10,7 +10,7 @@ using System.Net.Sockets;
 
 namespace artiso.Fischertechnik.TxtController.Lib.ControllerDriver
 {
-   using artiso.Fischertechnik.TxtController.Lib.Contracts;
+   using Contracts;
 
    public class TcpControllerDriver : IDisposable
    {
@@ -23,15 +23,15 @@ namespace artiso.Fischertechnik.TxtController.Lib.ControllerDriver
          switch (communication)
          {
             case Communication.USB:
-               ipAddress = IPAddress.Parse("192.168.7.2");
+                 this.ipAddress = IPAddress.Parse("192.168.7.2");
                break;
 
             case Communication.Wifi:
-               ipAddress = IPAddress.Parse("192.168.8.2");
+                 this.ipAddress = IPAddress.Parse("192.168.8.2");
                break;
 
             case Communication.Bluetooth:
-               ipAddress = IPAddress.Parse("192.168.9.2");
+                 this.ipAddress = IPAddress.Parse("192.168.9.2");
                break;
 
             default:
@@ -42,26 +42,26 @@ namespace artiso.Fischertechnik.TxtController.Lib.ControllerDriver
 
       public void Dispose()
       {
-         if (socket?.Connected == true)
+         if (this.socket?.Connected == true)
          {
-            socket.Close();
-            socket.Dispose();
-            socket = null;
+             this.socket.Close();
+             this.socket.Dispose();
+             this.socket = null;
          }
       }
 
       public void StartCommunication()
       {
-         socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
-         socket.Connect(ipAddress, 65000);
+          this.socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
+          this.socket.Connect(this.ipAddress, 65000);
       }
 
       public void SendCommand<TCmdMessage>([NotNull] TCmdMessage command)
           where TCmdMessage : CommandMessage
       {
-         var cmdBytes = GetBytesOfMessage(command);
-         logger.DebugExt($"Sending {cmdBytes.Length} bytes");
-         socket.Send(cmdBytes);
+         var cmdBytes = this.GetBytesOfMessage(command);
+          this.logger.DebugExt($"Sending {cmdBytes.Length} bytes");
+          this.socket.Send(cmdBytes);
 
          using (var receiveStream = new MemoryStream())
          {
@@ -69,7 +69,7 @@ namespace artiso.Fischertechnik.TxtController.Lib.ControllerDriver
             int length;
             do
             {
-               length = socket.Receive(receiveBuffer);
+               length = this.socket.Receive(receiveBuffer);
                receiveStream.Write(receiveBuffer, 0, length);
             } while (length == receiveBuffer.Length);
 
@@ -79,7 +79,7 @@ namespace artiso.Fischertechnik.TxtController.Lib.ControllerDriver
                throw new CommunicationFailedException("Failed to receive response");
             }
 
-            var responseMessageId = GetMessageId(receviedBytes);
+            var responseMessageId = this.GetMessageId(receviedBytes);
             if (command.ExpectedResponseId != responseMessageId)
             {
                throw new CommunicationFailedException(
@@ -93,8 +93,8 @@ namespace artiso.Fischertechnik.TxtController.Lib.ControllerDriver
           where TCmdMessage : CommandMessage
           where TResponseMessage : ResponseMessage, new()
       {
-         var cmdBytes = GetBytesOfMessage(command);
-         socket.Send(cmdBytes);
+         var cmdBytes = this.GetBytesOfMessage(command);
+          this.socket.Send(cmdBytes);
 
          using (var receiveStream = new MemoryStream())
          {
@@ -102,7 +102,7 @@ namespace artiso.Fischertechnik.TxtController.Lib.ControllerDriver
             int length;
             do
             {
-               length = socket.Receive(receiveBuffer);
+               length = this.socket.Receive(receiveBuffer);
                receiveStream.Write(receiveBuffer, 0, length);
             } while (length == receiveBuffer.Length);
 
@@ -112,7 +112,7 @@ namespace artiso.Fischertechnik.TxtController.Lib.ControllerDriver
                throw new CommunicationFailedException("Failed to receive response");
             }
 
-            var responseMessage = GetMessageOfBytes<TResponseMessage>(receviedBytes);
+            var responseMessage = this.GetMessageOfBytes<TResponseMessage>(receviedBytes);
             if (command.ExpectedResponseId != responseMessage.CommandId)
             {
                throw new CommunicationFailedException(
@@ -126,7 +126,7 @@ namespace artiso.Fischertechnik.TxtController.Lib.ControllerDriver
       [NotNull]
       public byte[] GetBytesOfMessage([NotNull] CommandMessage message)
       {
-         logger.DebugExt($"Serialize message of type {message.GetType().FullName}");
+          this.logger.DebugExt($"Serialize message of type {message.GetType().FullName}");
          using (var memoryStream = new MemoryStream())
          {
             long oldLength;
@@ -136,7 +136,7 @@ namespace artiso.Fischertechnik.TxtController.Lib.ControllerDriver
                oldLength = memoryStream.Length;
                propertySerializationInfo.WriteValue(memoryStream);
                newLength = memoryStream.Length;
-               logger.DebugExt(() => $"  {propertySerializationInfo.Name} -> {newLength - oldLength} added -> {string.Join("|", memoryStream.ToArray().Skip((int)oldLength))}");
+                this.logger.DebugExt(() => $"  {propertySerializationInfo.Name} -> {newLength - oldLength} added -> {string.Join("|", memoryStream.ToArray().Skip((int)oldLength))}");
             }
 
             return memoryStream.ToArray();
@@ -156,7 +156,7 @@ namespace artiso.Fischertechnik.TxtController.Lib.ControllerDriver
           where TResponseMessage : ResponseMessage, new()
       {
          var responseMessage = new TResponseMessage();
-         logger.DebugExt($"Deserialize message of type {responseMessage.GetType().FullName}");
+          this.logger.DebugExt($"Deserialize message of type {responseMessage.GetType().FullName}");
          var deserializationContext = new DeserializationContext(bytes);
          int oldPosition;
          int newPosition;
@@ -165,7 +165,7 @@ namespace artiso.Fischertechnik.TxtController.Lib.ControllerDriver
             oldPosition = deserializationContext.CurrentPosition;
             propertyDeserializationInfo.ReadValue(deserializationContext);
             newPosition = deserializationContext.CurrentPosition;
-            logger.DebugExt(() => $"  {propertyDeserializationInfo.Name} -> {newPosition - oldPosition} read -> {string.Join("|", deserializationContext.Buffer.Skip(oldPosition).Take(newPosition - oldPosition))}");
+             this.logger.DebugExt(() => $"  {propertyDeserializationInfo.Name} -> {newPosition - oldPosition} read -> {string.Join("|", deserializationContext.Buffer.Skip(oldPosition).Take(newPosition - oldPosition))}");
          }
 
          return responseMessage;

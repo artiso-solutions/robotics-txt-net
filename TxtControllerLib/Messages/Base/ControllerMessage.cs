@@ -8,7 +8,7 @@ namespace artiso.Fischertechnik.TxtController.Lib.Messages.Base
 
         protected ControllerMessage(uint commandId)
         {
-            CommandId = commandId;
+            this.CommandId = commandId;
         }
 
         public uint CommandId { get; protected set; }
