@@ -10,25 +10,13 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
+using artiso.Fischertechnik.TxtController.Lib.Contracts;
 
 namespace TxtControllerLibTests
 {
-    using artiso.Fischertechnik.TxtController.Lib.Contracts;
-
     [TestClass]
     public class TcpControllerDriverTests
     {
-        [AssemblyInitialize]
-        public static void AssemblyInitialize(TestContext testContext)
-        {
-            var tracer = new TraceAppender();
-            var hierarchy = (Hierarchy) LogManager.GetRepository();
-            hierarchy.Root.AddAppender(tracer);
-            var patternLayout = new PatternLayout {ConversionPattern = "%m%n"};
-            tracer.Layout = patternLayout;
-            hierarchy.Configured = true;
-        }
-
         [TestMethod]
         public void ReceiveQueryStatusTcpControllerDriver()
         {
@@ -99,26 +87,26 @@ namespace TxtControllerLibTests
 
                     var startMotorLeftCommand = new ExchangeDataCommandMessage
                     {
-                        PwmOutputValues = new short[] {256, 0, 512, 0, 0, 0, 0, 0},
-                        MotorCommandId = new short[] {1, 1, 0, 0}
+                        PwmOutputValues = new short[] { 256, 0, 512, 0, 0, 0, 0, 0 },
+                        MotorCommandId = new short[] { 1, 1, 0, 0 }
                     };
 
                     var stopMotorCommand1 = new ExchangeDataCommandMessage
                     {
-                        PwmOutputValues = new short[] {0, 0, 0, 0, 0, 0, 0, 0},
-                        MotorCommandId = new short[] {2, 2, 0, 0}
+                        PwmOutputValues = new short[] { 0, 0, 0, 0, 0, 0, 0, 0 },
+                        MotorCommandId = new short[] { 2, 2, 0, 0 }
                     };
 
                     var startMotorRightCommand = new ExchangeDataCommandMessage
                     {
-                        PwmOutputValues = new short[] {0, 256, 0, 512, 0, 0, 0, 0},
-                        MotorCommandId = new short[] {3, 3, 0, 0}
+                        PwmOutputValues = new short[] { 0, 256, 0, 512, 0, 0, 0, 0 },
+                        MotorCommandId = new short[] { 3, 3, 0, 0 }
                     };
 
                     var stopMotorCommand2 = new ExchangeDataCommandMessage
                     {
-                        PwmOutputValues = new short[] {0, 0, 0, 0, 0, 0, 0, 0},
-                        MotorCommandId = new short[] {4, 4, 0, 0}
+                        PwmOutputValues = new short[] { 0, 0, 0, 0, 0, 0, 0, 0 },
+                        MotorCommandId = new short[] { 4, 4, 0, 0 }
                     };
 
                     var test = tcpControllerDriver.GetBytesOfMessage(startMotorLeftCommand);
@@ -161,28 +149,28 @@ namespace TxtControllerLibTests
 
                     var startMotorLeftCommand = new ExchangeDataCommandMessage
                     {
-                        PwmOutputValues = new short[] {256, 0, 512, 0, 0, 0, 0, 0},
-                        MotorCommandId = new short[] {1, 1, 0, 0},
-                        MotorDistance = new short[] {200, 200, 0, 0}
+                        PwmOutputValues = new short[] { 256, 0, 512, 0, 0, 0, 0, 0 },
+                        MotorCommandId = new short[] { 1, 1, 0, 0 },
+                        MotorDistance = new short[] { 200, 200, 0, 0 }
                     };
 
                     var stopMotorCommand1 = new ExchangeDataCommandMessage
                     {
-                        PwmOutputValues = new short[] {0, 0, 0, 0, 0, 0, 0, 0},
-                        MotorCommandId = new short[] {2, 2, 0, 0}
+                        PwmOutputValues = new short[] { 0, 0, 0, 0, 0, 0, 0, 0 },
+                        MotorCommandId = new short[] { 2, 2, 0, 0 }
                     };
 
                     var startMotorRightCommand = new ExchangeDataCommandMessage
                     {
-                        PwmOutputValues = new short[] {0, 256, 0, 512, 0, 0, 0, 0},
-                        MotorDistance = new short[] {200, 200, 0, 0},
-                        MotorCommandId = new short[] {3, 3, 0, 0}
+                        PwmOutputValues = new short[] { 0, 256, 0, 512, 0, 0, 0, 0 },
+                        MotorDistance = new short[] { 200, 200, 0, 0 },
+                        MotorCommandId = new short[] { 3, 3, 0, 0 }
                     };
 
                     var stopMotorCommand2 = new ExchangeDataCommandMessage
                     {
-                        PwmOutputValues = new short[] {0, 0, 0, 0, 0, 0, 0, 0},
-                        MotorCommandId = new short[] {4, 4, 0, 0}
+                        PwmOutputValues = new short[] { 0, 0, 0, 0, 0, 0, 0, 0 },
+                        MotorCommandId = new short[] { 4, 4, 0, 0 }
                     };
 
                     var test = tcpControllerDriver.GetBytesOfMessage(startMotorLeftCommand);
@@ -234,8 +222,8 @@ namespace TxtControllerLibTests
 
                     var Command = new ExchangeDataCommandMessage
                     {
-                        PwmOutputValues = new short[] {0, 0, 0, 0, 0, 0, 0, 0},
-                        MotorCommandId = new short[] {commandId, commandId, commandId, commandId}
+                        PwmOutputValues = new short[] { 0, 0, 0, 0, 0, 0, 0, 0 },
+                        MotorCommandId = new short[] { commandId, commandId, commandId, commandId }
                     };
                     commandId++;
 
@@ -248,8 +236,8 @@ namespace TxtControllerLibTests
 
                     Command = new ExchangeDataCommandMessage
                     {
-                        PwmOutputValues = new short[] {256, 0, 0, 0, 0, 0, 0, 0},
-                        MotorCommandId = new short[] {commandId, commandId, commandId, commandId}
+                        PwmOutputValues = new short[] { 256, 0, 0, 0, 0, 0, 0, 0 },
+                        MotorCommandId = new short[] { commandId, commandId, commandId, commandId }
                     };
                     commandId++;
 
@@ -262,8 +250,8 @@ namespace TxtControllerLibTests
 
                     Command = new ExchangeDataCommandMessage
                     {
-                        PwmOutputValues = new short[] {0, 0, 0, 0, 0, 0, 0, 0},
-                        MotorCommandId = new short[] {commandId, commandId, commandId, commandId}
+                        PwmOutputValues = new short[] { 0, 0, 0, 0, 0, 0, 0, 0 },
+                        MotorCommandId = new short[] { commandId, commandId, commandId, commandId }
                     };
                     commandId++;
 
@@ -290,15 +278,15 @@ namespace TxtControllerLibTests
 
                     var startMotorCommand = new ExchangeDataCommandMessage
                     {
-                        PwmOutputValues = new short[] {0, 0, 0, 256, 0, 0, 0, 0},
-                        MotorCommandId = new short[] {0, 1, 0, 0},
-                        MotorDistance = new short[] {0, 0, 0, 0}
+                        PwmOutputValues = new short[] { 0, 0, 0, 256, 0, 0, 0, 0 },
+                        MotorCommandId = new short[] { 0, 1, 0, 0 },
+                        MotorDistance = new short[] { 0, 0, 0, 0 }
                     };
 
                     var stopMotorCommand = new ExchangeDataCommandMessage
                     {
-                        PwmOutputValues = new short[] {0, 0, 0, 0, 0, 0, 0, 0},
-                        MotorCommandId = new short[] {0, 2, 0, 0}
+                        PwmOutputValues = new short[] { 0, 0, 0, 0, 0, 0, 0, 0 },
+                        MotorCommandId = new short[] { 0, 2, 0, 0 }
                     };
 
                     var endTime = DateTime.Now.AddSeconds(10);
@@ -324,7 +312,7 @@ namespace TxtControllerLibTests
 
         private TcpControllerDriver PrepareTcpControllerDriver()
         {
-            var logger = LogManager.GetLogger(typeof (TcpControllerDriverTests));
+            var logger = LogManager.GetLogger(typeof(TcpControllerDriverTests));
             logger.Info($"Preparing TcpControllerDriver");
             var tcpControllerDriver = new TcpControllerDriver(Communication.USB);
             tcpControllerDriver.StartCommunication();
@@ -336,11 +324,11 @@ namespace TxtControllerLibTests
             var message = new UpdateConfigCommandMessage
             {
                 ConfigId = 0,
-                MotorModes = new[] {MotorMode.M1, MotorMode.M1, MotorMode.M1, MotorMode.M1},
+                MotorModes = new[] { MotorMode.M1, MotorMode.M1, MotorMode.M1, MotorMode.M1 },
                 InputConfigurations =
-                    Enumerable.Repeat(new InputConfiguration {InputMode = InputMode.Resistance, IsDigital = true}, 8)
+                    Enumerable.Repeat(new InputConfiguration { InputMode = InputMode.Resistance, IsDigital = true }, 8)
                         .ToArray(),
-                CounterModes = new[] {CounterMode.Normal, CounterMode.Normal, CounterMode.Normal, CounterMode.Normal}
+                CounterModes = new[] { CounterMode.Normal, CounterMode.Normal, CounterMode.Normal, CounterMode.Normal }
             };
             var bytes = new TcpControllerDriver(Communication.USB).GetBytesOfMessage(message);
             Assert.AreEqual(96, bytes.Length);
@@ -353,11 +341,11 @@ namespace TxtControllerLibTests
             tcpControllerDriver.SendCommand(new UpdateConfigCommandMessage
             {
                 ConfigId = 0,
-                MotorModes = new[] {MotorMode.O1O2, MotorMode.O1O2, MotorMode.O1O2, MotorMode.O1O2},
+                MotorModes = new[] { MotorMode.O1O2, MotorMode.O1O2, MotorMode.O1O2, MotorMode.O1O2 },
                 InputConfigurations =
-                    Enumerable.Repeat(new InputConfiguration {InputMode = InputMode.Resistance, IsDigital = true}, 8)
+                    Enumerable.Repeat(new InputConfiguration { InputMode = InputMode.Resistance, IsDigital = true }, 8)
                         .ToArray(),
-                CounterModes = new[] {CounterMode.Normal, CounterMode.Normal, CounterMode.Normal, CounterMode.Normal}
+                CounterModes = new[] { CounterMode.Normal, CounterMode.Normal, CounterMode.Normal, CounterMode.Normal }
             });
         }
     }
