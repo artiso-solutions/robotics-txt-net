@@ -4,6 +4,8 @@ using System.Threading;
 using artiso.Fischertechnik.TxtController.Lib.Commands;
 using artiso.Fischertechnik.TxtController.Lib.Components;
 using artiso.Fischertechnik.TxtController.Lib.Contracts;
+using log4net;
+using log4net.Util;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace TxtControllerLibTests
@@ -11,6 +13,13 @@ namespace TxtControllerLibTests
     [TestClass]
     public class ControllerCommunicatorTest
     {
+        private ILog logger;
+
+        public ControllerCommunicatorTest()
+        {
+            this.logger = LogManager.GetLogger(typeof (ControllerCommunicatorTest));
+        }
+
         [TestMethod]
         public void StartStopMotor()
         {
@@ -25,7 +34,7 @@ namespace TxtControllerLibTests
             Thread.Sleep(TimeSpan.FromSeconds(3));
 
             communicator.QueueCommand(new StopMotorCommand(Motor.Two));
-            
+
             Thread.Sleep(TimeSpan.FromSeconds(3));
 
             communicator.Stop();
@@ -43,7 +52,7 @@ namespace TxtControllerLibTests
                 var inputDisplayIndex = i + 1;
 
                 communicator.UniversalInputs[i].StateChanges.Subscribe(
-                    state => Debug.WriteLine($"Input {inputDisplayIndex} - {DateTime.Now} - {state}"));
+                    state => this.logger.DebugExt($"Input {inputDisplayIndex} - {state}"));
             }
 
             Thread.Sleep(TimeSpan.FromSeconds(5));

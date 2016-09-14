@@ -2,9 +2,6 @@
 using artiso.Fischertechnik.TxtController.Lib.ControllerDriver;
 using artiso.Fischertechnik.TxtController.Lib.Messages;
 using log4net;
-using log4net.Appender;
-using log4net.Layout;
-using log4net.Repository.Hierarchy;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Diagnostics;
