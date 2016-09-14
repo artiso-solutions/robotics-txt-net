@@ -62,7 +62,6 @@
     <Compile Include="Messages\ExchangeDataCommandMessage.cs" />
     <Compile Include="Messages\ExchangeDataResponseMessage.cs" />
     <Compile Include="TxtCommands\TxtCommands.cs" />
-    <Compile Include="xxxObsoletexxx\CommunicationManager.cs" />
     <Compile Include="Messages\Base\CommandMessage.cs" />
     <Compile Include="ControllerDriver\CommunicationFailedException.cs" />
     <Compile Include="Messages\Base\CommandMessageExtensions.cs" />
@@ -76,7 +75,6 @@
     <Compile Include="Configuration\MotorMode.cs" />
     <Compile Include="Messages\QueryStatusCommandMessage.cs" />
     <Compile Include="Messages\QueryStatusResponseMessage.cs" />
-    <Compile Include="xxxObsoletexxx\ControllerStatus.cs" />
     <Compile Include="Messages\Base\ResponseMessage.cs" />
     <Compile Include="Messages\Base\ResponseMessageExtensions.cs" />
     <Compile Include="Messages\StartOnlineCommandMessage.cs" />
