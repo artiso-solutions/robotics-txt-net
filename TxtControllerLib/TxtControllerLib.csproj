@@ -49,10 +49,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Components\CommandProcessor.cs" />
+    <Compile Include="Components\ControllerCommunicator.cs" />
     <Compile Include="Contracts\Communication.cs" />
     <Compile Include="Contracts\Motor.cs" />
     <Compile Include="Contracts\Movement.cs" />
     <Compile Include="Contracts\Speed.cs" />
+    <Compile Include="Interfaces\IControllerCommand.cs" />
     <Compile Include="Messages\Base\ArchiveReader.cs" />
     <Compile Include="Messages\Base\ArchiveWriter.cs" />
     <Compile Include="Messages\CommandIds.cs" />
