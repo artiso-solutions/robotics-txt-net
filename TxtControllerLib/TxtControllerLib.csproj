@@ -49,8 +49,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\StartMotorCommand.cs" />
+    <Compile Include="Commands\StopMotorCommand.cs" />
     <Compile Include="Components\CommandProcessor.cs" />
     <Compile Include="Components\ControllerCommunicator.cs" />
+    <Compile Include="Components\ResponseProcessor.cs" />
     <Compile Include="Contracts\Communication.cs" />
     <Compile Include="Contracts\Motor.cs" />
     <Compile Include="Contracts\Movement.cs" />

@@ -7,6 +7,7 @@ namespace artiso.Fischertechnik.TxtController.Lib.Contracts
       Slow = 64,
       Average = 128,
       Quick = 192,
-      Maximal = 256
+      Fast = 256,
+      Maximal = 512
    }
 }
