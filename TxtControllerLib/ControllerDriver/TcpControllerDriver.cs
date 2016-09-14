@@ -73,13 +73,13 @@ namespace artiso.Fischertechnik.TxtController.Lib.ControllerDriver
                receiveStream.Write(receiveBuffer, 0, length);
             } while (length == receiveBuffer.Length);
 
-            var receviedBytes = receiveStream.ToArray();
-            if (receviedBytes.Length <= 0)
+            var receivedBytes = receiveStream.ToArray();
+            if (receivedBytes.Length <= 0)
             {
                throw new CommunicationFailedException("Failed to receive response");
             }
 
-            var responseMessageId = this.GetMessageId(receviedBytes);
+            var responseMessageId = this.GetMessageId(receivedBytes);
             if (command.ExpectedResponseId != responseMessageId)
             {
                throw new CommunicationFailedException(
