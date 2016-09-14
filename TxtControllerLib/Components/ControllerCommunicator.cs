@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -34,6 +33,13 @@ namespace artiso.Fischertechnik.TxtController.Lib.Components
             this.responseProcessor = new ResponseProcessor();
 
             this.commandQueue = new ConcurrentQueue<IControllerCommand>();
+
+            this.UniversalInputs = new DigitalInputInfo[8];
+
+            for (int i = 0; i < this.UniversalInputs.Length; i++)
+            {
+                this.UniversalInputs[i] = new DigitalInputInfo();
+            }
         }
 
         public void Start()
@@ -57,6 +63,8 @@ namespace artiso.Fischertechnik.TxtController.Lib.Components
         {
             this.commandQueue.Enqueue(command);
         }
+
+        public DigitalInputInfo[] UniversalInputs { get; set; }
 
         private void CommunicationLoop(CancellationToken cancellationToken)
         {
@@ -95,7 +103,7 @@ namespace artiso.Fischertechnik.TxtController.Lib.Components
 
                 var response = driver.SendCommand<ExchangeDataCommandMessage, ExchangeDataResponseMessage>(currentCommandMessage);
 
-                //this.responseProcessor.ProcessResponse(response);
+                this.responseProcessor.ProcessResponse(response, this.UniversalInputs);
 
                 Thread.Sleep(100);
             }
