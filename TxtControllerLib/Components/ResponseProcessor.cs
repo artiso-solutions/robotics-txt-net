@@ -9,7 +9,7 @@ namespace artiso.Fischertechnik.TxtController.Lib.Components
         {
             for (int i = 0; i < 8; i++)
             {
-                var newState = responseMessage.UniversalInputs[i] == 1;
+                var newState = responseMessage.UniversalInputs[i] == 0;
                 universalInputs[i].SetNewState(newState);
             }
         }

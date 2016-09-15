@@ -1,8 +1,6 @@
 ﻿
 namespace artiso.Fischertechnik.TxtController.Lib.Contracts
 {
-   using System.Runtime.Remoting.Messaging;
-
    public enum Motor
    {
       One = 0,

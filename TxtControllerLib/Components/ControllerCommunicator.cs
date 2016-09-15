@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -61,6 +62,7 @@ namespace artiso.Fischertechnik.TxtController.Lib.Components
 
         public void QueueCommand(IControllerCommand command)
         {
+            logger.DebugExt($"Queue command {command.GetType().Name}");
             this.commandQueue.Enqueue(command);
         }
 
@@ -87,11 +89,12 @@ namespace artiso.Fischertechnik.TxtController.Lib.Components
 
             while (!cancellationToken.IsCancellationRequested)
             {
-                foreach (var command in this.commandQueue)
+                IControllerCommand command;
+                while (this.commandQueue.TryDequeue(out command))
                 {
                     try
                     {
-                        this.logger.DebugExt(command.GetType());
+                        this.logger.DebugExt($"Process {command.GetType().Name}");
                         this.commandProcessor.ProcessControllerCommand(command, currentCommandMessage);
                     }
                     catch (Exception)
@@ -101,11 +104,12 @@ namespace artiso.Fischertechnik.TxtController.Lib.Components
                     }
                 }
 
+                this.logger.DebugExt("Send current message to controller");
                 var response = driver.SendCommand<ExchangeDataCommandMessage, ExchangeDataResponseMessage>(currentCommandMessage);
 
                 this.responseProcessor.ProcessResponse(response, this.UniversalInputs);
 
-                Thread.Sleep(100);
+                Thread.Sleep(10);
             }
 
             driver.SendCommand(new StopOnlineCommandMessage());

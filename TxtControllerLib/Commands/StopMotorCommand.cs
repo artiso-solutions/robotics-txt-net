@@ -21,10 +21,10 @@ namespace artiso.Fischertechnik.TxtController.Lib.Commands
 
             var motorIndex = (int) this.motor;
 
-            message.PwmOutputValues[motorIndex] = 0;
-            message.PwmOutputValues[motorIndex + 1] = 0;
+            message.PwmOutputValues[2 * motorIndex] = 0;
+            message.PwmOutputValues[2 * motorIndex + 1] = 0;
 
-            message.MotorDistance[motorIndex] = 0;
+            message.MotorDistance[2 * motorIndex] = 0;
 
             message.MotorCommandId[motorIndex]++;
         }

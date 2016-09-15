@@ -77,6 +77,7 @@
     <Compile Include="Components\DigitalInputInfo.cs" />
     <Compile Include="Components\ResponseProcessor.cs" />
     <Compile Include="Contracts\Communication.cs" />
+    <Compile Include="Contracts\DigitalInput.cs" />
     <Compile Include="Contracts\Motor.cs" />
     <Compile Include="Contracts\Movement.cs" />
     <Compile Include="Contracts\Speed.cs" />

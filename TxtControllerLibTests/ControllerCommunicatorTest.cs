@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Threading;
 using artiso.Fischertechnik.TxtController.Lib.Commands;
 using artiso.Fischertechnik.TxtController.Lib.Components;
