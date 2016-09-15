@@ -1,17 +1,16 @@
 ﻿
-namespace artiso.Fischertechnik.TxtController.Lib.TxtCommands
+using System;
+using System.ComponentModel;
+using System.Linq;
+using System.Threading;
+using RoboticsTxt.Lib.Configuration;
+using RoboticsTxt.Lib.Contracts;
+using RoboticsTxt.Lib.ControllerDriver;
+using RoboticsTxt.Lib.Messages;
+
+namespace RoboticsTxt.Lib.TxtCommands
 {
-   using System;
-   using System.ComponentModel;
-   using System.Linq;
-   using System.Threading;
-
-   using Configuration;
-   using Contracts;
-   using ControllerDriver;
-   using Messages;
-
-   public static class TxtCommands
+    public static class TxtCommands
    {
       #region Constants and Fields
 

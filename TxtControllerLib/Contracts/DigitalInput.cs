@@ -1,4 +1,4 @@
-﻿namespace artiso.Fischertechnik.TxtController.Lib.Contracts
+﻿namespace RoboticsTxt.Lib.Contracts
 {
     public enum DigitalInput
     {

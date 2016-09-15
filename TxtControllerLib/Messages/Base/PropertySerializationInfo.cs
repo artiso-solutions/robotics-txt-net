@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 
-namespace artiso.Fischertechnik.TxtController.Lib.Messages.Base
+namespace RoboticsTxt.Lib.Messages.Base
 {
     public class PropertySerializationInfo
     {

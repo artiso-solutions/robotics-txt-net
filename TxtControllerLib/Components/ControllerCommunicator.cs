@@ -3,15 +3,15 @@ using System.Collections.Concurrent;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using artiso.Fischertechnik.TxtController.Lib.Configuration;
-using artiso.Fischertechnik.TxtController.Lib.Contracts;
-using artiso.Fischertechnik.TxtController.Lib.ControllerDriver;
-using artiso.Fischertechnik.TxtController.Lib.Interfaces;
-using artiso.Fischertechnik.TxtController.Lib.Messages;
 using log4net;
 using log4net.Util;
+using RoboticsTxt.Lib.Configuration;
+using RoboticsTxt.Lib.Contracts;
+using RoboticsTxt.Lib.ControllerDriver;
+using RoboticsTxt.Lib.Interfaces;
+using RoboticsTxt.Lib.Messages;
 
-namespace artiso.Fischertechnik.TxtController.Lib.Components
+namespace RoboticsTxt.Lib.Components
 {
     internal class ControllerCommunicator
     {

@@ -1,6 +1,6 @@
-﻿using artiso.Fischertechnik.TxtController.Lib.Messages;
+﻿using RoboticsTxt.Lib.Messages;
 
-namespace artiso.Fischertechnik.TxtController.Lib.Interfaces
+namespace RoboticsTxt.Lib.Interfaces
 {
     internal interface IControllerCommand
     {

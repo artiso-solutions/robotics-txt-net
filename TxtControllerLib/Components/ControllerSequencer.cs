@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Reactive.Linq;
 using System.Threading;
-using artiso.Fischertechnik.TxtController.Lib.Commands;
-using artiso.Fischertechnik.TxtController.Lib.Contracts;
+using RoboticsTxt.Lib.Commands;
+using RoboticsTxt.Lib.Contracts;
 
-namespace artiso.Fischertechnik.TxtController.Lib.Components
+namespace RoboticsTxt.Lib.Components
 {
     public class ControllerSequencer : IDisposable
     {

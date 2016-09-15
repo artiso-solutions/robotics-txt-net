@@ -7,8 +7,8 @@
     <ProjectGuid>{877FAE27-64DF-4C56-B2AC-5E48CF35C151}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>artiso.Fischertechnik.TxtController.Lib</RootNamespace>
-    <AssemblyName>artiso.Fischertechnik.TxtController.Lib</AssemblyName>
+    <RootNamespace>RoboticsTxt.Lib</RootNamespace>
+    <AssemblyName>RoboticsTxt.Lib</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -112,6 +112,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Robotics.Txt.nuspec" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

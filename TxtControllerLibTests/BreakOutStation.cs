@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Reactive.Linq;
 using System.Threading;
-using artiso.Fischertechnik.TxtController.Lib.Commands;
-using artiso.Fischertechnik.TxtController.Lib.Components;
-using artiso.Fischertechnik.TxtController.Lib.Contracts;
 using log4net;
 using log4net.Util;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using RoboticsTxt.Lib.Components;
+using RoboticsTxt.Lib.Contracts;
 
 namespace TxtControllerLibTests
 {

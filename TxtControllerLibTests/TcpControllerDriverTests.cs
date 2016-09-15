@@ -1,13 +1,13 @@
-﻿using artiso.Fischertechnik.TxtController.Lib.Configuration;
-using artiso.Fischertechnik.TxtController.Lib.ControllerDriver;
-using artiso.Fischertechnik.TxtController.Lib.Messages;
-using log4net;
+﻿using log4net;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
-using artiso.Fischertechnik.TxtController.Lib.Contracts;
+using RoboticsTxt.Lib.Configuration;
+using RoboticsTxt.Lib.Contracts;
+using RoboticsTxt.Lib.ControllerDriver;
+using RoboticsTxt.Lib.Messages;
 
 namespace TxtControllerLibTests
 {

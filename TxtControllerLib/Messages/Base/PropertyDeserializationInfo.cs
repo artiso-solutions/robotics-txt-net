@@ -1,6 +1,6 @@
 using System;
 
-namespace artiso.Fischertechnik.TxtController.Lib.Messages.Base
+namespace RoboticsTxt.Lib.Messages.Base
 {
     public class PropertyDeserializationInfo
     {

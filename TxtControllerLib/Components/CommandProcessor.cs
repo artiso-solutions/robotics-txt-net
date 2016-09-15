@@ -1,9 +1,9 @@
 ﻿using System;
-using artiso.Fischertechnik.TxtController.Lib.Interfaces;
-using artiso.Fischertechnik.TxtController.Lib.Messages;
 using JetBrains.Annotations;
+using RoboticsTxt.Lib.Interfaces;
+using RoboticsTxt.Lib.Messages;
 
-namespace artiso.Fischertechnik.TxtController.Lib.Components
+namespace RoboticsTxt.Lib.Components
 {
     internal class CommandProcessor
     {

@@ -1,10 +1,10 @@
 ﻿using System;
-using artiso.Fischertechnik.TxtController.Lib.Contracts;
-using artiso.Fischertechnik.TxtController.Lib.Interfaces;
-using artiso.Fischertechnik.TxtController.Lib.Messages;
 using JetBrains.Annotations;
+using RoboticsTxt.Lib.Contracts;
+using RoboticsTxt.Lib.Interfaces;
+using RoboticsTxt.Lib.Messages;
 
-namespace artiso.Fischertechnik.TxtController.Lib.Commands
+namespace RoboticsTxt.Lib.Commands
 {
     public class StopMotorCommand : IControllerCommand
     {

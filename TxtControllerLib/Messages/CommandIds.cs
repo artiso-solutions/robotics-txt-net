@@ -1,4 +1,4 @@
-namespace artiso.Fischertechnik.TxtController.Lib.Messages
+namespace RoboticsTxt.Lib.Messages
 {
     public class CommandIds
     {

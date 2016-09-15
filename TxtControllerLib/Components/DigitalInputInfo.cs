@@ -2,7 +2,7 @@
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 
-namespace artiso.Fischertechnik.TxtController.Lib.Components
+namespace RoboticsTxt.Lib.Components
 {
     internal class DigitalInputInfo
     {

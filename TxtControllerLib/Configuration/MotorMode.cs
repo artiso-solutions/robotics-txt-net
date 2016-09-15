@@ -1,4 +1,4 @@
-namespace artiso.Fischertechnik.TxtController.Lib.Configuration
+namespace RoboticsTxt.Lib.Configuration
 {
     public enum MotorMode
     {
