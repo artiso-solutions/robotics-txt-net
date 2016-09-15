@@ -95,7 +95,7 @@ namespace artiso.Fischertechnik.TxtController.Lib.Components
                     try
                     {
                         this.logger.DebugExt($"Process {command.GetType().Name}");
-                        this.commandProcessor.ProcessControllerCommand(command, currentCommandMessage);
+                        this.commandProcessor.ProcessControllerCommand(command, currentCommandMessage, UniversalInputs);
                     }
                     catch (Exception)
                     {

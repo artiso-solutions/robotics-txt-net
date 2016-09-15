@@ -7,8 +7,7 @@ namespace artiso.Fischertechnik.TxtController.Lib.Components
 {
     public class CommandProcessor
     {
-        public void ProcessControllerCommand([NotNull] IControllerCommand command,
-            [NotNull] ExchangeDataCommandMessage currentCommandMessage)
+        public void ProcessControllerCommand([NotNull] IControllerCommand command, [NotNull] ExchangeDataCommandMessage currentCommandMessage, DigitalInputInfo[] universalInputs)
         {
             if (command == null) throw new ArgumentNullException(nameof(command));
             if (currentCommandMessage == null) throw new ArgumentNullException(nameof(currentCommandMessage));

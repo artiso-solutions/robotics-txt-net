@@ -29,68 +29,48 @@ namespace TxtControllerLibTests
 
             Thread.Sleep(TimeSpan.FromSeconds(1));
 
-            logger.DebugExt("Send StartMotor Two");
-            communicator.QueueCommand(new StartMotorCommand(Motor.Two, Speed.Fast, Movement.Right));
-            WaitForInput(communicator, DigitalInput.One, true);
-            logger.DebugExt("Send StopMotor Two");
-            communicator.QueueCommand(new StopMotorCommand(Motor.Two));
+            StartMotorStopWithDigitalInput(communicator, new StartMotorCommand(Motor.Two, Speed.Fast, Movement.Right), DigitalInput.One, true);
 
-            logger.DebugExt("Send StartMotor One Left");
-            communicator.QueueCommand(new StartMotorCommand(Motor.One, Speed.Fast, Movement.Left));
-            WaitForInput(communicator, DigitalInput.Three, false);
-            Thread.Sleep(TimeSpan.FromMilliseconds(900));
-            logger.DebugExt("Send StartMotor One Right");
-            communicator.QueueCommand(new StartMotorCommand(Motor.One, Speed.Fast, Movement.Right));
-            WaitForInput(communicator, DigitalInput.Three, true);
-            logger.DebugExt("Send StopMotor One");
-            communicator.QueueCommand(new StopMotorCommand(Motor.One));
+            BreakoutInterface(communicator);
 
-            logger.DebugExt("Send StartMotor Two");
-            communicator.QueueCommand(new StartMotorCommand(Motor.Two, Speed.Fast, Movement.Right));
-            WaitForInput(communicator, DigitalInput.Two, true);
-            logger.DebugExt("Send StopMotor Two");
-            communicator.QueueCommand(new StopMotorCommand(Motor.Two));
+            StartMotorStopWithDigitalInput(communicator, new StartMotorCommand(Motor.Two, Speed.Fast, Movement.Right), DigitalInput.Two, true);
 
-            logger.DebugExt("Send StartMotor One Left");
-            communicator.QueueCommand(new StartMotorCommand(Motor.One, Speed.Fast, Movement.Left));
-            Thread.Sleep(TimeSpan.FromMilliseconds(1000));
-            logger.DebugExt("Send StartMotor One Right");
-            communicator.QueueCommand(new StartMotorCommand(Motor.One, Speed.Fast, Movement.Right));
-            WaitForInput(communicator, DigitalInput.Three, true);
+            BreakoutInterface(communicator);
 
-
-            logger.DebugExt("Send StartMotor Two");
-            communicator.QueueCommand(new StartMotorCommand(Motor.Two, Speed.Fast, Movement.Right));
-            WaitForInput(communicator, DigitalInput.Three, false);
-
-            logger.DebugExt("Send StopMotor One");
-            communicator.QueueCommand(new StopMotorCommand(Motor.One));
+            StartMotorStopAfter(communicator, new StartMotorCommand(Motor.Two, Speed.Maximal, Movement.Right), TimeSpan.FromSeconds(2));
             
-            Thread.Sleep(TimeSpan.FromSeconds(2));
-            logger.DebugExt("Send StopMotor Two");
-            communicator.QueueCommand(new StopMotorCommand(Motor.Two));
-
-
             Thread.Sleep(TimeSpan.FromSeconds(5));
 
             communicator.Stop();
         }
 
+        private void BreakoutInterface(ControllerCommunicator communicator)
+        {
+            logger.InfoExt("Breakout interface");
+            communicator.QueueCommand(new StartMotorCommand(Motor.One, Speed.Fast, Movement.Left));
+            Thread.Sleep(TimeSpan.FromMilliseconds(900));
+            communicator.QueueCommand(new StartMotorCommand(Motor.One, Speed.Fast, Movement.Right));
+            WaitForInput(communicator, DigitalInput.Three, true);
+            communicator.QueueCommand(new StopMotorCommand(Motor.One));
+        }
+
+        private void StartMotorStopWithDigitalInput(ControllerCommunicator communicator, StartMotorCommand startMotorCommand, DigitalInput digitalInput, bool expectedInputState)
+        {
+            communicator.QueueCommand(startMotorCommand);
+            WaitForInput(communicator, digitalInput, expectedInputState);
+            communicator.QueueCommand(new StopMotorCommand(startMotorCommand.Motor));
+        }
+
+        private void StartMotorStopAfter(ControllerCommunicator communicator, StartMotorCommand startMotorCommand, TimeSpan stopAfterTimeSpan)
+        {
+            communicator.QueueCommand(startMotorCommand);
+            Thread.Sleep(stopAfterTimeSpan);
+            communicator.QueueCommand(new StopMotorCommand(startMotorCommand.Motor));
+        }
+
         private void WaitForInput(ControllerCommunicator communicator, DigitalInput digitalInput, bool expectedValue)
         {
-            var waitHandle = new ManualResetEvent(false);
-
-            logger.DebugExt("Wait for input 1");
-            communicator.UniversalInputs[(int)digitalInput].StateChanges.Where(b => b == expectedValue).Subscribe(b =>
-            {
-                logger.DebugExt($"Got input {digitalInput}");
-                waitHandle.Set();
-            });
-
-            if (!waitHandle.WaitOne(TimeSpan.FromSeconds(10)))
-            {
-                Assert.Fail("Did not finish movement");
-            }
+            communicator.UniversalInputs[(int)digitalInput].StateChanges.FirstAsync(b => b == expectedValue).Wait();
         }
     }
 }
