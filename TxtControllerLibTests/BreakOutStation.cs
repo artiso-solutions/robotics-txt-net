@@ -23,54 +23,36 @@ namespace TxtControllerLibTests
         [TestMethod]
         public void BreakOutBothInterfaces()
         {
-            var communicator = new ControllerCommunicator();
-
-            communicator.Start();
-
-            Thread.Sleep(TimeSpan.FromSeconds(1));
-
-            StartMotorStopWithDigitalInput(communicator, new StartMotorCommand(Motor.Two, Speed.Fast, Movement.Right), DigitalInput.One, true);
-
-            BreakoutInterface(communicator);
-
-            StartMotorStopWithDigitalInput(communicator, new StartMotorCommand(Motor.Two, Speed.Fast, Movement.Right), DigitalInput.Two, true);
-
-            BreakoutInterface(communicator);
-
-            StartMotorStopAfter(communicator, new StartMotorCommand(Motor.Two, Speed.Maximal, Movement.Right), TimeSpan.FromSeconds(2));
-            
-            Thread.Sleep(TimeSpan.FromSeconds(5));
-
-            communicator.Stop();
+            ProcessWorkpiece(true, false);
         }
 
-        private void BreakoutInterface(ControllerCommunicator communicator)
+        private void ProcessWorkpiece(bool breakoutFirstInterface, bool breakoutSecondInterface)
+        {
+            using (var sequencer = new ControllerSequencer())
+            {
+                sequencer.StartMotorStopWithDigitalInput(Motor.Two, Speed.Fast, Movement.Right, DigitalInput.One, true);
+
+                if (breakoutFirstInterface)
+                {
+                    BreakoutInterface(sequencer);
+                }
+
+                sequencer.StartMotorStopWithDigitalInput(Motor.Two, Speed.Fast, Movement.Right, DigitalInput.Two, true);
+
+                if (breakoutSecondInterface)
+                {
+                    BreakoutInterface(sequencer);
+                }
+
+                sequencer.StartMotorStopAfter(Motor.Two, Speed.Maximal, Movement.Right, TimeSpan.FromSeconds(2));
+            }
+        }
+
+        private void BreakoutInterface(ControllerSequencer sequencer)
         {
             logger.InfoExt("Breakout interface");
-            communicator.QueueCommand(new StartMotorCommand(Motor.One, Speed.Fast, Movement.Left));
-            Thread.Sleep(TimeSpan.FromMilliseconds(900));
-            communicator.QueueCommand(new StartMotorCommand(Motor.One, Speed.Fast, Movement.Right));
-            WaitForInput(communicator, DigitalInput.Three, true);
-            communicator.QueueCommand(new StopMotorCommand(Motor.One));
-        }
-
-        private void StartMotorStopWithDigitalInput(ControllerCommunicator communicator, StartMotorCommand startMotorCommand, DigitalInput digitalInput, bool expectedInputState)
-        {
-            communicator.QueueCommand(startMotorCommand);
-            WaitForInput(communicator, digitalInput, expectedInputState);
-            communicator.QueueCommand(new StopMotorCommand(startMotorCommand.Motor));
-        }
-
-        private void StartMotorStopAfter(ControllerCommunicator communicator, StartMotorCommand startMotorCommand, TimeSpan stopAfterTimeSpan)
-        {
-            communicator.QueueCommand(startMotorCommand);
-            Thread.Sleep(stopAfterTimeSpan);
-            communicator.QueueCommand(new StopMotorCommand(startMotorCommand.Motor));
-        }
-
-        private void WaitForInput(ControllerCommunicator communicator, DigitalInput digitalInput, bool expectedValue)
-        {
-            communicator.UniversalInputs[(int)digitalInput].StateChanges.FirstAsync(b => b == expectedValue).Wait();
+            sequencer.StartMotorStopAfter(Motor.One, Speed.Fast, Movement.Left, TimeSpan.FromMilliseconds(900));
+            sequencer.StartMotorStopWithDigitalInput(Motor.One, Speed.Fast, Movement.Right, DigitalInput.Three, true);
         }
     }
 }

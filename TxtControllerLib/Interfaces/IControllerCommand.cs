@@ -2,7 +2,7 @@
 
 namespace artiso.Fischertechnik.TxtController.Lib.Interfaces
 {
-    public interface IControllerCommand
+    internal interface IControllerCommand
     {
         void ApplyMessageChanges(ExchangeDataCommandMessage message);
     }

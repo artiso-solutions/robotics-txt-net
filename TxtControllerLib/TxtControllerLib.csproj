@@ -74,6 +74,7 @@
     <Compile Include="Commands\StopMotorCommand.cs" />
     <Compile Include="Components\CommandProcessor.cs" />
     <Compile Include="Components\ControllerCommunicator.cs" />
+    <Compile Include="Components\ControllerSequencer.cs" />
     <Compile Include="Components\DigitalInputInfo.cs" />
     <Compile Include="Components\ResponseProcessor.cs" />
     <Compile Include="Contracts\Communication.cs" />

@@ -3,7 +3,7 @@ using artiso.Fischertechnik.TxtController.Lib.Messages;
 
 namespace artiso.Fischertechnik.TxtController.Lib.Components
 {
-    public class ResponseProcessor
+    internal class ResponseProcessor
     {
         public void ProcessResponse(ExchangeDataResponseMessage responseMessage, DigitalInputInfo[] universalInputs)
         {

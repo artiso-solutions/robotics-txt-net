@@ -7,7 +7,7 @@ using JetBrains.Annotations;
 
 namespace artiso.Fischertechnik.TxtController.Lib.Commands
 {
-    public class StartMotorCommand : IControllerCommand
+    internal class StartMotorCommand : IControllerCommand
     {
         private readonly Speed speed;
         private readonly Movement movement;

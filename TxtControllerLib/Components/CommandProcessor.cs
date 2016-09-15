@@ -5,7 +5,7 @@ using JetBrains.Annotations;
 
 namespace artiso.Fischertechnik.TxtController.Lib.Components
 {
-    public class CommandProcessor
+    internal class CommandProcessor
     {
         public void ProcessControllerCommand([NotNull] IControllerCommand command, [NotNull] ExchangeDataCommandMessage currentCommandMessage, DigitalInputInfo[] universalInputs)
         {

@@ -4,7 +4,7 @@ using System.Reactive.Subjects;
 
 namespace artiso.Fischertechnik.TxtController.Lib.Components
 {
-    public class DigitalInputInfo
+    internal class DigitalInputInfo
     {
         private readonly Subject<bool> stateChangesSubject;
 

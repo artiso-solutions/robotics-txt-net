@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,7 +13,7 @@ using log4net.Util;
 
 namespace artiso.Fischertechnik.TxtController.Lib.Components
 {
-    public class ControllerCommunicator
+    internal class ControllerCommunicator
     {
         private readonly ILog logger;
 
@@ -28,7 +27,7 @@ namespace artiso.Fischertechnik.TxtController.Lib.Components
 
         public ControllerCommunicator()
         {
-            this.logger = LogManager.GetLogger(typeof (ControllerCommunicator));
+            this.logger = LogManager.GetLogger(typeof(ControllerCommunicator));
 
             this.commandProcessor = new CommandProcessor();
             this.responseProcessor = new ResponseProcessor();
@@ -87,7 +86,7 @@ namespace artiso.Fischertechnik.TxtController.Lib.Components
             }; // TODO init config?
             driver.SendCommand(configMessage);
 
-            while (!cancellationToken.IsCancellationRequested)
+            while (!cancellationToken.IsCancellationRequested || !this.commandQueue.IsEmpty)
             {
                 IControllerCommand command;
                 while (this.commandQueue.TryDequeue(out command))
@@ -97,8 +96,9 @@ namespace artiso.Fischertechnik.TxtController.Lib.Components
                         this.logger.DebugExt($"Process {command.GetType().Name}");
                         this.commandProcessor.ProcessControllerCommand(command, currentCommandMessage, UniversalInputs);
                     }
-                    catch (Exception)
+                    catch (Exception exception)
                     {
+                        logger.Error(exception);
                         // TODO ???
                         throw;
                     }
