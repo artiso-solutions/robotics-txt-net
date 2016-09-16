@@ -1,9 +1,9 @@
 using System;
-using artiso.Fischertechnik.TxtController.Lib.Messages.Base;
+using RoboticsTxt.Lib.Messages.Base;
 
-namespace artiso.Fischertechnik.TxtController.Lib.Messages
+namespace RoboticsTxt.Lib.Messages
 {
-    public class QueryStatusResponseMessage : ResponseMessage
+    internal class QueryStatusResponseMessage : ResponseMessage
     {
         public QueryStatusResponseMessage() : base(CommandIds.ReceiveQueryStatus)
         {

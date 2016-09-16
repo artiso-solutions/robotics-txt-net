@@ -1,18 +1,17 @@
-﻿using artiso.Fischertechnik.TxtController.Lib.Messages.Base;
-using JetBrains.Annotations;
-using log4net;
-using log4net.Util;
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using JetBrains.Annotations;
+using log4net;
+using log4net.Util;
+using RoboticsTxt.Lib.Contracts;
+using RoboticsTxt.Lib.Messages.Base;
 
-namespace artiso.Fischertechnik.TxtController.Lib.ControllerDriver
+namespace RoboticsTxt.Lib.ControllerDriver
 {
-   using Contracts;
-
-   public class TcpControllerDriver : IDisposable
+    internal class TcpControllerDriver : IDisposable
    {
       private readonly IPAddress ipAddress;
       private readonly ILog logger = LogManager.GetLogger(typeof(TcpControllerDriver));

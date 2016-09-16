@@ -1,8 +1,8 @@
 using System;
 
-namespace artiso.Fischertechnik.TxtController.Lib.Messages.Base
+namespace RoboticsTxt.Lib.Messages.Base
 {
-    public class PropertyDeserializationInfo
+    internal class PropertyDeserializationInfo
     {
         public PropertyDeserializationInfo(string name, Action<DeserializationContext> readValue)
         {

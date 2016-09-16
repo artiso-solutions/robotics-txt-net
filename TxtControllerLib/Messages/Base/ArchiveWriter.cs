@@ -1,9 +1,9 @@
 using System;
 using System.IO;
 
-namespace artiso.Fischertechnik.TxtController.Lib.Messages.Base
+namespace RoboticsTxt.Lib.Messages.Base
 {
-    public class ArchiveWriter
+    internal class ArchiveWriter
     {
         public static void WriteInt32(Stream stream, uint value)
         {

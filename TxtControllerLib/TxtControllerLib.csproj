@@ -7,8 +7,8 @@
     <ProjectGuid>{877FAE27-64DF-4C56-B2AC-5E48CF35C151}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>artiso.Fischertechnik.TxtController.Lib</RootNamespace>
-    <AssemblyName>artiso.Fischertechnik.TxtController.Lib</AssemblyName>
+    <RootNamespace>RoboticsTxt.Lib</RootNamespace>
+    <AssemblyName>RoboticsTxt.Lib</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -41,25 +41,53 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Reactive.Core, Version=3.0.0.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Reactive.Core.3.0.0\lib\net46\System.Reactive.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Reactive.Interfaces, Version=3.0.0.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Reactive.Interfaces.3.0.0\lib\net45\System.Reactive.Interfaces.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Reactive.Linq, Version=3.0.0.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Reactive.Linq.3.0.0\lib\net46\System.Reactive.Linq.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Reactive.PlatformServices, Version=3.0.0.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Reactive.PlatformServices.3.0.0\lib\net46\System.Reactive.PlatformServices.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Reactive.Windows.Threading, Version=3.0.0.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Reactive.Windows.Threading.3.0.0\lib\net45\System.Reactive.Windows.Threading.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\StartMotorCommand.cs" />
+    <Compile Include="Commands\StopMotorCommand.cs" />
+    <Compile Include="Components\CommandProcessor.cs" />
+    <Compile Include="Components\ControllerCommunicator.cs" />
+    <Compile Include="Components\ControllerSequencer.cs" />
+    <Compile Include="Components\DigitalInputInfo.cs" />
+    <Compile Include="Components\ResponseProcessor.cs" />
     <Compile Include="Contracts\Communication.cs" />
+    <Compile Include="Contracts\DigitalInput.cs" />
     <Compile Include="Contracts\Motor.cs" />
     <Compile Include="Contracts\Movement.cs" />
     <Compile Include="Contracts\Speed.cs" />
+    <Compile Include="Interfaces\IControllerCommand.cs" />
     <Compile Include="Messages\Base\ArchiveReader.cs" />
     <Compile Include="Messages\Base\ArchiveWriter.cs" />
     <Compile Include="Messages\CommandIds.cs" />
     <Compile Include="Messages\ExchangeDataCommandMessage.cs" />
     <Compile Include="Messages\ExchangeDataResponseMessage.cs" />
-    <Compile Include="TxtCommands\TxtCommands.cs" />
-    <Compile Include="xxxObsoletexxx\CommunicationManager.cs" />
     <Compile Include="Messages\Base\CommandMessage.cs" />
     <Compile Include="ControllerDriver\CommunicationFailedException.cs" />
     <Compile Include="Messages\Base\CommandMessageExtensions.cs" />
@@ -73,7 +101,6 @@
     <Compile Include="Configuration\MotorMode.cs" />
     <Compile Include="Messages\QueryStatusCommandMessage.cs" />
     <Compile Include="Messages\QueryStatusResponseMessage.cs" />
-    <Compile Include="xxxObsoletexxx\ControllerStatus.cs" />
     <Compile Include="Messages\Base\ResponseMessage.cs" />
     <Compile Include="Messages\Base\ResponseMessageExtensions.cs" />
     <Compile Include="Messages\StartOnlineCommandMessage.cs" />
@@ -84,6 +111,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Robotics.Txt.nuspec" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

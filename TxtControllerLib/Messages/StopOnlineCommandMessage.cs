@@ -1,8 +1,8 @@
-using artiso.Fischertechnik.TxtController.Lib.Messages.Base;
+using RoboticsTxt.Lib.Messages.Base;
 
-namespace artiso.Fischertechnik.TxtController.Lib.Messages
+namespace RoboticsTxt.Lib.Messages
 {
-    public class StopOnlineCommandMessage : CommandMessage
+    internal class StopOnlineCommandMessage : CommandMessage
     {
         public StopOnlineCommandMessage() : base(CommandIds.SendStopOnline, CommandIds.ReceiveStopOnline)
         {

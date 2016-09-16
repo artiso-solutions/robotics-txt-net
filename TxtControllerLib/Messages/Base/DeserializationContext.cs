@@ -1,6 +1,6 @@
-namespace artiso.Fischertechnik.TxtController.Lib.Messages.Base
+namespace RoboticsTxt.Lib.Messages.Base
 {
-    public class DeserializationContext
+    internal class DeserializationContext
     {
         public DeserializationContext(byte[] buffer)
         {

@@ -1,9 +1,9 @@
 using System;
 using JetBrains.Annotations;
 
-namespace artiso.Fischertechnik.TxtController.Lib.Messages.Base
+namespace RoboticsTxt.Lib.Messages.Base
 {
-    public static class ResponseMessageExtensions
+    internal static class ResponseMessageExtensions
     {
         public static ResponseMessage AddProperty([NotNull] this ResponseMessage commandMessage, [NotNull] string name,
             [NotNull] Action<DeserializationContext> readValue)

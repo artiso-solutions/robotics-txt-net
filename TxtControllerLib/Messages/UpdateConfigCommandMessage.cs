@@ -1,10 +1,10 @@
 using System.Linq;
-using artiso.Fischertechnik.TxtController.Lib.Configuration;
-using artiso.Fischertechnik.TxtController.Lib.Messages.Base;
+using RoboticsTxt.Lib.Configuration;
+using RoboticsTxt.Lib.Messages.Base;
 
-namespace artiso.Fischertechnik.TxtController.Lib.Messages
+namespace RoboticsTxt.Lib.Messages
 {
-    public class UpdateConfigCommandMessage : CommandMessage
+    internal class UpdateConfigCommandMessage : CommandMessage
     {
         public UpdateConfigCommandMessage() : base(CommandIds.SendUpdateConfig, CommandIds.ReceiveUpdateConfig)
         {

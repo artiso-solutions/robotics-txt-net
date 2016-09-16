@@ -2,9 +2,9 @@ using System;
 using System.IO;
 using JetBrains.Annotations;
 
-namespace artiso.Fischertechnik.TxtController.Lib.Messages.Base
+namespace RoboticsTxt.Lib.Messages.Base
 {
-    public static class CommandMessageExtensions
+    internal static class CommandMessageExtensions
     {
         public static CommandMessage AddProperty([NotNull] this CommandMessage commandMessage, [NotNull] string name,
             [NotNull] Action<Stream> writeValueAction)
