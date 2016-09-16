@@ -88,7 +88,6 @@
     <Compile Include="Messages\CommandIds.cs" />
     <Compile Include="Messages\ExchangeDataCommandMessage.cs" />
     <Compile Include="Messages\ExchangeDataResponseMessage.cs" />
-    <Compile Include="TxtCommands\TxtCommands.cs" />
     <Compile Include="Messages\Base\CommandMessage.cs" />
     <Compile Include="ControllerDriver\CommunicationFailedException.cs" />
     <Compile Include="Messages\Base\CommandMessageExtensions.cs" />
