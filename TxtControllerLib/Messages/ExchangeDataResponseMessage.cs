@@ -2,7 +2,7 @@ using RoboticsTxt.Lib.Messages.Base;
 
 namespace RoboticsTxt.Lib.Messages
 {
-    public class ExchangeDataResponseMessage : ResponseMessage
+    internal class ExchangeDataResponseMessage : ResponseMessage
     {
         public ExchangeDataResponseMessage() : base(CommandIds.ReceiveExchangeData)
         {

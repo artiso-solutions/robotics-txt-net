@@ -3,7 +3,7 @@ using System.IO;
 
 namespace RoboticsTxt.Lib.Messages.Base
 {
-    public class PropertySerializationInfo
+    internal class PropertySerializationInfo
     {
         public PropertySerializationInfo(string name, Action<Stream> writeValue)
         {

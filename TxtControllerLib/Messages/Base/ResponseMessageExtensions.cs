@@ -3,7 +3,7 @@ using JetBrains.Annotations;
 
 namespace RoboticsTxt.Lib.Messages.Base
 {
-    public static class ResponseMessageExtensions
+    internal static class ResponseMessageExtensions
     {
         public static ResponseMessage AddProperty([NotNull] this ResponseMessage commandMessage, [NotNull] string name,
             [NotNull] Action<DeserializationContext> readValue)

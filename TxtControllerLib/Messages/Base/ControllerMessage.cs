@@ -1,6 +1,6 @@
 namespace RoboticsTxt.Lib.Messages.Base
 {
-    public abstract class ControllerMessage
+    internal abstract class ControllerMessage
     {
         protected ControllerMessage()
         {

@@ -4,7 +4,7 @@ using JetBrains.Annotations;
 
 namespace RoboticsTxt.Lib.Messages.Base
 {
-    public static class CommandMessageExtensions
+    internal static class CommandMessageExtensions
     {
         public static CommandMessage AddProperty([NotNull] this CommandMessage commandMessage, [NotNull] string name,
             [NotNull] Action<Stream> writeValueAction)

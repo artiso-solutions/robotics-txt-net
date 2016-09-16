@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace RoboticsTxt.Lib.Messages.Base
 {
-    public abstract class CommandMessage : ControllerMessage
+    internal abstract class CommandMessage : ControllerMessage
     {
         public CommandMessage(uint commandId, uint expectedResponseId) : base(commandId)
         {

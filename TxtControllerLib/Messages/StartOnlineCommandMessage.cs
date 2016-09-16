@@ -2,7 +2,7 @@ using RoboticsTxt.Lib.Messages.Base;
 
 namespace RoboticsTxt.Lib.Messages
 {
-    public class StartOnlineCommandMessage : CommandMessage
+    internal class StartOnlineCommandMessage : CommandMessage
     {
         public StartOnlineCommandMessage() : base(CommandIds.SendStartOnline, CommandIds.ReceiveStartOnline)
         {

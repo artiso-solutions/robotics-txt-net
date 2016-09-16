@@ -11,7 +11,7 @@ using RoboticsTxt.Lib.Messages.Base;
 
 namespace RoboticsTxt.Lib.ControllerDriver
 {
-    public class TcpControllerDriver : IDisposable
+    internal class TcpControllerDriver : IDisposable
    {
       private readonly IPAddress ipAddress;
       private readonly ILog logger = LogManager.GetLogger(typeof(TcpControllerDriver));

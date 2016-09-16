@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 
 namespace RoboticsTxt.Lib.ControllerDriver
 {
-    public class CommunicationFailedException : Exception
+    internal class CommunicationFailedException : Exception
     {
         public CommunicationFailedException()
         {

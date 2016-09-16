@@ -4,7 +4,7 @@ using RoboticsTxt.Lib.Messages.Base;
 
 namespace RoboticsTxt.Lib.Messages
 {
-    public class UpdateConfigCommandMessage : CommandMessage
+    internal class UpdateConfigCommandMessage : CommandMessage
     {
         public UpdateConfigCommandMessage() : base(CommandIds.SendUpdateConfig, CommandIds.ReceiveUpdateConfig)
         {

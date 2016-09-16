@@ -6,7 +6,7 @@ using RoboticsTxt.Lib.Messages;
 
 namespace RoboticsTxt.Lib.Commands
 {
-    public class StopMotorCommand : IControllerCommand
+    internal class StopMotorCommand : IControllerCommand
     {
         private readonly Motor motor;
 

@@ -1,6 +1,6 @@
 namespace RoboticsTxt.Lib.Messages
 {
-    public class CommandIds
+    internal class CommandIds
     {
         public const uint SendQueryStatus = 0xDC21219A;
         public const uint ReceiveQueryStatus = 0xBAC9723E;

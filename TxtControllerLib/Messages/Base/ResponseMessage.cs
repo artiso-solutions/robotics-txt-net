@@ -3,7 +3,7 @@ using RoboticsTxt.Lib.ControllerDriver;
 
 namespace RoboticsTxt.Lib.Messages.Base
 {
-    public class ResponseMessage : ControllerMessage
+    internal class ResponseMessage : ControllerMessage
     {
         public ResponseMessage(uint commandId)
         {

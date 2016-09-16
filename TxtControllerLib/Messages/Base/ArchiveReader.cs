@@ -3,7 +3,7 @@ using System.Text;
 
 namespace RoboticsTxt.Lib.Messages.Base
 {
-    public class ArchiveReader
+    internal class ArchiveReader
     {
         public static uint ReadUInt32(byte[] bytes, ref int currentPosition)
         {
