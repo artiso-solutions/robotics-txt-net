@@ -67,6 +67,10 @@
     </Window.Resources>
 
     <Grid>
+        <Button HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Command="{Binding ReferenceAxisCommand}"
+                Content="Reference Axis" />
         <Viewbox>
             <Canvas Width="500" Height="300">
                 <Canvas.Background>

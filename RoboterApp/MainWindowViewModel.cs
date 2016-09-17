@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows.Input;
 using JetBrains.Annotations;
 using RoboticsTxt.Lib.Components;
 using RoboticsTxt.Lib.Contracts;
@@ -14,6 +15,8 @@ namespace RoboterApp
         public MainWindowViewModel()
         {
             controllerSequencer = new ControllerSequencer();
+
+            ReferenceAxisCommand = new ReferenceAxisCommand(controllerSequencer);
 
             MoveBackwardCommand = new ContinuousMoveAxisCommand(controllerSequencer, Motor.Two, Movement.Left);
             MoveForwardCommand = new ContinuousMoveAxisCommand(controllerSequencer, Motor.Two, Movement.Right);
@@ -33,6 +36,7 @@ namespace RoboterApp
             controllerSequencer.Dispose();
         }
 
+        public ICommand ReferenceAxisCommand { get; }
         public ContinuousMoveAxisCommand MoveBackwardCommand { get; }
         public ContinuousMoveAxisCommand MoveForwardCommand { get; }
         public ContinuousMoveAxisCommand MoveUpCommand { get; }
