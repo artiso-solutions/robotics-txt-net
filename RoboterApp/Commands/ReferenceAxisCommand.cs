@@ -42,6 +42,13 @@ namespace RoboterApp.Commands
 
         private async Task ReferenceAxis(Motor motor, Movement movement, Speed referenceSpeed, DigitalInput referenceInput)
         {
+            if (controllerSequencer.GetDigitalInputState(referenceInput) == false)
+            {
+                var freeRunMovement = movement == Movement.Left ? Movement.Right : Movement.Left;
+                await controllerSequencer.StartMotorStopWithDigitalInputAsync(motor, referenceSpeed, freeRunMovement, referenceInput, true);
+                await controllerSequencer.StartMotorStopAfterAsync(motor, referenceSpeed, freeRunMovement, TimeSpan.FromMilliseconds(100));
+            }
+
             await controllerSequencer.StartMotorStopWithDigitalInputAsync(motor, referenceSpeed, movement, referenceInput, false);
         }
 

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Reactive.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using RoboticsTxt.Lib.Commands;
 using RoboticsTxt.Lib.Contracts;
@@ -88,6 +87,11 @@ namespace RoboticsTxt.Lib.Components
         public void Dispose()
         {
             controllerCommunicator.Stop();
+        }
+
+        public bool GetDigitalInputState(DigitalInput referenceInput)
+        {
+            return controllerCommunicator.UniversalInputs[(int)referenceInput].CurrentState;
         }
     }
 }
