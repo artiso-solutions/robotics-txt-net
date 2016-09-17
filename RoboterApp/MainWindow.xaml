@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:roboterApp="clr-namespace:RoboterApp"
-        Title="MainWindow"
+        Title="ROBOTICS TXT Sample"
         Width="1024"
         Height="768"
         d:DataContext="{d:DesignInstance roboterApp:MainWindowViewModel,
@@ -62,37 +62,45 @@
                 <Button Canvas.Left="50"
                         Canvas.Top="60"
                         Content="{StaticResource Backward}"
+                        Command="{Binding MoveBackwardCommand}"
                         Template="{StaticResource ControlButtonTemplate}" />
                 <Button Canvas.Left="90"
                         Canvas.Top="60"
                         Content="{StaticResource Forward}"
+                        Command="{Binding MoveForwardCommand}"
                         Template="{StaticResource ControlButtonTemplate}" />
 
 
                 <Button Canvas.Left="190"
                         Canvas.Top="5"
+                        Command="{Binding TurnLeftCommand}"
                         Content="{StaticResource Left}"
                         Template="{StaticResource ControlButtonTemplate}" />
                 <Button Canvas.Left="240"
                         Canvas.Top="5"
+                        Command="{Binding TurnRightCommand}"
                         Content="{StaticResource Right}"
                         Template="{StaticResource ControlButtonTemplate}" />
 
                 <Button Canvas.Left="270"
                         Canvas.Top="100"
+                        Command="{Binding MoveUpCommand}"
                         Content="{StaticResource Up}"
                         Template="{StaticResource ControlButtonTemplate}" />
                 <Button Canvas.Left="270"
                         Canvas.Top="180"
+                        Command="{Binding MoveDownCommand}"
                         Content="{StaticResource Down}"
                         Template="{StaticResource ControlButtonTemplate}" />
 
                 <Button Canvas.Left="390"
                         Canvas.Top="160"
+                        Command="{Binding OpenClampCommand}"
                         Content="{StaticResource Open}"
                         Template="{StaticResource ControlButtonTemplate}" />
-                <Button Canvas.Left="390"
-                        Canvas.Top="233"
+                <Button Canvas.Left="425"
+                        Canvas.Top="160"
+                        Command="{Binding CloseClampCommand}"
                         Content="{StaticResource Close}"
                         Template="{StaticResource ControlButtonTemplate}" />
             </Canvas>

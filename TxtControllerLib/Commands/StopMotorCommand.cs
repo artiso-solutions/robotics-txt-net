@@ -19,12 +19,12 @@ namespace RoboticsTxt.Lib.Commands
         {
             if (message == null) throw new ArgumentNullException(nameof(message));
 
-            var motorIndex = (int) this.motor;
+            var motorIndex = (int)this.motor;
 
             message.PwmOutputValues[2 * motorIndex] = 0;
             message.PwmOutputValues[2 * motorIndex + 1] = 0;
 
-            message.MotorDistance[2 * motorIndex] = 0;
+            message.MotorDistance[motorIndex] = 0;
 
             message.MotorCommandId[motorIndex]++;
         }

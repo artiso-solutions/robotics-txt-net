@@ -1,9 +1,4 @@
-﻿using System;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using System.Windows;
-using RoboterApp.Annotations;
-using RoboticsTxt.Lib.Components;
+﻿using System.Windows;
 
 namespace RoboterApp
 {
@@ -25,30 +20,6 @@ namespace RoboterApp
         protected override void OnExit(ExitEventArgs e)
         {
             mainWindowViewModel.Dispose();
-        }
-    }
-
-    public class MainWindowViewModel : INotifyPropertyChanged, IDisposable
-    {
-        private readonly ControllerSequencer controllerSequencer;
-
-        public MainWindowViewModel()
-        {
-            controllerSequencer = new ControllerSequencer();
-        }
-
-        public void Dispose()
-        {
-            controllerSequencer.Dispose();
-        }
-
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
