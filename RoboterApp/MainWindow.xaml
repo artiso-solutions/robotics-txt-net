@@ -1,6 +1,7 @@
 ﻿<Window x:Class="RoboterApp.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="clr-namespace:RoboterApp.Controls"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:roboterApp="clr-namespace:RoboterApp"
@@ -36,73 +37,69 @@
             M14.69948,7.0050564L17.301562,9.6070963 12.597465,14.31111 24.707598,14.31111 24.707598,17.714151 12.998471,17.714151 17.501517,22.217174 14.69948,25.019197 5.6924126,16.012111z M16.000521,1.9010148C12.39745,1.9010149 8.7944405,3.3030332 5.9924042,6.0050493 0.4883088,11.509087 0.4883088,20.416135 5.9924042,25.920206 11.497476,31.424274 20.403589,31.424274 25.908661,25.920206 31.412695,20.416135 31.412695,11.509087 25.908661,6.0050493 23.206602,3.3030332 19.603531,1.9010149 16.000521,1.9010148z M16.000521,0C20.103537,-1.8870742E-07 24.206616,1.6010248 27.309679,4.7040444 33.614748,10.908101 33.514712,21.116153 27.309679,27.321216 21.104588,33.526279 10.896455,33.526279 4.6913626,27.321216 -1.6137065,21.116153 -1.5136686,10.908101 4.6913626,4.7040444 7.7944281,1.6010248 11.897444,-1.8870742E-07 16.000521,0z
         </Geometry>
 
-        <ControlTemplate x:Key="ControlButtonTemplate"
-                         TargetType="Button">
-            <Border Background="#CCCCCCCC"
-                    CornerRadius="5">
-                <Path Width="25"
-                      Height="25"
-                      Margin="2"
-                      Data="{Binding Content,
-                                     RelativeSource={RelativeSource TemplatedParent}}"
-                      Fill="ForestGreen"
-                      Stretch="Uniform"
-                      Stroke="ForestGreen" />
-            </Border>
-        </ControlTemplate>
+        <Style TargetType="{x:Type controls:MovementButton}">
+            <Setter Property="Background" Value="#CCCCCCCC" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type controls:MovementButton}">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="5">
+                            <Path Width="26"
+                                  Height="26"
+                                  Margin="2"
+                                  Data="{Binding Content,
+                                                 RelativeSource={RelativeSource TemplatedParent}}"
+                                  Fill="ForestGreen"
+                                  Stretch="Uniform"
+                                  Stroke="ForestGreen" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Window.Resources>
 
     <Grid>
         <Viewbox>
-            <Canvas Width="500"
-                    Height="300">
+            <Canvas Width="500" Height="300">
                 <Canvas.Background>
                     <ImageBrush ImageSource="pack://application:,,,/Resources/Robo.jpg" />
                 </Canvas.Background>
-                <Button Canvas.Left="50"
-                        Canvas.Top="60"
-                        Content="{StaticResource Backward}"
-                        Command="{Binding MoveBackwardCommand}"
-                        Template="{StaticResource ControlButtonTemplate}" />
-                <Button Canvas.Left="90"
-                        Canvas.Top="60"
-                        Content="{StaticResource Forward}"
-                        Command="{Binding MoveForwardCommand}"
-                        Template="{StaticResource ControlButtonTemplate}" />
+                <controls:MovementButton Canvas.Left="50"
+                                         Canvas.Top="60"
+                                         Content="{StaticResource Backward}"
+                                         MoveAxisCommand="{Binding MoveBackwardCommand}" />
+                <controls:MovementButton Canvas.Left="90"
+                                         Canvas.Top="60"
+                                         Content="{StaticResource Forward}"
+                                         MoveAxisCommand="{Binding MoveForwardCommand}" />
 
 
-                <Button Canvas.Left="190"
-                        Canvas.Top="5"
-                        Command="{Binding TurnLeftCommand}"
-                        Content="{StaticResource Left}"
-                        Template="{StaticResource ControlButtonTemplate}" />
-                <Button Canvas.Left="240"
-                        Canvas.Top="5"
-                        Command="{Binding TurnRightCommand}"
-                        Content="{StaticResource Right}"
-                        Template="{StaticResource ControlButtonTemplate}" />
+                <controls:MovementButton Canvas.Left="190"
+                                         Canvas.Top="5"
+                                         Content="{StaticResource Left}"
+                                         MoveAxisCommand="{Binding TurnLeftCommand}" />
+                <controls:MovementButton Canvas.Left="240"
+                                         Canvas.Top="5"
+                                         Content="{StaticResource Right}"
+                                         MoveAxisCommand="{Binding TurnRightCommand}" />
 
-                <Button Canvas.Left="270"
-                        Canvas.Top="100"
-                        Command="{Binding MoveUpCommand}"
-                        Content="{StaticResource Up}"
-                        Template="{StaticResource ControlButtonTemplate}" />
-                <Button Canvas.Left="270"
-                        Canvas.Top="180"
-                        Command="{Binding MoveDownCommand}"
-                        Content="{StaticResource Down}"
-                        Template="{StaticResource ControlButtonTemplate}" />
+                <controls:MovementButton Canvas.Left="270"
+                                         Canvas.Top="100"
+                                         Content="{StaticResource Up}"
+                                         MoveAxisCommand="{Binding MoveUpCommand}" />
+                <controls:MovementButton Canvas.Left="270"
+                                         Canvas.Top="180"
+                                         Content="{StaticResource Down}"
+                                         MoveAxisCommand="{Binding MoveDownCommand}" />
 
-                <Button Canvas.Left="390"
-                        Canvas.Top="160"
-                        Command="{Binding OpenClampCommand}"
-                        Content="{StaticResource Open}"
-                        Template="{StaticResource ControlButtonTemplate}" />
-                <Button Canvas.Left="425"
-                        Canvas.Top="160"
-                        Command="{Binding CloseClampCommand}"
-                        Content="{StaticResource Close}"
-                        Template="{StaticResource ControlButtonTemplate}" />
+                <controls:MovementButton Canvas.Left="390"
+                                         Canvas.Top="160"
+                                         Content="{StaticResource Open}"
+                                         MoveAxisCommand="{Binding OpenClampCommand}" />
+                <controls:MovementButton Canvas.Left="425"
+                                         Canvas.Top="160"
+                                         Content="{StaticResource Close}"
+                                         MoveAxisCommand="{Binding CloseClampCommand}" />
             </Canvas>
         </Viewbox>
     </Grid>
