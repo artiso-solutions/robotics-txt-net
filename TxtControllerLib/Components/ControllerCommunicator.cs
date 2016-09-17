@@ -104,7 +104,6 @@ namespace RoboticsTxt.Lib.Components
                     }
                 }
 
-                this.logger.DebugExt("Send current message to controller");
                 var response = driver.SendCommand<ExchangeDataCommandMessage, ExchangeDataResponseMessage>(currentCommandMessage);
 
                 this.responseProcessor.ProcessResponse(response, this.UniversalInputs);

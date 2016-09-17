@@ -10,9 +10,12 @@ namespace RoboticsTxt.Lib.Messages
             this.CounterInput = new short[4];
             this.CounterValue = new short[4];
 
-            this.AddProperty("UniversalInputs", dc => this.UniversalInputs = ArchiveReader.ReadInt16(dc, 8))
-                .AddProperty("CounterInput", dc => this.CounterInput = ArchiveReader.ReadInt16(dc, 4))
-                .AddProperty("CounterValue", dc => this.CounterValue = ArchiveReader.ReadInt16(dc, 4));
+            this.AddProperty(nameof(UniversalInputs), dc => this.UniversalInputs = ArchiveReader.ReadInt16(dc, 8))
+                .AddProperty(nameof(CounterInput), dc => this.CounterInput = ArchiveReader.ReadInt16(dc, 4))
+                .AddProperty(nameof(CounterValue), dc => this.CounterValue = ArchiveReader.ReadInt16(dc, 4))
+                .AddProperty(nameof(CounterCommandId), dc => this.CounterCommandId = ArchiveReader.ReadInt16(dc))
+                .AddProperty(nameof(MotorCommandId), dc => this.MotorCommandId = ArchiveReader.ReadInt16(dc))
+                .AddProperty(nameof(SoundCommandId), dc => this.SoundCommandId = ArchiveReader.ReadInt16(dc));
         }
 
         /// <summary>

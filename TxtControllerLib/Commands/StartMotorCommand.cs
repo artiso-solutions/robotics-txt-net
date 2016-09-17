@@ -24,24 +24,22 @@ namespace RoboticsTxt.Lib.Commands
         {
             if (message == null) throw new ArgumentNullException(nameof(message));
 
-            var motorIndex = (int) this.Motor;
-            var speedValue = (short) this.speed;
+            var motorIndex = (int)this.Motor;
+            var speedValue = (short)this.speed;
 
             switch (this.movement)
             {
                 case Movement.Left:
-                    message.PwmOutputValues[2*motorIndex] = speedValue;
-                    message.PwmOutputValues[2*motorIndex + 1] = 0;
+                    message.PwmOutputValues[2 * motorIndex] = speedValue;
+                    message.PwmOutputValues[2 * motorIndex + 1] = 0;
                     break;
                 case Movement.Right:
-                    message.PwmOutputValues[2*motorIndex] = 0;
-                    message.PwmOutputValues[2*motorIndex + 1] = speedValue;
+                    message.PwmOutputValues[2 * motorIndex] = 0;
+                    message.PwmOutputValues[2 * motorIndex + 1] = speedValue;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-
-            message.MotorCommandId[motorIndex]++;
         }
     }
 }
