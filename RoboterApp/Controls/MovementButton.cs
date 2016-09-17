@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using RoboterApp.Commands;
 using RoboticsTxt.Lib.Contracts;
 
 namespace RoboterApp.Controls

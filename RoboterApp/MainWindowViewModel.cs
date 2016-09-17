@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using JetBrains.Annotations;
+using RoboterApp.Commands;
 using RoboticsTxt.Lib.Components;
 using RoboticsTxt.Lib.Contracts;
 

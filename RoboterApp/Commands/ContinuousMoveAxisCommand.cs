@@ -1,7 +1,7 @@
 using RoboticsTxt.Lib.Components;
 using RoboticsTxt.Lib.Contracts;
 
-namespace RoboterApp
+namespace RoboterApp.Commands
 {
     public class ContinuousMoveAxisCommand
     {

@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using log4net;
 
 namespace RoboterApp
 {
@@ -11,6 +12,8 @@ namespace RoboterApp
 
         protected override void OnStartup(StartupEventArgs e)
         {
+            var logger = LogManager.GetLogger(typeof(App));
+            logger.Info("Starting ROBOTICS TXT Sample application");
             mainWindowViewModel = new MainWindowViewModel();
             MainWindow = new MainWindow();
             MainWindow.DataContext = mainWindowViewModel;
