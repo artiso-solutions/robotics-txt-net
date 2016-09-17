@@ -38,7 +38,15 @@
         </Geometry>
 
         <Style TargetType="{x:Type controls:MovementButton}">
-            <Setter Property="Background" Value="#CCCCCCCC" />
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0 0" EndPoint="0 1">
+                        <GradientStop Offset="0.45" Color="#CC8AFF90" />
+
+                        <GradientStop Offset="0.55" Color="#CCFF4545" />
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type controls:MovementButton}">
@@ -48,9 +56,9 @@
                                   Margin="2"
                                   Data="{Binding Content,
                                                  RelativeSource={RelativeSource TemplatedParent}}"
-                                  Fill="ForestGreen"
+                                  Fill="#5651D6"
                                   Stretch="Uniform"
-                                  Stroke="ForestGreen" />
+                                  Stroke="#5651D6" />
                         </Border>
                     </ControlTemplate>
                 </Setter.Value>

@@ -37,13 +37,9 @@ namespace RoboterApp.Controls
             var position = e.GetPosition(this);
             var relative = position.Y / this.ActualHeight;
 
-            if (relative < 0.3)
+            if (relative < 0.5)
             {
                 currentSpeed = Speed.Slow;
-            }
-            else if (relative < 0.6)
-            {
-                currentSpeed = Speed.Quick;
             }
             else
             {
