@@ -3,11 +3,13 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Threading;
 using RoboticsTxt.Lib.Configuration;
 using RoboticsTxt.Lib.Contracts;
 using RoboticsTxt.Lib.ControllerDriver;
 using RoboticsTxt.Lib.Messages;
+using TxtControllerLibTests.Properties;
 
 namespace TxtControllerLibTests
 {
@@ -20,7 +22,7 @@ namespace TxtControllerLibTests
             using (var tcpControllerDriver = this.PrepareTcpControllerDriver())
             {
                 var message = new QueryStatusCommandMessage();
-                var bytes = new TcpControllerDriver(Communication.USB).GetBytesOfMessage(message);
+                var bytes = new TcpControllerDriver(IPAddress.Parse(Settings.Default.TestDeviceIpAddress)).GetBytesOfMessage(message);
                 Assert.AreEqual(4, bytes.Length);
 
                 var queryStatusResponseMessage =
@@ -38,7 +40,7 @@ namespace TxtControllerLibTests
             using (var tcpControllerDriver = this.PrepareTcpControllerDriver())
             {
                 var message = new StartOnlineCommandMessage();
-                var bytes = new TcpControllerDriver(Communication.USB).GetBytesOfMessage(message);
+                var bytes = new TcpControllerDriver(IPAddress.Parse(Settings.Default.TestDeviceIpAddress)).GetBytesOfMessage(message);
                 Assert.AreEqual(68, bytes.Length);
 
                 tcpControllerDriver.SendCommand(message);
@@ -311,7 +313,7 @@ namespace TxtControllerLibTests
         {
             var logger = LogManager.GetLogger(typeof(TcpControllerDriverTests));
             logger.Info($"Preparing TcpControllerDriver");
-            var tcpControllerDriver = new TcpControllerDriver(Communication.USB);
+            var tcpControllerDriver = new TcpControllerDriver(IPAddress.Parse(Settings.Default.TestDeviceIpAddress));
             tcpControllerDriver.StartCommunication();
             return tcpControllerDriver;
         }
@@ -327,7 +329,7 @@ namespace TxtControllerLibTests
                         .ToArray(),
                 CounterModes = new[] { CounterMode.Normal, CounterMode.Normal, CounterMode.Normal, CounterMode.Normal }
             };
-            var bytes = new TcpControllerDriver(Communication.USB).GetBytesOfMessage(message);
+            var bytes = new TcpControllerDriver(IPAddress.Parse(Settings.Default.TestDeviceIpAddress)).GetBytesOfMessage(message);
             Assert.AreEqual(96, bytes.Length);
 
             tcpControllerDriver.SendCommand(message);

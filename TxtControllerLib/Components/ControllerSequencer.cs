@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using RoboticsTxt.Lib.Commands;
@@ -21,9 +22,10 @@ namespace RoboticsTxt.Lib.Components
         /// Creates a new instance of the <see cref="ControllerSequencer"/> and starts the communication with the controller. To stop the communication
         /// you have to dispose the <see cref="ControllerSequencer"/>.
         /// </summary>
-        public ControllerSequencer()
+        /// <param name="ipAddress"></param>
+        public ControllerSequencer(IPAddress ipAddress)
         {
-            this.controllerCommunicator = new ControllerCommunicator();
+            this.controllerCommunicator = new ControllerCommunicator(ipAddress);
 
             this.controllerCommunicator.Start();
         }

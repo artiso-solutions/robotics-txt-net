@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel;
+using System.Net;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using JetBrains.Annotations;
@@ -15,7 +16,8 @@ namespace RoboterApp
 
         public MainWindowViewModel()
         {
-            controllerSequencer = new ControllerSequencer();
+            var ipAddress = IPAddress.Parse(Properties.Settings.Default.RoboIpAddress);
+            controllerSequencer = new ControllerSequencer(ipAddress);
 
             ReferenceAxisCommand = new ReferenceAxisCommand(controllerSequencer);
 
