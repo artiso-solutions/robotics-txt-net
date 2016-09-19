@@ -7,7 +7,7 @@ namespace RoboticsTxt.Lib.Components
 {
     internal class CommandProcessor
     {
-        public void ProcessControllerCommand([NotNull] IControllerCommand command, [NotNull] ExchangeDataCommandMessage currentCommandMessage, DigitalInputInfo[] universalInputs)
+        public void ProcessControllerCommand([NotNull] IControllerCommand command, [NotNull] ExchangeDataCommandMessage currentCommandMessage)
         {
             if (command == null) throw new ArgumentNullException(nameof(command));
             if (currentCommandMessage == null) throw new ArgumentNullException(nameof(currentCommandMessage));

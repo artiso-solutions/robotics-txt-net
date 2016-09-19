@@ -11,7 +11,7 @@ namespace RoboticsTxt.Lib.Components
     /// This includes the operation of motors and inputs of any kind.
     /// </summary>
     /// <remarks>
-    /// The operations provides by the <see cref="ControllerSequencer"/> are not implemented completely. More operations will follow...
+    /// The operations provided by the <see cref="ControllerSequencer"/> are not implemented completely. More operations will follow...
     /// </remarks>
     public class ControllerSequencer : IDisposable
     {
@@ -36,7 +36,7 @@ namespace RoboticsTxt.Lib.Components
         /// <param name="movement">The direction to start.</param>
         public void StartMotor(Motor motor, Speed speed, Movement movement)
         {
-            controllerCommunicator.QueueCommand(new StartMotorCommand(motor, speed, movement));
+            this.controllerCommunicator.QueueCommand(new StartMotorCommand(motor, speed, movement));
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace RoboticsTxt.Lib.Components
         /// <param name="motor">The motor to stop.</param>
         public void StopMotor(Motor motor)
         {
-            controllerCommunicator.QueueCommand(new StopMotorCommand(motor));
+            this.controllerCommunicator.QueueCommand(new StopMotorCommand(motor));
         }
 
         /// <summary>
@@ -59,9 +59,9 @@ namespace RoboticsTxt.Lib.Components
         /// <returns>This method is async. The returned task will be completed as soon as the movement is finished.</returns>
         public async Task StartMotorStopWithDigitalInputAsync(Motor motor, Speed speed, Movement movement, DigitalInput digitalInput, bool expectedInputState)
         {
-            StartMotor(motor, speed, movement);
-            await WaitForInputAsync(digitalInput, expectedInputState);
-            StopMotor(motor);
+            this.StartMotor(motor, speed, movement);
+            await this.WaitForInputAsync(digitalInput, expectedInputState);
+            this.StopMotor(motor);
         }
 
         /// <summary>
@@ -74,24 +74,26 @@ namespace RoboticsTxt.Lib.Components
         /// <returns>This method is async. The returned task will be completed as soon as the movement is finished.</returns>
         public async Task StartMotorStopAfterAsync(Motor motor, Speed speed, Movement movement, TimeSpan stopAfterTimeSpan)
         {
-            StartMotor(motor, speed, movement);
+            this.StartMotor(motor, speed, movement);
             await Task.Delay(stopAfterTimeSpan);
-            StopMotor(motor);
+            this.StopMotor(motor);
         }
 
         private async Task WaitForInputAsync(DigitalInput digitalInput, bool expectedValue)
         {
-            await controllerCommunicator.UniversalInputs[(int)digitalInput].StateChanges.FirstAsync(b => b == expectedValue);
+            await this.controllerCommunicator.UniversalInputs[(int)digitalInput].StateChanges.FirstAsync(b => b == expectedValue);
         }
 
+        // Review warum keine Doku?
         public void Dispose()
         {
-            controllerCommunicator.Stop();
+            this.controllerCommunicator.Stop();
         }
 
+        // Review warum keine Doku?
         public bool GetDigitalInputState(DigitalInput referenceInput)
         {
-            return controllerCommunicator.UniversalInputs[(int)referenceInput].CurrentState;
+            return this.controllerCommunicator.UniversalInputs[(int)referenceInput].CurrentState;
         }
     }
 }

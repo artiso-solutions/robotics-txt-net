@@ -1,9 +1,9 @@
-﻿
-namespace RoboticsTxt.Lib.Contracts
+﻿namespace RoboticsTxt.Lib.Contracts
 {
     /// <summary>
     /// The speed to run a motor with.
     /// </summary>
+    // ToDo Configure speed per motor
     public enum Speed
     {
         Off = 0,

@@ -1,10 +1,10 @@
-﻿
-namespace RoboticsTxt.Lib.Contracts
+﻿namespace RoboticsTxt.Lib.Contracts
 {
-  public enum Communication
-   {
-      USB,
-      Wifi,
-      Bluetooth
-   }
+    // Review warum keine Doku?
+    public enum Communication
+    {
+        USB,
+        Wifi,
+        Bluetooth
+    }
 }

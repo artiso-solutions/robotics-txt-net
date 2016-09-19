@@ -61,7 +61,7 @@ namespace RoboticsTxt.Lib.Components
 
         public void QueueCommand(IControllerCommand command)
         {
-            logger.DebugExt($"Queue command {command.GetType().Name}");
+            this.logger.DebugExt($"Queue command {command.GetType().Name}");
             this.commandQueue.Enqueue(command);
         }
 
@@ -94,13 +94,11 @@ namespace RoboticsTxt.Lib.Components
                     try
                     {
                         this.logger.DebugExt($"Process {command.GetType().Name}");
-                        this.commandProcessor.ProcessControllerCommand(command, currentCommandMessage, UniversalInputs);
+                        this.commandProcessor.ProcessControllerCommand(command, currentCommandMessage);
                     }
                     catch (Exception exception)
                     {
-                        logger.Error(exception);
-                        // TODO ???
-                        throw;
+                        this.logger.Error(exception);
                     }
                 }
 
@@ -108,7 +106,7 @@ namespace RoboticsTxt.Lib.Components
 
                 this.responseProcessor.ProcessResponse(response, this.UniversalInputs);
 
-                Thread.Sleep(10);
+                Thread.Sleep(TimeSpan.FromMilliseconds(10));
             }
 
             driver.SendCommand(new StopOnlineCommandMessage());

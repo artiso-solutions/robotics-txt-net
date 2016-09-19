@@ -1,9 +1,9 @@
-﻿
-namespace RoboticsTxt.Lib.Contracts
+﻿namespace RoboticsTxt.Lib.Contracts
 {
-   public enum Movement
-   {
-      Left = 0,
-      Right = 1
-   }
+    // Review warum keine Doku?
+    public enum Movement
+    {
+        Left = 0,
+        Right = 1
+    }
 }
