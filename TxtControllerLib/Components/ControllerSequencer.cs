@@ -83,14 +83,20 @@ namespace RoboticsTxt.Lib.Components
         {
             await this.controllerCommunicator.UniversalInputs[(int)digitalInput].StateChanges.FirstAsync(b => b == expectedValue);
         }
-
-        // Review warum keine Doku?
+        
+        /// <summary>
+        /// Cleanup of all resrouces. This also stops the communication to the controller.
+        /// </summary>
         public void Dispose()
         {
             this.controllerCommunicator.Stop();
         }
 
-        // Review warum keine Doku?
+        /// <summary>
+        /// Retrieves the current input state of the specified <paramref name="referenceInput"/>.
+        /// </summary>
+        /// <param name="referenceInput">The digital input to get the state from.</param>
+        /// <returns><c>true</c> if the input is triggered, otherwise <c>false</c>.</returns>
         public bool GetDigitalInputState(DigitalInput referenceInput)
         {
             return this.controllerCommunicator.UniversalInputs[(int)referenceInput].CurrentState;

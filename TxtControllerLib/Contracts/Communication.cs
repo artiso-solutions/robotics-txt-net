@@ -1,6 +1,8 @@
 ﻿namespace RoboticsTxt.Lib.Contracts
 {
-    // Review warum keine Doku?
+    /// <summary>
+    /// The communication mode of the controller.
+    /// </summary>
     public enum Communication
     {
         USB,

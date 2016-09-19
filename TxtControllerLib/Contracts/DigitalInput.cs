@@ -1,6 +1,8 @@
 ﻿namespace RoboticsTxt.Lib.Contracts
 {
-    // Review warum keine Doku?
+    /// <summary>
+    /// The identifier of the digital input of the controller.
+    /// </summary>
     public enum DigitalInput
     {
         One = 0,

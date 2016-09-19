@@ -1,6 +1,8 @@
 ﻿namespace RoboticsTxt.Lib.Contracts
 {
-    // Review warum keine Doku?
+    /// <summary>
+    /// The direction of the movement of a motor.
+    /// </summary>
     public enum Movement
     {
         Left = 0,
