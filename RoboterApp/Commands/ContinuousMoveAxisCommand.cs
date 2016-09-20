@@ -5,17 +5,15 @@ namespace RoboterApp.Commands
 {
     public class ContinuousMoveAxisCommand
     {
-        private readonly ControllerSequencer controllerSequencer;
-        private readonly Motor motor;
+        private readonly MotorPositionController motorPositionController;
         private readonly Movement movement;
         private readonly short maxDistance;
         private Speed? previousSpeed;
         private bool isMoving;
 
-        public ContinuousMoveAxisCommand(ControllerSequencer controllerSequencer, Motor motor, Movement movement, short maxDistance)
+        public ContinuousMoveAxisCommand(MotorPositionController motorPositionController, Movement movement, short maxDistance)
         {
-            this.controllerSequencer = controllerSequencer;
-            this.motor = motor;
+            this.motorPositionController = motorPositionController;
             this.movement = movement;
             this.maxDistance = maxDistance;
         }
@@ -35,7 +33,7 @@ namespace RoboterApp.Commands
             }
 
             previousSpeed = currentSpeed;
-            controllerSequencer.MotorRunDistance(motor, currentSpeed, movement, maxDistance);
+            motorPositionController.MotorRunDistance(currentSpeed, movement, maxDistance);
         }
 
         public void OnStop()
@@ -43,7 +41,7 @@ namespace RoboterApp.Commands
             isMoving = false;
 
             previousSpeed = null;
-            controllerSequencer.StopMotor(motor);
+            motorPositionController.StopMotor();
         }
     }
 }

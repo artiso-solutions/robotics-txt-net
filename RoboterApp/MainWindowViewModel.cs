@@ -33,17 +33,21 @@ namespace RoboterApp
 
             ReferenceAxisCommand = new ReferenceAxisCommand(controllerSequencer);
 
-            MoveBackwardCommand = new ContinuousMoveAxisCommand(controllerSequencer, Motor.Two, Movement.Left, 100);
-            MoveForwardCommand = new ContinuousMoveAxisCommand(controllerSequencer, Motor.Two, Movement.Right, 100);
+            var backwardForwardPositionController = controllerSequencer.ConfigureMotorPositionController(Motor.Two);
+            MoveBackwardCommand = new ContinuousMoveAxisCommand(backwardForwardPositionController, Movement.Left, 100);
+            MoveForwardCommand = new ContinuousMoveAxisCommand(backwardForwardPositionController, Movement.Right, 100);
 
-            MoveUpCommand = new ContinuousMoveAxisCommand(controllerSequencer, Motor.Three, Movement.Left, 100);
-            MoveDownCommand = new ContinuousMoveAxisCommand(controllerSequencer, Motor.Three, Movement.Right, 100);
+            var upDownPositionController = controllerSequencer.ConfigureMotorPositionController(Motor.Three);
+            MoveUpCommand = new ContinuousMoveAxisCommand(upDownPositionController, Movement.Left, 100);
+            MoveDownCommand = new ContinuousMoveAxisCommand(upDownPositionController, Movement.Right, 100);
 
-            TurnLeftCommand = new ContinuousMoveAxisCommand(controllerSequencer, Motor.One, Movement.Left, 100);
-            TurnRightCommand = new ContinuousMoveAxisCommand(controllerSequencer, Motor.One, Movement.Right, 100);
+            var turnLeftRightPositionController = controllerSequencer.ConfigureMotorPositionController(Motor.One);
+            TurnLeftCommand = new ContinuousMoveAxisCommand(turnLeftRightPositionController, Movement.Left, 100);
+            TurnRightCommand = new ContinuousMoveAxisCommand(turnLeftRightPositionController, Movement.Right, 100);
 
-            OpenClampCommand = new ContinuousMoveAxisCommand(controllerSequencer, Motor.Four, Movement.Left, 100);
-            CloseClampCommand = new ContinuousMoveAxisCommand(controllerSequencer, Motor.Four, Movement.Right, 100);
+            var openCloseClampPositionController = controllerSequencer.ConfigureMotorPositionController(Motor.Four);
+            OpenClampCommand = new ContinuousMoveAxisCommand(openCloseClampPositionController, Movement.Left, 100);
+            CloseClampCommand = new ContinuousMoveAxisCommand(openCloseClampPositionController, Movement.Right, 100);
         }
 
         public void Dispose()

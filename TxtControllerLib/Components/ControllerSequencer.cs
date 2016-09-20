@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
@@ -17,6 +18,7 @@ namespace RoboticsTxt.Lib.Components
     public class ControllerSequencer : IDisposable
     {
         private readonly ControllerCommunicator controllerCommunicator;
+        private readonly Dictionary<Motor, MotorPositionController> motorPositionControllers;
 
         /// <summary>
         /// Creates a new instance of the <see cref="ControllerSequencer"/> and starts the communication with the controller. To stop the communication
@@ -26,6 +28,7 @@ namespace RoboticsTxt.Lib.Components
         public ControllerSequencer(IPAddress ipAddress)
         {
             this.controllerCommunicator = new ControllerCommunicator(ipAddress);
+            this.motorPositionControllers = new Dictionary<Motor, MotorPositionController>();
 
             this.controllerCommunicator.Start();
         }
@@ -38,18 +41,9 @@ namespace RoboticsTxt.Lib.Components
         /// <param name="movement">The direction to start.</param>
         public void StartMotor(Motor motor, Speed speed, Movement movement)
         {
-            this.controllerCommunicator.QueueCommand(new StartMotorCommand(motor, speed, movement));
-        }
+            CheckMotorPositionMode(motor);
 
-        /// <summary>
-        /// Starts the specified <paramref name="motor"/> immediately.
-        /// </summary>
-        /// <param name="motor">The motor to start.</param>
-        /// <param name="speed">The speed of the motor.</param>
-        /// <param name="movement">The direction to start.</param>
-        public void MotorRunDistance(Motor motor, Speed speed, Movement movement, short distance)
-        {
-            controllerCommunicator.QueueCommand(new MotorRunDistanceCommand(motor, speed, movement, distance));
+            this.controllerCommunicator.QueueCommand(new StartMotorCommand(motor, speed, movement));
         }
 
         /// <summary>
@@ -58,6 +52,8 @@ namespace RoboticsTxt.Lib.Components
         /// <param name="motor">The motor to stop.</param>
         public void StopMotor(Motor motor)
         {
+            CheckMotorPositionMode(motor);
+
             this.controllerCommunicator.QueueCommand(new StopMotorCommand(motor));
         }
 
@@ -72,6 +68,8 @@ namespace RoboticsTxt.Lib.Components
         /// <returns>This method is async. The returned task will be completed as soon as the movement is finished.</returns>
         public async Task StartMotorStopWithDigitalInputAsync(Motor motor, Speed speed, Movement movement, DigitalInput digitalInput, bool expectedInputState)
         {
+            CheckMotorPositionMode(motor);
+
             this.StartMotor(motor, speed, movement);
             await this.WaitForInputAsync(digitalInput, expectedInputState);
             this.StopMotor(motor);
@@ -87,22 +85,11 @@ namespace RoboticsTxt.Lib.Components
         /// <returns>This method is async. The returned task will be completed as soon as the movement is finished.</returns>
         public async Task StartMotorStopAfterAsync(Motor motor, Speed speed, Movement movement, TimeSpan stopAfterTimeSpan)
         {
+            CheckMotorPositionMode(motor);
+
             this.StartMotor(motor, speed, movement);
             await Task.Delay(stopAfterTimeSpan);
             this.StopMotor(motor);
-        }
-
-        private async Task WaitForInputAsync(DigitalInput digitalInput, bool expectedValue)
-        {
-            await this.controllerCommunicator.UniversalInputs[(int)digitalInput].StateChanges.FirstAsync(b => b == expectedValue);
-        }
-        
-        /// <summary>
-        /// Cleanup of all resrouces. This also stops the communication to the controller.
-        /// </summary>
-        public void Dispose()
-        {
-            this.controllerCommunicator.Stop();
         }
 
         /// <summary>
@@ -113,6 +100,86 @@ namespace RoboticsTxt.Lib.Components
         public bool GetDigitalInputState(DigitalInput referenceInput)
         {
             return this.controllerCommunicator.UniversalInputs[(int)referenceInput].CurrentState;
+        }
+
+        /// <summary>
+        /// Cleanup of all resrouces. This also stops the communication to the controller.
+        /// </summary>
+        public void Dispose()
+        {
+            foreach (var motorPositionController in motorPositionControllers)
+            {
+                motorPositionController.Value.Dispose();
+            }
+
+            this.controllerCommunicator.Stop();
+        }
+
+        public MotorPositionController ConfigureMotorPositionController(Motor motor)
+        {
+            MotorPositionController configureMotorPositionController;
+            if (motorPositionControllers.TryGetValue(motor, out configureMotorPositionController))
+            {
+                return configureMotorPositionController;
+            }
+
+            configureMotorPositionController = new MotorPositionController(motor, controllerCommunicator);
+            motorPositionControllers[motor] = configureMotorPositionController;
+            return configureMotorPositionController;
+        }
+
+        public void ReleaseMotorPositionController(MotorPositionController motorPositionController)
+        {
+            motorPositionControllers.Remove(motorPositionController.Motor);
+            motorPositionController.Dispose();
+        }
+
+        private async Task WaitForInputAsync(DigitalInput digitalInput, bool expectedValue)
+        {
+            await this.controllerCommunicator.UniversalInputs[(int)digitalInput].StateChanges.FirstAsync(b => b == expectedValue);
+        }
+
+        private void CheckMotorPositionMode(Motor motor)
+        {
+            if (motorPositionControllers.ContainsKey(motor))
+            {
+                throw new InvalidOperationException($"Motor {motor} is configured for position control and can not be commanded via controller sequencer. Use the MotorPositionController.");
+            }
+        }
+    }
+
+    public class MotorPositionController : IDisposable
+    {
+        private readonly ControllerCommunicator controllerCommunicator;
+        public Motor Motor { get; }
+
+        internal MotorPositionController(Motor motor, ControllerCommunicator controllerCommunicator)
+        {
+            this.controllerCommunicator = controllerCommunicator;
+            Motor = motor;
+        }
+
+        /// <summary>
+        /// Starts the configured <see cref="Motor"/> immediately and runs the specified <paramref name="distance"/>.
+        /// </summary>
+        /// <param name="speed">The speed of the motor.</param>
+        /// <param name="movement">The direction to start.</param>
+        /// <param name="distance">The distance to run.</param>
+        public void MotorRunDistance(Speed speed, Movement movement, short distance)
+        {
+            controllerCommunicator.QueueCommand(new MotorRunDistanceCommand(Motor, speed, movement, distance));
+        }
+
+        /// <summary>
+        /// Stops the specified <see cref="Motor"/> immediately.
+        /// </summary>
+        public void StopMotor()
+        {
+            this.controllerCommunicator.QueueCommand(new StopMotorCommand(Motor));
+        }
+
+        public void Dispose()
+        {
         }
     }
 }
