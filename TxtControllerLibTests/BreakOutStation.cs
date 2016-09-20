@@ -46,14 +46,14 @@ namespace TxtControllerLibTests
                     await BreakoutInterface(sequencer);
                 }
 
-                await sequencer.StartMotorStopAfterAsync(Motor.Two, Speed.Maximal, Movement.Right, TimeSpan.FromSeconds(2));
+                await sequencer.StartMotorStopAfterTimeSpanAsync(Motor.Two, Speed.Maximal, Movement.Right, TimeSpan.FromSeconds(2));
             }
         }
 
         private async Task BreakoutInterface(ControllerSequencer sequencer)
         {
             logger.InfoExt("Breakout interface");
-            await sequencer.StartMotorStopAfterAsync(Motor.One, Speed.Fast, Movement.Left, TimeSpan.FromMilliseconds(900));
+            await sequencer.StartMotorStopAfterTimeSpanAsync(Motor.One, Speed.Fast, Movement.Left, TimeSpan.FromMilliseconds(900));
             await sequencer.StartMotorStopWithDigitalInputAsync(Motor.One, Speed.Fast, Movement.Right, DigitalInput.Three, true);
         }
     }

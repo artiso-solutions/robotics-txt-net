@@ -77,6 +77,8 @@
     <Compile Include="Components\ControllerCommunicator.cs" />
     <Compile Include="Components\ControllerSequencer.cs" />
     <Compile Include="Components\DigitalInputInfo.cs" />
+    <Compile Include="Components\MotorConfiguration.cs" />
+    <Compile Include="Components\MotorPositionController.cs" />
     <Compile Include="Components\ResponseProcessor.cs" />
     <Compile Include="Contracts\DigitalInput.cs" />
     <Compile Include="Contracts\Motor.cs" />

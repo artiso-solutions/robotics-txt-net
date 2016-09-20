@@ -31,23 +31,50 @@ namespace RoboterApp
 
             controllerSequencer = new ControllerSequencer(ipAddress);
 
-            ReferenceAxisCommand = new ReferenceAxisCommand(controllerSequencer);
-
-            var backwardForwardPositionController = controllerSequencer.ConfigureMotorPositionController(Motor.Two);
+            var backwardForwardPositionController = controllerSequencer.ConfigureMotorPositionController(new MotorConfiguration {
+                Motor = Motor.Two,
+                ReferencingMovement = Movement.Left,
+                ReferencingSpeed = Speed.Maximal,
+                ReferencingInput = DigitalInput.Two,
+                ReferencingInputState = false
+            });
             MoveBackwardCommand = new ContinuousMoveAxisCommand(backwardForwardPositionController, Movement.Left, 100);
             MoveForwardCommand = new ContinuousMoveAxisCommand(backwardForwardPositionController, Movement.Right, 100);
 
-            var upDownPositionController = controllerSequencer.ConfigureMotorPositionController(Motor.Three);
+            var upDownPositionController = controllerSequencer.ConfigureMotorPositionController(new MotorConfiguration
+            {
+                Motor = Motor.Three,
+                ReferencingMovement = Movement.Left,
+                ReferencingSpeed = Speed.Fast,
+                ReferencingInput = DigitalInput.Three,
+                ReferencingInputState = false
+            });
             MoveUpCommand = new ContinuousMoveAxisCommand(upDownPositionController, Movement.Left, 100);
             MoveDownCommand = new ContinuousMoveAxisCommand(upDownPositionController, Movement.Right, 100);
 
-            var turnLeftRightPositionController = controllerSequencer.ConfigureMotorPositionController(Motor.One);
+            var turnLeftRightPositionController = controllerSequencer.ConfigureMotorPositionController(new MotorConfiguration
+            {
+                Motor = Motor.One,
+                ReferencingMovement = Movement.Right,
+                ReferencingSpeed = Speed.Quick,
+                ReferencingInput = DigitalInput.One,
+                ReferencingInputState = false
+            });
             TurnLeftCommand = new ContinuousMoveAxisCommand(turnLeftRightPositionController, Movement.Left, 100);
             TurnRightCommand = new ContinuousMoveAxisCommand(turnLeftRightPositionController, Movement.Right, 100);
 
-            var openCloseClampPositionController = controllerSequencer.ConfigureMotorPositionController(Motor.Four);
+            var openCloseClampPositionController = controllerSequencer.ConfigureMotorPositionController(new MotorConfiguration
+            {
+                Motor = Motor.Four,
+                ReferencingMovement = Movement.Left,
+                ReferencingSpeed = Speed.Quick,
+                ReferencingInput = DigitalInput.Four,
+                ReferencingInputState = false
+            });
             OpenClampCommand = new ContinuousMoveAxisCommand(openCloseClampPositionController, Movement.Left, 100);
             CloseClampCommand = new ContinuousMoveAxisCommand(openCloseClampPositionController, Movement.Right, 100);
+            
+            ReferenceAxisCommand = new ReferenceAxisCommand(turnLeftRightPositionController, upDownPositionController, backwardForwardPositionController, openCloseClampPositionController);
         }
 
         public void Dispose()
