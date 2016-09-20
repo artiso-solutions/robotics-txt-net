@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Linq;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using log4net;
 using log4net.Util;
 using RoboticsTxt.Lib.Configuration;
-using RoboticsTxt.Lib.Contracts;
 using RoboticsTxt.Lib.ControllerDriver;
 using RoboticsTxt.Lib.Interfaces;
 using RoboticsTxt.Lib.Messages;
@@ -15,6 +15,7 @@ namespace RoboticsTxt.Lib.Components
 {
     internal class ControllerCommunicator
     {
+        private readonly IPAddress ipAddress;
         private readonly ILog logger;
 
         private readonly CommandProcessor commandProcessor;
@@ -25,8 +26,9 @@ namespace RoboticsTxt.Lib.Components
         private Task communicationLoopTask;
         private CancellationTokenSource cancellationTokenSource;
 
-        public ControllerCommunicator()
+        public ControllerCommunicator(IPAddress ipAddress)
         {
+            this.ipAddress = ipAddress;
             this.logger = LogManager.GetLogger(typeof(ControllerCommunicator));
 
             this.commandProcessor = new CommandProcessor();
@@ -61,7 +63,7 @@ namespace RoboticsTxt.Lib.Components
 
         public void QueueCommand(IControllerCommand command)
         {
-            logger.DebugExt($"Queue command {command.GetType().Name}");
+            this.logger.DebugExt($"Queue command {command.GetType().Name}");
             this.commandQueue.Enqueue(command);
         }
 
@@ -69,7 +71,7 @@ namespace RoboticsTxt.Lib.Components
 
         private void CommunicationLoop(CancellationToken cancellationToken)
         {
-            var driver = new TcpControllerDriver(Communication.USB); // TODO dynamic comm-mode?
+            var driver = new TcpControllerDriver(ipAddress);
             var currentCommandMessage = new ExchangeDataCommandMessage();
 
             driver.StartCommunication();
@@ -94,22 +96,19 @@ namespace RoboticsTxt.Lib.Components
                     try
                     {
                         this.logger.DebugExt($"Process {command.GetType().Name}");
-                        this.commandProcessor.ProcessControllerCommand(command, currentCommandMessage, UniversalInputs);
+                        this.commandProcessor.ProcessControllerCommand(command, currentCommandMessage);
                     }
                     catch (Exception exception)
                     {
-                        logger.Error(exception);
-                        // TODO ???
-                        throw;
+                        this.logger.Error(exception);
                     }
                 }
 
-                this.logger.DebugExt("Send current message to controller");
                 var response = driver.SendCommand<ExchangeDataCommandMessage, ExchangeDataResponseMessage>(currentCommandMessage);
 
                 this.responseProcessor.ProcessResponse(response, this.UniversalInputs);
 
-                Thread.Sleep(10);
+                Thread.Sleep(TimeSpan.FromMilliseconds(10));
             }
 
             driver.SendCommand(new StopOnlineCommandMessage());

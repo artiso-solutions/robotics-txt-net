@@ -1,10 +1,12 @@
-﻿
-namespace RoboticsTxt.Lib.Contracts
+﻿namespace RoboticsTxt.Lib.Contracts
 {
-  public enum Communication
-   {
-      USB,
-      Wifi,
-      Bluetooth
-   }
+    /// <summary>
+    /// The communication mode of the controller.
+    /// </summary>
+    public enum Communication
+    {
+        USB,
+        Wifi,
+        Bluetooth
+    }
 }

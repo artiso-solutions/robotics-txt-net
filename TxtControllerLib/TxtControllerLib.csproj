@@ -70,6 +70,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\MotorRunDistanceCommand.cs" />
     <Compile Include="Commands\StartMotorCommand.cs" />
     <Compile Include="Commands\StopMotorCommand.cs" />
     <Compile Include="Components\CommandProcessor.cs" />

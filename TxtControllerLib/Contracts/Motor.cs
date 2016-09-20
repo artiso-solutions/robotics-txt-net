@@ -1,5 +1,4 @@
-﻿
-namespace RoboticsTxt.Lib.Contracts
+﻿namespace RoboticsTxt.Lib.Contracts
 {
     /// <summary>
     /// Defines the available motors.

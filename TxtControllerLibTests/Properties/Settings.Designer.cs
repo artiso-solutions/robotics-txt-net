@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace RoboterApp.Properties {
+namespace TxtControllerLibTests.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
@@ -25,10 +25,10 @@ namespace RoboterApp.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("MagazinRoboter")]
-        public string RoboAddress {
+        [global::System.Configuration.DefaultSettingValueAttribute("192.168.178.64")]
+        public string TestDeviceIpAddress {
             get {
-                return ((string)(this["RoboAddress"]));
+                return ((string)(this["TestDeviceIpAddress"]));
             }
         }
     }

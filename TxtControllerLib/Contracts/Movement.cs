@@ -1,9 +1,11 @@
-﻿
-namespace RoboticsTxt.Lib.Contracts
+﻿namespace RoboticsTxt.Lib.Contracts
 {
-   public enum Movement
-   {
-      Left = 0,
-      Right = 1
-   }
+    /// <summary>
+    /// The direction of the movement of a motor.
+    /// </summary>
+    public enum Movement
+    {
+        Left = 0,
+        Right = 1
+    }
 }

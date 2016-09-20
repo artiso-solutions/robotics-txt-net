@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using JetBrains.Annotations;
 using RoboticsTxt.Lib.Contracts;
 using RoboticsTxt.Lib.Interfaces;
@@ -6,16 +6,18 @@ using RoboticsTxt.Lib.Messages;
 
 namespace RoboticsTxt.Lib.Commands
 {
-    internal class StartMotorCommand : IControllerCommand
+    internal class MotorRunDistanceCommand : IControllerCommand
     {
         private readonly Speed speed;
         private readonly Movement movement;
+        private readonly short distance;
 
-        public StartMotorCommand(Motor motor, Speed speed, Movement movement)
+        public MotorRunDistanceCommand(Motor motor, Speed speed, Movement movement, short distance)
         {
             this.Motor = motor;
             this.speed = speed;
             this.movement = movement;
+            this.distance = distance;
         }
 
         public Motor Motor { get; }
@@ -40,6 +42,9 @@ namespace RoboticsTxt.Lib.Commands
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+
+            message.MotorDistance[motorIndex] = this.distance;
+            message.MotorCommandId[motorIndex]++;
         }
     }
 }

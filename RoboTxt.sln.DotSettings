@@ -1,2 +1,9 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
-	<s:Boolean x:Key="/Default/CodeInspection/CodeAnnotations/NamespacesWithAnnotations/=artiso_002EFischertechnik_002ERoboTxt_002ELib_002EAnnotations/@EntryIndexedValue">True</s:Boolean></wpf:ResourceDictionary>
+	<s:Boolean x:Key="/Default/CodeInspection/CodeAnnotations/NamespacesWithAnnotations/=artiso_002EFischertechnik_002ERoboTxt_002ELib_002EAnnotations/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/CodeInspection/CodeAnnotations/NamespacesWithAnnotations/=RoboterApp_002EAnnotations/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/Todo/TodoPatterns/=820A0EA33111B44C8650F7888A801496/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/Todo/TodoPatterns/=820A0EA33111B44C8650F7888A801496/Color/@EntryValue">OrangeRed</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/Todo/TodoPatterns/=820A0EA33111B44C8650F7888A801496/MatchComments/@EntryValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/Todo/TodoPatterns/=820A0EA33111B44C8650F7888A801496/Name/@EntryValue">Review</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/Todo/TodoPatterns/=820A0EA33111B44C8650F7888A801496/Pattern/@EntryValue">(?&lt;=\W|^)(?&lt;TAG&gt;REVIEW)(\W|$)(.*)</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/Todo/TodoPatterns/=820A0EA33111B44C8650F7888A801496/TodoIconStyle/@EntryValue">Warning</s:String></wpf:ResourceDictionary>
