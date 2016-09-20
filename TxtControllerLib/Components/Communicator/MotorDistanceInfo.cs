@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using RoboticsTxt.Lib.Contracts;
@@ -30,10 +31,18 @@ namespace RoboticsTxt.Lib.Components.Communicator
 
         public void SetCurrentDistanceValue(short distanceValue)
         {
+            if (distanceValue == 0)
+            {
+                currentDistanceValue = 0;
+                return;
+            }
+
             if (currentDistanceValue == distanceValue)
             {
                 return;
             }
+
+            Debug.WriteLine(distanceValue);
 
             var difference = distanceValue - currentDistanceValue;
             currentDistanceValue = distanceValue;

@@ -50,7 +50,8 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type controls:MovementButton}">
-                        <Border Background="{TemplateBinding Background}" CornerRadius="5">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="5">
                             <Path Width="26"
                                   Height="26"
                                   Margin="2"
@@ -67,12 +68,40 @@
     </Window.Resources>
 
     <Grid>
-        <Button HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                Command="{Binding ReferenceAxisCommand}"
-                Content="Reference Axis" />
-        <Viewbox>
-            <Canvas Width="500" Height="300">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="0">
+            <Button HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Command="{Binding ReferenceAxisCommand}"
+                    Content="Reference Axis" />
+            
+            <TextBlock>
+                <Run Text="L/R: "/>
+                <Run Text="{Binding TurnLeftRightPositionController.CurrentPosition}"/>
+            </TextBlock>
+
+            <TextBlock>
+                <Run Text="U/D: "/>
+                <Run Text="{Binding UpDownPositionController.CurrentPosition}"/>
+            </TextBlock>
+
+            <TextBlock>
+                <Run Text="B/F: "/>
+                <Run Text="{Binding BackwardForwardPositionController.CurrentPosition}"/>
+            </TextBlock>
+
+            <TextBlock>
+                <Run Text="O/C: "/>
+                <Run Text="{Binding OpenCloseClampPositionController.CurrentPosition}"/>
+            </TextBlock>
+        </StackPanel>
+
+        <Viewbox Grid.Column="1">
+            <Canvas Width="500"
+                    Height="300">
                 <Canvas.Background>
                     <ImageBrush ImageSource="pack://application:,,,/Resources/Robo.jpg" />
                 </Canvas.Background>

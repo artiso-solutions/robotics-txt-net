@@ -1,14 +1,17 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using RoboticsTxt.Lib.Commands;
 using RoboticsTxt.Lib.Components.Communicator;
 using RoboticsTxt.Lib.Contracts;
 
 namespace RoboticsTxt.Lib.Components.Sequencer
 {
-    public class MotorPositionController : IDisposable
+    public class MotorPositionController : INotifyPropertyChanged, IDisposable
     {
         private readonly ControllerCommunicator controllerCommunicator;
         private readonly ControllerSequencer controllerSequencer;
@@ -18,6 +21,21 @@ namespace RoboticsTxt.Lib.Components.Sequencer
         private int currentPosition;
 
         public MotorConfiguration MotorConfiguration { get; }
+
+        public int CurrentPosition
+        {
+            get { return currentPosition; }
+            set
+            {
+                if (currentPosition == value)
+                {
+                    return;
+                }
+
+                currentPosition = value;
+                OnPropertyChanged();
+            }
+        }
 
         internal MotorPositionController(MotorConfiguration motorConfiguration, ControllerCommunicator controllerCommunicator, ControllerSequencer controllerSequencer)
         {
@@ -35,11 +53,13 @@ namespace RoboticsTxt.Lib.Components.Sequencer
 
                 if (currentDirection.Value == motorConfiguration.ReferencingMovement)
                 {
-                    currentPosition -= diff;
+                    Interlocked.Add(ref currentPosition, -diff);
+                    OnPropertyChanged(nameof(CurrentPosition));
                 }
                 else
                 {
-                    currentPosition += diff;
+                    Interlocked.Add(ref currentPosition, diff);
+                    OnPropertyChanged(nameof(CurrentPosition));
                 }
             });
         }
@@ -75,11 +95,19 @@ namespace RoboticsTxt.Lib.Components.Sequencer
 
             await controllerSequencer.StartMotorStopWithDigitalInputInternalAsync(MotorConfiguration.Motor, MotorConfiguration.ReferencingSpeed, MotorConfiguration.ReferencingMovement, MotorConfiguration.ReferencingInput, MotorConfiguration.ReferencingInputState);
 
-            currentPosition = 0;
+            CurrentPosition = 0;
         }
 
         public void Dispose()
         {
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
