@@ -7,6 +7,7 @@ using log4net;
 using log4net.Util;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RoboticsTxt.Lib.Components;
+using RoboticsTxt.Lib.Components.Sequencer;
 using RoboticsTxt.Lib.Contracts;
 using TxtControllerLibTests.Properties;
 

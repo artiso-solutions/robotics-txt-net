@@ -4,9 +4,10 @@ using System.Net;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using RoboticsTxt.Lib.Commands;
+using RoboticsTxt.Lib.Components.Communicator;
 using RoboticsTxt.Lib.Contracts;
 
-namespace RoboticsTxt.Lib.Components
+namespace RoboticsTxt.Lib.Components.Sequencer
 {
     /// <summary>
     /// The <see cref="ControllerSequencer"/> provides high level methods for operation of the Fischertechnik ROBOTICS TXT controller.

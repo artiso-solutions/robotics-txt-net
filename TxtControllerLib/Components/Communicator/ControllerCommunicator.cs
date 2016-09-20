@@ -7,11 +7,12 @@ using System.Threading.Tasks;
 using log4net;
 using log4net.Util;
 using RoboticsTxt.Lib.Configuration;
+using RoboticsTxt.Lib.Contracts;
 using RoboticsTxt.Lib.ControllerDriver;
 using RoboticsTxt.Lib.Interfaces;
 using RoboticsTxt.Lib.Messages;
 
-namespace RoboticsTxt.Lib.Components
+namespace RoboticsTxt.Lib.Components.Communicator
 {
     internal class ControllerCommunicator
     {
@@ -35,13 +36,10 @@ namespace RoboticsTxt.Lib.Components
             this.responseProcessor = new ResponseProcessor();
 
             this.commandQueue = new ConcurrentQueue<IControllerCommand>();
+            
+            this.UniversalInputs = Enum.GetValues(typeof(DigitalInput)).OfType<DigitalInput>().Select(d => new DigitalInputInfo(d)).ToArray();
+            this.MotorDistanceInfos = Enum.GetValues(typeof(Motor)).OfType<Motor>().Select(m => new MotorDistanceInfo(m)).ToArray();
 
-            this.UniversalInputs = new DigitalInputInfo[8];
-
-            for (int i = 0; i < this.UniversalInputs.Length; i++)
-            {
-                this.UniversalInputs[i] = new DigitalInputInfo();
-            }
         }
 
         public void Start()
@@ -67,7 +65,9 @@ namespace RoboticsTxt.Lib.Components
             this.commandQueue.Enqueue(command);
         }
 
-        public DigitalInputInfo[] UniversalInputs { get; set; }
+        public DigitalInputInfo[] UniversalInputs { get; }
+
+        public MotorDistanceInfo[] MotorDistanceInfos { get; }
 
         private void CommunicationLoop(CancellationToken cancellationToken)
         {
@@ -106,7 +106,7 @@ namespace RoboticsTxt.Lib.Components
 
                 var response = driver.SendCommand<ExchangeDataCommandMessage, ExchangeDataResponseMessage>(currentCommandMessage);
 
-                this.responseProcessor.ProcessResponse(response, this.UniversalInputs);
+                this.responseProcessor.ProcessResponse(response, this.UniversalInputs, this.MotorDistanceInfos);
 
                 Thread.Sleep(TimeSpan.FromMilliseconds(10));
             }

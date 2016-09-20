@@ -1,6 +1,6 @@
 ﻿using RoboticsTxt.Lib.Contracts;
 
-namespace RoboticsTxt.Lib.Components
+namespace RoboticsTxt.Lib.Components.Sequencer
 {
     public class MotorConfiguration
     {

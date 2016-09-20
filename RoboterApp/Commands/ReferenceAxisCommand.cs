@@ -4,6 +4,7 @@ using System.Windows.Input;
 using log4net;
 using log4net.Util;
 using RoboticsTxt.Lib.Components;
+using RoboticsTxt.Lib.Components.Sequencer;
 using RoboticsTxt.Lib.Contracts;
 
 namespace RoboterApp.Commands
@@ -33,10 +34,6 @@ namespace RoboterApp.Commands
 
         public async void Execute(object parameter)
         {
-            //logger.InfoExt("Start referencing of axis...");
-            //controllerSequencer.MotorRunDistance(Motor.One, Speed.Quick, Movement.Left, 47);
-            //controllerSequencer.MotorRunDistance(Motor.Three, Speed.Fast, Movement.Right, 30);
-
             logger.InfoExt("Start referencing of axis...");
             logger.InfoExt("Reference \"Turn Left / Right\"");
             await turnLeftRightPositionController.ReferenceAsync();

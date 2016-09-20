@@ -6,6 +6,7 @@ using System.Windows.Input;
 using JetBrains.Annotations;
 using RoboterApp.Commands;
 using RoboticsTxt.Lib.Components;
+using RoboticsTxt.Lib.Components.Sequencer;
 using RoboticsTxt.Lib.Contracts;
 
 namespace RoboterApp

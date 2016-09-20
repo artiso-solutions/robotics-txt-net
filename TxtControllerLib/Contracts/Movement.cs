@@ -3,6 +3,7 @@
     /// <summary>
     /// The direction of the movement of a motor.
     /// </summary>
+    // TODO Rename to Direction
     public enum Movement
     {
         Left = 0,
