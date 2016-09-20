@@ -25,10 +25,10 @@ namespace RoboterApp.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("192.168.178.64")]
-        public string RoboIpAddress {
+        [global::System.Configuration.DefaultSettingValueAttribute("MagazinRoboter")]
+        public string RoboAddress {
             get {
-                return ((string)(this["RoboIpAddress"]));
+                return ((string)(this["RoboAddress"]));
             }
         }
     }

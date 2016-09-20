@@ -2,8 +2,8 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="RoboterApp.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="RoboIpAddress" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">192.168.178.64</Value>
+    <Setting Name="RoboAddress" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">MagazinRoboter</Value>
     </Setting>
   </Settings>
 </SettingsFile>
