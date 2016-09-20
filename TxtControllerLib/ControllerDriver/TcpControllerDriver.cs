@@ -17,26 +17,9 @@ namespace RoboticsTxt.Lib.ControllerDriver
         private readonly ILog logger = LogManager.GetLogger(typeof(TcpControllerDriver));
         private Socket socket;
 
-        public TcpControllerDriver(Communication communication)
+        public TcpControllerDriver(IPAddress ipAddress)
         {
-            switch (communication)
-            {
-                case Communication.USB:
-                    this.ipAddress = IPAddress.Parse("192.168.7.2");
-                    break;
-
-                case Communication.Wifi:
-                    this.ipAddress = IPAddress.Parse("192.168.8.2");
-                    break;
-
-                case Communication.Bluetooth:
-                    this.ipAddress = IPAddress.Parse("192.168.9.2");
-                    break;
-
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(communication), communication, "Unknow value");
-            }
-
+            this.ipAddress = ipAddress;
         }
 
         public void Dispose()
