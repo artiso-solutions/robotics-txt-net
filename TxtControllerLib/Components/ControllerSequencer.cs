@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using RoboticsTxt.Lib.Commands;
@@ -21,9 +22,10 @@ namespace RoboticsTxt.Lib.Components
         /// Creates a new instance of the <see cref="ControllerSequencer"/> and starts the communication with the controller. To stop the communication
         /// you have to dispose the <see cref="ControllerSequencer"/>.
         /// </summary>
-        public ControllerSequencer()
+        /// <param name="ipAddress"></param>
+        public ControllerSequencer(IPAddress ipAddress)
         {
-            this.controllerCommunicator = new ControllerCommunicator();
+            this.controllerCommunicator = new ControllerCommunicator(ipAddress);
 
             this.controllerCommunicator.Start();
         }
@@ -37,6 +39,17 @@ namespace RoboticsTxt.Lib.Components
         public void StartMotor(Motor motor, Speed speed, Movement movement)
         {
             this.controllerCommunicator.QueueCommand(new StartMotorCommand(motor, speed, movement));
+        }
+
+        /// <summary>
+        /// Starts the specified <paramref name="motor"/> immediately.
+        /// </summary>
+        /// <param name="motor">The motor to start.</param>
+        /// <param name="speed">The speed of the motor.</param>
+        /// <param name="movement">The direction to start.</param>
+        public void MotorRunDistance(Motor motor, Speed speed, Movement movement, short distance)
+        {
+            controllerCommunicator.QueueCommand(new MotorRunDistanceCommand(motor, speed, movement, distance));
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Threading;
 using log4net;
 using log4net.Util;
@@ -6,6 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RoboticsTxt.Lib.Commands;
 using RoboticsTxt.Lib.Components;
 using RoboticsTxt.Lib.Contracts;
+using TxtControllerLibTests.Properties;
 
 namespace TxtControllerLibTests
 {
@@ -22,7 +24,7 @@ namespace TxtControllerLibTests
         [TestMethod]
         public void StartStopMotor()
         {
-            var communicator = new ControllerCommunicator();
+            var communicator = new ControllerCommunicator(IPAddress.Parse(Settings.Default.TestDeviceIpAddress));
 
             communicator.Start();
 
@@ -42,7 +44,7 @@ namespace TxtControllerLibTests
         [TestMethod]
         public void LogInputStateChanges()
         {
-            var communicator = new ControllerCommunicator();
+            var communicator = new ControllerCommunicator(IPAddress.Parse(Settings.Default.TestDeviceIpAddress));
 
             communicator.Start();
 
