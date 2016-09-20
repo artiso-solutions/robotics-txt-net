@@ -42,6 +42,17 @@ namespace RoboticsTxt.Lib.Components
         }
 
         /// <summary>
+        /// Starts the specified <paramref name="motor"/> immediately.
+        /// </summary>
+        /// <param name="motor">The motor to start.</param>
+        /// <param name="speed">The speed of the motor.</param>
+        /// <param name="movement">The direction to start.</param>
+        public void MotorRunDistance(Motor motor, Speed speed, Movement movement, short distance)
+        {
+            controllerCommunicator.QueueCommand(new MotorRunDistanceCommand(motor, speed, movement, distance));
+        }
+
+        /// <summary>
         /// Stops the specified <paramref name="motor"/> immediately.
         /// </summary>
         /// <param name="motor">The motor to stop.</param>

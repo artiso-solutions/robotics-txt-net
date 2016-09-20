@@ -138,6 +138,7 @@ namespace RoboticsTxt.Lib.ControllerDriver
         {
             var responseMessage = new TResponseMessage();
             this.logger.DebugExt($"Deserialize message of type {responseMessage.GetType().FullName}");
+            this.logger.DebugExt($"Message bytes: {string.Join("|", bytes)}");
             var deserializationContext = new DeserializationContext(bytes);
             int oldPosition;
             int newPosition;

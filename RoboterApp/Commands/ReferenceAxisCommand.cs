@@ -26,6 +26,10 @@ namespace RoboterApp.Commands
 
         public async void Execute(object parameter)
         {
+            //logger.InfoExt("Start referencing of axis...");
+            //controllerSequencer.MotorRunDistance(Motor.One, Speed.Quick, Movement.Left, 47);
+            //controllerSequencer.MotorRunDistance(Motor.Three, Speed.Fast, Movement.Right, 30);
+
             logger.InfoExt("Start referencing of axis...");
             logger.InfoExt("Reference \"Turn Left / Right\"");
             await ReferenceAxis(Motor.One, Movement.Right, Speed.Quick, DigitalInput.One);

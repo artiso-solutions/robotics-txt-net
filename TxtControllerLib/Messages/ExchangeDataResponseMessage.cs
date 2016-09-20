@@ -9,12 +9,14 @@ namespace RoboticsTxt.Lib.Messages
             this.UniversalInputs = new short[8];
             this.CounterInput = new short[4];
             this.CounterValue = new short[4];
+            this.CounterCommandId = new short[4];
+            this.MotorCommandId = new short[4];
 
             this.AddProperty(nameof(UniversalInputs), dc => this.UniversalInputs = ArchiveReader.ReadInt16(dc, 8))
                 .AddProperty(nameof(CounterInput), dc => this.CounterInput = ArchiveReader.ReadInt16(dc, 4))
                 .AddProperty(nameof(CounterValue), dc => this.CounterValue = ArchiveReader.ReadInt16(dc, 4))
-                .AddProperty(nameof(CounterCommandId), dc => this.CounterCommandId = ArchiveReader.ReadInt16(dc))
-                .AddProperty(nameof(MotorCommandId), dc => this.MotorCommandId = ArchiveReader.ReadInt16(dc))
+                .AddProperty(nameof(CounterCommandId), dc => this.CounterCommandId = ArchiveReader.ReadInt16(dc, 4))
+                .AddProperty(nameof(MotorCommandId), dc => this.MotorCommandId = ArchiveReader.ReadInt16(dc, 4))
                 .AddProperty(nameof(SoundCommandId), dc => this.SoundCommandId = ArchiveReader.ReadInt16(dc));
         }
 
@@ -36,12 +38,12 @@ namespace RoboticsTxt.Lib.Messages
         /// <summary>
         /// This value changes to the last m_counter_reset_command_id in the command structure after a reset command finished.
         /// </summary>
-        public short CounterCommandId { get; private set; }
+        public short[] CounterCommandId { get; private set; }
 
         /// <summary>
         /// This value changes to the last m_motor_command_id in the command structure after a motor distance command is finished
         /// </summary>
-        public short MotorCommandId { get; private set; }
+        public short[] MotorCommandId { get; private set; }
 
         /// <summary>
         /// This value changes to the last m_sound_command_id in the command structure after a sound playback finished.
