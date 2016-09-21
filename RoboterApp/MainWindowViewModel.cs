@@ -41,7 +41,8 @@ namespace RoboterApp
                 ReferencingDirection = Direction.Left,
                 ReferencingSpeed = Speed.Maximal,
                 ReferencingInput = DigitalInput.Two,
-                ReferencingInputState = false
+                ReferencingInputState = false,
+                Limit = 700
             });
             MoveBackwardCommand = new ContinuousMoveAxisCommand(BackwardForwardPositionController, Direction.Left, 100);
             MoveForwardCommand = new ContinuousMoveAxisCommand(BackwardForwardPositionController, Direction.Right, 100);
@@ -52,7 +53,8 @@ namespace RoboterApp
                 ReferencingDirection = Direction.Left,
                 ReferencingSpeed = Speed.Fast,
                 ReferencingInput = DigitalInput.Three,
-                ReferencingInputState = false
+                ReferencingInputState = false,
+                Limit = 2000
             });
             MoveUpCommand = new ContinuousMoveAxisCommand(UpDownPositionController, Direction.Left, 100);
             MoveDownCommand = new ContinuousMoveAxisCommand(UpDownPositionController, Direction.Right, 100);
@@ -63,7 +65,8 @@ namespace RoboterApp
                 ReferencingDirection = Direction.Right,
                 ReferencingSpeed = Speed.Quick,
                 ReferencingInput = DigitalInput.One,
-                ReferencingInputState = false
+                ReferencingInputState = false,
+                Limit = 1500
             });
             TurnLeftCommand = new ContinuousMoveAxisCommand(TurnLeftRightPositionController, Direction.Left, 100);
             TurnRightCommand = new ContinuousMoveAxisCommand(TurnLeftRightPositionController, Direction.Right, 100);
@@ -74,7 +77,8 @@ namespace RoboterApp
                 ReferencingDirection = Direction.Left,
                 ReferencingSpeed = Speed.Quick,
                 ReferencingInput = DigitalInput.Four,
-                ReferencingInputState = false
+                ReferencingInputState = false,
+                Limit = 15
             });
             OpenClampCommand = new ContinuousMoveAxisCommand(OpenCloseClampPositionController, Direction.Left, 100);
             CloseClampCommand = new ContinuousMoveAxisCommand(OpenCloseClampPositionController, Direction.Right, 100);

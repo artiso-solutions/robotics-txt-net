@@ -13,5 +13,7 @@ namespace RoboticsTxt.Lib.Components.Sequencer
         public Speed ReferencingSpeed { get; set; }
 
         public bool ReferencingInputState { get; set; }
+
+        public int Limit { get; set; }
     }
 }

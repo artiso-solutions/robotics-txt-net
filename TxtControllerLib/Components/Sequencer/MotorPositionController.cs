@@ -72,6 +72,21 @@ namespace RoboticsTxt.Lib.Components.Sequencer
         /// <param name="distance">The distance to run.</param>
         public void MotorRunDistance(Speed speed, Direction direction, short distance)
         {
+            if (direction != this.MotorConfiguration.ReferencingDirection)
+            {
+                var availableDistance = this.MotorConfiguration.Limit - this.CurrentPosition;
+
+                if (availableDistance <= 0)
+                {
+                    return;
+                }
+                
+                if (distance > availableDistance)
+                {
+                    distance = (short)availableDistance;
+                }
+            }
+
             currentDirection = direction;
             controllerCommunicator.QueueCommand(new MotorRunDistanceCommand(MotorConfiguration.Motor, speed, direction, distance));
         }
@@ -81,6 +96,11 @@ namespace RoboticsTxt.Lib.Components.Sequencer
             if (motorPositionInfo == null) throw new ArgumentNullException(nameof(motorPositionInfo));
 
             var targetPosition = motorPositionInfo.Position;
+
+            if (targetPosition > this.MotorConfiguration.Limit)
+            {
+                throw new InvalidOperationException("Position would breach limit.");
+            }
 
             var distanceToPosition = targetPosition - this.CurrentPosition;
 
