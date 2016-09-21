@@ -16,7 +16,7 @@ namespace RoboticsTxt.Lib.Components.Sequencer
         private readonly ControllerCommunicator controllerCommunicator;
         private readonly ControllerSequencer controllerSequencer;
         private MotorDistanceInfo motorDistanceInfo;
-        private Movement? currentDirection;
+        private Direction? currentDirection;
 
         private int currentPosition;
 
@@ -51,7 +51,7 @@ namespace RoboticsTxt.Lib.Components.Sequencer
                     return;
                 }
 
-                if (currentDirection.Value == motorConfiguration.ReferencingMovement)
+                if (currentDirection.Value == motorConfiguration.ReferencingDirection)
                 {
                     Interlocked.Add(ref currentPosition, -diff);
                     OnPropertyChanged(nameof(CurrentPosition));
@@ -68,12 +68,12 @@ namespace RoboticsTxt.Lib.Components.Sequencer
         /// Starts the configured <see cref="MotorConfiguration"/> immediately and runs the specified <paramref name="distance"/>.
         /// </summary>
         /// <param name="speed">The speed of the motor.</param>
-        /// <param name="movement">The direction to start.</param>
+        /// <param name="direction">The direction to start.</param>
         /// <param name="distance">The distance to run.</param>
-        public void MotorRunDistance(Speed speed, Movement movement, short distance)
+        public void MotorRunDistance(Speed speed, Direction direction, short distance)
         {
-            currentDirection = movement;
-            controllerCommunicator.QueueCommand(new MotorRunDistanceCommand(MotorConfiguration.Motor, speed, movement, distance));
+            currentDirection = direction;
+            controllerCommunicator.QueueCommand(new MotorRunDistanceCommand(MotorConfiguration.Motor, speed, direction, distance));
         }
 
         public void MoveMotorToPosition([NotNull] MotorPositionInfo motorPositionInfo)
@@ -89,21 +89,21 @@ namespace RoboticsTxt.Lib.Components.Sequencer
                 return;
             }
 
-            Movement movement;
-            var positiveMovement = this.MotorConfiguration.ReferencingMovement == Movement.Left
-                ? Movement.Right
-                : Movement.Left;
+            Direction direction;
+            var positiveMovement = this.MotorConfiguration.ReferencingDirection == Direction.Left
+                ? Direction.Right
+                : Direction.Left;
 
-            var negativeMovement = this.MotorConfiguration.ReferencingMovement == Movement.Left
-                ? Movement.Left
-                : Movement.Right;
+            var negativeMovement = this.MotorConfiguration.ReferencingDirection == Direction.Left
+                ? Direction.Left
+                : Direction.Right;
 
-            movement = distanceToPosition > 0 ? positiveMovement : negativeMovement;
+            direction = distanceToPosition > 0 ? positiveMovement : negativeMovement;
             distanceToPosition = Math.Abs(distanceToPosition);
 
             var speed = Speed.Maximal;
 
-            this.MotorRunDistance(speed, movement, (short)distanceToPosition);
+            this.MotorRunDistance(speed, direction, (short)distanceToPosition);
         }
 
         /// <summary>
@@ -120,12 +120,12 @@ namespace RoboticsTxt.Lib.Components.Sequencer
 
             if (controllerSequencer.GetDigitalInputState(MotorConfiguration.ReferencingInput) == MotorConfiguration.ReferencingInputState)
             {
-                var freeRunMovement = MotorConfiguration.ReferencingMovement == Movement.Left ? Movement.Right : Movement.Left;
+                var freeRunMovement = MotorConfiguration.ReferencingDirection == Direction.Left ? Direction.Right : Direction.Left;
                 await controllerSequencer.StartMotorStopWithDigitalInputInternalAsync(MotorConfiguration.Motor, MotorConfiguration.ReferencingSpeed, freeRunMovement, MotorConfiguration.ReferencingInput, true);
                 await controllerSequencer.StartMotorStopAfterTimeSpanInternalAsync(MotorConfiguration.Motor, MotorConfiguration.ReferencingSpeed, freeRunMovement, TimeSpan.FromMilliseconds(100));
             }
 
-            await controllerSequencer.StartMotorStopWithDigitalInputInternalAsync(MotorConfiguration.Motor, MotorConfiguration.ReferencingSpeed, MotorConfiguration.ReferencingMovement, MotorConfiguration.ReferencingInput, MotorConfiguration.ReferencingInputState);
+            await controllerSequencer.StartMotorStopWithDigitalInputInternalAsync(MotorConfiguration.Motor, MotorConfiguration.ReferencingSpeed, MotorConfiguration.ReferencingDirection, MotorConfiguration.ReferencingInput, MotorConfiguration.ReferencingInputState);
 
             Interlocked.Exchange(ref currentPosition, 0);
             this.OnPropertyChanged(nameof(CurrentPosition));

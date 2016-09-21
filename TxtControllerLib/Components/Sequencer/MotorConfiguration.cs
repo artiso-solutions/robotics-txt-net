@@ -8,7 +8,7 @@ namespace RoboticsTxt.Lib.Components.Sequencer
 
         public DigitalInput ReferencingInput { get; set; }
 
-        public Movement ReferencingMovement { get; set; }
+        public Direction ReferencingDirection { get; set; }
 
         public Speed ReferencingSpeed { get; set; }
 

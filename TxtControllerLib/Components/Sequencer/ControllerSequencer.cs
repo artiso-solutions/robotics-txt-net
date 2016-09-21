@@ -47,12 +47,12 @@ namespace RoboticsTxt.Lib.Components.Sequencer
         /// </summary>
         /// <param name="motor">The motor to start.</param>
         /// <param name="speed">The speed of the motor.</param>
-        /// <param name="movement">The direction to start.</param>
-        public void StartMotor(Motor motor, Speed speed, Movement movement)
+        /// <param name="direction">The direction to start.</param>
+        public void StartMotor(Motor motor, Speed speed, Direction direction)
         {
             CheckMotorPositionMode(motor);
 
-            this.controllerCommunicator.QueueCommand(new StartMotorCommand(motor, speed, movement));
+            this.controllerCommunicator.QueueCommand(new StartMotorCommand(motor, speed, direction));
         }
 
         /// <summary>
@@ -71,20 +71,20 @@ namespace RoboticsTxt.Lib.Components.Sequencer
         /// </summary>
         /// <param name="motor">The motor to start.</param>
         /// <param name="speed">The speed of the motor.</param>
-        /// <param name="movement">The direction to start.</param>
+        /// <param name="direction">The direction to start.</param>
         /// <param name="digitalInput">The digital input to trigger the stop.</param>
         /// <param name="expectedInputState">The expected value for the state trigger.</param>
         /// <returns>This method is async. The returned task will be completed as soon as the movement is finished.</returns>
-        public async Task StartMotorStopWithDigitalInputAsync(Motor motor, Speed speed, Movement movement, DigitalInput digitalInput, bool expectedInputState)
+        public async Task StartMotorStopWithDigitalInputAsync(Motor motor, Speed speed, Direction direction, DigitalInput digitalInput, bool expectedInputState)
         {
             CheckMotorPositionMode(motor);
 
-            await StartMotorStopWithDigitalInputInternalAsync(motor, speed, movement, digitalInput, expectedInputState);
+            await StartMotorStopWithDigitalInputInternalAsync(motor, speed, direction, digitalInput, expectedInputState);
         }
 
-        internal async Task StartMotorStopWithDigitalInputInternalAsync(Motor motor, Speed speed, Movement movement, DigitalInput digitalInput, bool expectedInputState)
+        internal async Task StartMotorStopWithDigitalInputInternalAsync(Motor motor, Speed speed, Direction direction, DigitalInput digitalInput, bool expectedInputState)
         {
-            this.controllerCommunicator.QueueCommand(new StartMotorCommand(motor, speed, movement));
+            this.controllerCommunicator.QueueCommand(new StartMotorCommand(motor, speed, direction));
             await this.WaitForInputAsync(digitalInput, expectedInputState);
             this.controllerCommunicator.QueueCommand(new StopMotorCommand(motor));
         }
@@ -94,19 +94,19 @@ namespace RoboticsTxt.Lib.Components.Sequencer
         /// </summary>
         /// <param name="motor">The motor to start.</param>
         /// <param name="speed">The speed of the motor.</param>
-        /// <param name="movement">The direction to start.</param>
+        /// <param name="direction">The direction to start.</param>
         /// <param name="stopAfterTimeSpan">The time span which is used to stop the motor again.</param>
         /// <returns>This method is async. The returned task will be completed as soon as the movement is finished.</returns>
-        public async Task StartMotorStopAfterTimeSpanAsync(Motor motor, Speed speed, Movement movement, TimeSpan stopAfterTimeSpan)
+        public async Task StartMotorStopAfterTimeSpanAsync(Motor motor, Speed speed, Direction direction, TimeSpan stopAfterTimeSpan)
         {
             CheckMotorPositionMode(motor);
 
-            await StartMotorStopAfterTimeSpanInternalAsync(motor, speed, movement, stopAfterTimeSpan);
+            await StartMotorStopAfterTimeSpanInternalAsync(motor, speed, direction, stopAfterTimeSpan);
         }
 
-        internal async Task StartMotorStopAfterTimeSpanInternalAsync(Motor motor, Speed speed, Movement movement, TimeSpan stopAfterTimeSpan)
+        internal async Task StartMotorStopAfterTimeSpanInternalAsync(Motor motor, Speed speed, Direction direction, TimeSpan stopAfterTimeSpan)
         {
-            this.controllerCommunicator.QueueCommand(new StartMotorCommand(motor, speed, movement));
+            this.controllerCommunicator.QueueCommand(new StartMotorCommand(motor, speed, direction));
             await Task.Delay(stopAfterTimeSpan);
             this.controllerCommunicator.QueueCommand(new StopMotorCommand(motor));
         }

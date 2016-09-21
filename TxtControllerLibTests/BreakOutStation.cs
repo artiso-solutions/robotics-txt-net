@@ -33,29 +33,29 @@ namespace TxtControllerLibTests
         {
             using (var sequencer = new ControllerSequencer(IPAddress.Parse(Settings.Default.TestDeviceIpAddress)))
             {
-                await sequencer.StartMotorStopWithDigitalInputAsync(Motor.Two, Speed.Fast, Movement.Right, DigitalInput.One, true);
+                await sequencer.StartMotorStopWithDigitalInputAsync(Motor.Two, Speed.Fast, Direction.Right, DigitalInput.One, true);
 
                 if (breakoutFirstInterface)
                 {
                     await BreakoutInterface(sequencer);
                 }
 
-                await sequencer.StartMotorStopWithDigitalInputAsync(Motor.Two, Speed.Fast, Movement.Right, DigitalInput.Two, true);
+                await sequencer.StartMotorStopWithDigitalInputAsync(Motor.Two, Speed.Fast, Direction.Right, DigitalInput.Two, true);
 
                 if (breakoutSecondInterface)
                 {
                     await BreakoutInterface(sequencer);
                 }
 
-                await sequencer.StartMotorStopAfterTimeSpanAsync(Motor.Two, Speed.Maximal, Movement.Right, TimeSpan.FromSeconds(2));
+                await sequencer.StartMotorStopAfterTimeSpanAsync(Motor.Two, Speed.Maximal, Direction.Right, TimeSpan.FromSeconds(2));
             }
         }
 
         private async Task BreakoutInterface(ControllerSequencer sequencer)
         {
             logger.InfoExt("Breakout interface");
-            await sequencer.StartMotorStopAfterTimeSpanAsync(Motor.One, Speed.Fast, Movement.Left, TimeSpan.FromMilliseconds(900));
-            await sequencer.StartMotorStopWithDigitalInputAsync(Motor.One, Speed.Fast, Movement.Right, DigitalInput.Three, true);
+            await sequencer.StartMotorStopAfterTimeSpanAsync(Motor.One, Speed.Fast, Direction.Left, TimeSpan.FromMilliseconds(900));
+            await sequencer.StartMotorStopWithDigitalInputAsync(Motor.One, Speed.Fast, Direction.Right, DigitalInput.Three, true);
         }
     }
 }
