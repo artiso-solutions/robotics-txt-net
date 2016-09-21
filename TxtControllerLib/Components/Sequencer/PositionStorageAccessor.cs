@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using log4net;
 using Newtonsoft.Json;
-using RoboticsTxt.Lib.Components.Communicator;
 using RoboticsTxt.Lib.Contracts;
 
 namespace RoboticsTxt.Lib.Components.Sequencer
