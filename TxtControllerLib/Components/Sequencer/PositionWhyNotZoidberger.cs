@@ -18,7 +18,7 @@ namespace RoboticsTxt.Lib.Components.Sequencer
         {
             try
             {
-                var positionsJson = JsonConvert.SerializeObject(positions);
+                var positionsJson = JsonConvert.SerializeObject(positions, Formatting.Indented);
 
                 var stream = new FileStream(fileName, FileMode.Create);
                 var streamWriter = new StreamWriter(stream);
