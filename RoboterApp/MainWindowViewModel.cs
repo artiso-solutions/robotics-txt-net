@@ -14,6 +14,7 @@ namespace RoboterApp
     public class MainWindowViewModel : INotifyPropertyChanged, IDisposable
     {
         private readonly ControllerSequencer controllerSequencer;
+        private string positionName;
 
         public MainWindowViewModel()
         {
@@ -32,7 +33,8 @@ namespace RoboterApp
 
             controllerSequencer = new ControllerSequencer(ipAddress);
 
-            BackwardForwardPositionController = controllerSequencer.ConfigureMotorPositionController(new MotorConfiguration {
+            BackwardForwardPositionController = controllerSequencer.ConfigureMotorPositionController(new MotorConfiguration
+            {
                 Motor = Motor.Two,
                 ReferencingMovement = Movement.Left,
                 ReferencingSpeed = Speed.Maximal,
@@ -74,8 +76,9 @@ namespace RoboterApp
             });
             OpenClampCommand = new ContinuousMoveAxisCommand(OpenCloseClampPositionController, Movement.Left, 100);
             CloseClampCommand = new ContinuousMoveAxisCommand(OpenCloseClampPositionController, Movement.Right, 100);
-            
+
             ReferenceAxisCommand = new ReferenceAxisCommand(TurnLeftRightPositionController, UpDownPositionController, BackwardForwardPositionController, OpenCloseClampPositionController);
+            SavePositionCommand = new SavePositionCommand(this.controllerSequencer);
         }
 
         public MotorPositionController OpenCloseClampPositionController { get; }
@@ -92,6 +95,7 @@ namespace RoboterApp
         }
 
         public ICommand ReferenceAxisCommand { get; }
+        public ICommand SavePositionCommand { get; set; }
         public ContinuousMoveAxisCommand MoveBackwardCommand { get; }
         public ContinuousMoveAxisCommand MoveForwardCommand { get; }
         public ContinuousMoveAxisCommand MoveUpCommand { get; }
@@ -100,6 +104,17 @@ namespace RoboterApp
         public ContinuousMoveAxisCommand TurnRightCommand { get; }
         public ContinuousMoveAxisCommand OpenClampCommand { get; }
         public ContinuousMoveAxisCommand CloseClampCommand { get; }
+
+        public string PositionName
+        {
+            get { return this.positionName; }
+            set
+            {
+                this.positionName = value;
+                this.OnPropertyChanged();
+            }
+        }
+
 
         public event PropertyChangedEventHandler PropertyChanged;
 

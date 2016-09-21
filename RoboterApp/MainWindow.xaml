@@ -97,6 +97,8 @@
                 <Run Text="O/C: "/>
                 <Run Text="{Binding OpenCloseClampPositionController.CurrentPosition}"/>
             </TextBlock>
+            <TextBox Text="{Binding PositionName}"></TextBox>
+            <Button Command="{Binding SavePositionCommand}" CommandParameter="{Binding PositionName}" Content="Save Position" HorizontalAlignment="Left"/>
         </StackPanel>
 
         <Viewbox Grid.Column="1">
