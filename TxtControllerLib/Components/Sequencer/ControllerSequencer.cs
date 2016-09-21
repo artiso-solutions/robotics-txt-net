@@ -22,7 +22,7 @@ namespace RoboticsTxt.Lib.Components.Sequencer
     {
         private readonly ControllerCommunicator controllerCommunicator;
         private readonly Dictionary<Motor, MotorPositionController> motorPositionControllers;
-        private readonly PositionWhyNotZoidberger positionWhyNotZoidberger;
+        private readonly PositionStorageAccessor positionStorageAccessor;
 
         private List<Position> positions;
 
@@ -35,9 +35,9 @@ namespace RoboticsTxt.Lib.Components.Sequencer
         {
             this.controllerCommunicator = new ControllerCommunicator(ipAddress);
             this.motorPositionControllers = new Dictionary<Motor, MotorPositionController>();
-            this.positionWhyNotZoidberger = new PositionWhyNotZoidberger();
+            this.positionStorageAccessor = new PositionStorageAccessor();
 
-            this.positions = this.positionWhyNotZoidberger.LoadPositionsFromFile();
+            this.positions = this.positionStorageAccessor.LoadPositionsFromFile();
 
             this.controllerCommunicator.Start();
         }
@@ -144,7 +144,7 @@ namespace RoboticsTxt.Lib.Components.Sequencer
                 }
             }
 
-            this.positionWhyNotZoidberger.WritePositionsToFile(this.positions);
+            this.positionStorageAccessor.WritePositionsToFile(this.positions);
         }
 
         public void MoveToPosition(string positionName)

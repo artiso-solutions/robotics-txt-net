@@ -8,11 +8,11 @@ using RoboticsTxt.Lib.Contracts;
 
 namespace RoboticsTxt.Lib.Components.Sequencer
 {
-    internal class PositionWhyNotZoidberger
+    internal class PositionStorageAccessor
     {
-        private readonly ILog logger = LogManager.GetLogger(typeof(PositionWhyNotZoidberger));
+        private readonly ILog logger = LogManager.GetLogger(typeof(PositionStorageAccessor));
 
-        private const string fileName = "PositionFile.json";
+        private const string FileName = "Positions.json";
 
         public bool WritePositionsToFile(IEnumerable<Position> positions)
         {
@@ -20,7 +20,7 @@ namespace RoboticsTxt.Lib.Components.Sequencer
             {
                 var positionsJson = JsonConvert.SerializeObject(positions, Formatting.Indented);
 
-                var stream = new FileStream(fileName, FileMode.Create);
+                var stream = new FileStream(FileName, FileMode.Create);
                 var streamWriter = new StreamWriter(stream);
 
                 streamWriter.Write(positionsJson);
@@ -41,7 +41,7 @@ namespace RoboticsTxt.Lib.Components.Sequencer
 
             try
             {
-                var stream = new FileStream(fileName, FileMode.Open);
+                var stream = new FileStream(FileName, FileMode.Open);
                 var streamReader = new StreamReader(stream);
 
                 var positionsJson = streamReader.ReadToEnd();
