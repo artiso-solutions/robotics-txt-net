@@ -100,6 +100,8 @@ namespace RoboticsTxt.Lib.Components.Sequencer
             Interlocked.Exchange(ref currentPosition, 0);
             this.OnPropertyChanged(nameof(CurrentPosition));
 
+            Thread.Sleep(TimeSpan.FromMilliseconds(500));
+
             this.motorDistanceInfo.IsTracking = true;
         }
 
