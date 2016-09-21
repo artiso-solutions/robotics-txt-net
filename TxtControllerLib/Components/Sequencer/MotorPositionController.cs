@@ -37,6 +37,8 @@ namespace RoboticsTxt.Lib.Components.Sequencer
             }
         }
 
+        public int AvailableDistance => this.MotorConfiguration.Limit - this.CurrentPosition;
+
         internal MotorPositionController(MotorConfiguration motorConfiguration, ControllerCommunicator controllerCommunicator, ControllerSequencer controllerSequencer)
         {
             this.controllerCommunicator = controllerCommunicator;
@@ -64,6 +66,11 @@ namespace RoboticsTxt.Lib.Components.Sequencer
             });
         }
 
+        public void StartMotor(Speed speed, Direction direction)
+        {
+            MotorRunDistance(speed, direction, (short) this.AvailableDistance);
+        }
+
         /// <summary>
         /// Starts the configured <see cref="MotorConfiguration"/> immediately and runs the specified <paramref name="distance"/>.
         /// </summary>
@@ -74,16 +81,14 @@ namespace RoboticsTxt.Lib.Components.Sequencer
         {
             if (direction != this.MotorConfiguration.ReferencingDirection)
             {
-                var availableDistance = this.MotorConfiguration.Limit - this.CurrentPosition;
-
-                if (availableDistance <= 0)
+                if (this.AvailableDistance <= 0)
                 {
                     return;
                 }
                 
-                if (distance > availableDistance)
+                if (distance > this.AvailableDistance)
                 {
-                    distance = (short)availableDistance;
+                    distance = (short)this.AvailableDistance;
                 }
             }
 

@@ -8,15 +8,13 @@ namespace RoboterApp.Commands
     {
         private readonly MotorPositionController motorPositionController;
         private readonly Direction direction;
-        private readonly short maxDistance;
         private Speed? previousSpeed;
         private bool isMoving;
 
-        public ContinuousMoveAxisCommand(MotorPositionController motorPositionController, Direction direction, short maxDistance)
+        public ContinuousMoveAxisCommand(MotorPositionController motorPositionController, Direction direction)
         {
             this.motorPositionController = motorPositionController;
             this.direction = direction;
-            this.maxDistance = maxDistance;
         }
 
         public void OnMove(Speed currentSpeed)
@@ -34,7 +32,7 @@ namespace RoboterApp.Commands
             }
 
             previousSpeed = currentSpeed;
-            motorPositionController.MotorRunDistance(currentSpeed, this.direction, maxDistance);
+            motorPositionController.StartMotor(currentSpeed, this.direction);
         }
 
         public void OnStop()
