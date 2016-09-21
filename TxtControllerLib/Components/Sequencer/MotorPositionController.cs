@@ -15,7 +15,7 @@ namespace RoboticsTxt.Lib.Components.Sequencer
     {
         private readonly ControllerCommunicator controllerCommunicator;
         private readonly ControllerSequencer controllerSequencer;
-        private MotorDistanceInfo motorDistanceInfo;
+        private readonly MotorDistanceInfo motorDistanceInfo;
         private Direction? currentDirection;
 
         private int currentPosition;
