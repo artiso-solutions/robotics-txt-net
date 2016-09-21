@@ -76,6 +76,36 @@ namespace RoboticsTxt.Lib.Components.Sequencer
             controllerCommunicator.QueueCommand(new MotorRunDistanceCommand(MotorConfiguration.Motor, speed, movement, distance));
         }
 
+        public void MoveMotorToPosition([NotNull] MotorPositionInfo motorPositionInfo)
+        {
+            if (motorPositionInfo == null) throw new ArgumentNullException(nameof(motorPositionInfo));
+
+            var targetPosition = motorPositionInfo.Position;
+
+            var distanceToPosition = targetPosition - this.CurrentPosition;
+
+            if (distanceToPosition == 0)
+            {
+                return;
+            }
+
+            Movement movement;
+            var positiveMovement = this.MotorConfiguration.ReferencingMovement == Movement.Left
+                ? Movement.Right
+                : Movement.Left;
+
+            var negativeMovement = this.MotorConfiguration.ReferencingMovement == Movement.Left
+                ? Movement.Left
+                : Movement.Right;
+
+            movement = distanceToPosition > 0 ? positiveMovement : negativeMovement;
+            distanceToPosition = Math.Abs(distanceToPosition);
+
+            var speed = Speed.Maximal;
+
+            this.MotorRunDistance(speed, movement, (short)distanceToPosition);
+        }
+
         /// <summary>
         /// Stops the specified <see cref="MotorConfiguration"/> immediately.
         /// </summary>

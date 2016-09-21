@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Net;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
@@ -133,6 +135,19 @@ namespace RoboticsTxt.Lib.Components.Sequencer
             this.positionWhyNotZoidberger.WritePositionsToFile(this.positions);
         }
 
+        public void MoveToPosition(string positionName)
+        {
+            var position = this.positions.FirstOrDefault(p => p.PositionName == positionName);
+
+            if (position != null)
+            {
+                foreach (var motorPositionInfo in position.MotorPositionInfos)
+                {
+                    this.motorPositionControllers[motorPositionInfo.Motor].MoveMotorToPosition(motorPositionInfo);
+                }
+            }
+        }
+
         /// <summary>
         /// Cleanup of all resrouces. This also stops the communication to the controller.
         /// </summary>
@@ -176,6 +191,16 @@ namespace RoboticsTxt.Lib.Components.Sequencer
             {
                 throw new InvalidOperationException($"Motor {motor} is configured for position control and can not be commanded via controller sequencer. Use the MotorPositionController.");
             }
+        }
+
+        public List<string> GetPositionNames()
+        {
+            var result = new List<string>();
+            foreach (var position in this.positions)
+            {
+                result.Add(position.PositionName);
+            }
+            return result;
         }
     }
 }

@@ -75,6 +75,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\MotorRunDistanceCommand.cs" />
+    <Compile Include="Commands\MoveToPositionCommand.cs" />
     <Compile Include="Commands\StartMotorCommand.cs" />
     <Compile Include="Commands\StopMotorCommand.cs" />
     <Compile Include="Components\Communicator\CommandProcessor.cs" />

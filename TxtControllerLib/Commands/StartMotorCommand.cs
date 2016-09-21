@@ -40,6 +40,8 @@ namespace RoboticsTxt.Lib.Commands
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+
+            message.MotorDistance[motorIndex] = 0;
         }
     }
 }

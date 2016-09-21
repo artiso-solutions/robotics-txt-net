@@ -67,7 +67,7 @@
         </Style>
     </Window.Resources>
 
-    <Grid>
+    <Grid x:Name="BaseGrid">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200" />
             <ColumnDefinition Width="*" />
@@ -99,6 +99,19 @@
             </TextBlock>
             <TextBox Text="{Binding PositionName}"></TextBox>
             <Button Command="{Binding SavePositionCommand}" CommandParameter="{Binding PositionName}" Content="Save Position" HorizontalAlignment="Left"/>
+            
+            <ItemsControl ItemsSource="{Binding PositionNames}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel></StackPanel>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button Content="{Binding}" Command="{Binding DataContext.MoveToPositionCommand, ElementName=BaseGrid}" CommandParameter="{Binding}"></Button>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
         </StackPanel>
 
         <Viewbox Grid.Column="1">

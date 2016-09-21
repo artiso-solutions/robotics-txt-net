@@ -1,10 +1,12 @@
 using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Net;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using JetBrains.Annotations;
 using RoboterApp.Commands;
+using RoboticsTxt.Lib.Commands;
 using RoboticsTxt.Lib.Components;
 using RoboticsTxt.Lib.Components.Sequencer;
 using RoboticsTxt.Lib.Contracts;
@@ -32,7 +34,7 @@ namespace RoboterApp
             }
 
             controllerSequencer = new ControllerSequencer(ipAddress);
-
+            this.PositionNames = new ObservableCollection<string>(this.controllerSequencer.GetPositionNames());
             BackwardForwardPositionController = controllerSequencer.ConfigureMotorPositionController(new MotorConfiguration
             {
                 Motor = Motor.Two,
@@ -79,6 +81,7 @@ namespace RoboterApp
 
             ReferenceAxisCommand = new ReferenceAxisCommand(TurnLeftRightPositionController, UpDownPositionController, BackwardForwardPositionController, OpenCloseClampPositionController);
             SavePositionCommand = new SavePositionCommand(this.controllerSequencer);
+            MoveToPositionCommand = new MoveToPositionCommand(this.controllerSequencer);
         }
 
         public MotorPositionController OpenCloseClampPositionController { get; }
@@ -94,6 +97,7 @@ namespace RoboterApp
             controllerSequencer.Dispose();
         }
 
+        public ICommand MoveToPositionCommand { get; set; }
         public ICommand ReferenceAxisCommand { get; }
         public ICommand SavePositionCommand { get; set; }
         public ContinuousMoveAxisCommand MoveBackwardCommand { get; }
@@ -114,6 +118,8 @@ namespace RoboterApp
                 this.OnPropertyChanged();
             }
         }
+
+        public ObservableCollection<string> PositionNames { get; }
 
 
         public event PropertyChangedEventHandler PropertyChanged;
