@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using RoboticsTxt.Lib.Components.Sequencer;
 
-namespace RoboticsTxt.Lib.Commands
+namespace RoboterApp.Commands
 {
     public class MoveToPositionCommand : ICommand
     {
