@@ -35,6 +35,7 @@ namespace RoboterApp
 
             controllerSequencer = new ControllerSequencer(ipAddress);
             this.PositionNames = new ObservableCollection<string>(this.controllerSequencer.GetPositionNames());
+
             BackwardForwardPositionController = controllerSequencer.ConfigureMotorPositionController(new MotorConfiguration
             {
                 Motor = Motor.Two,
@@ -84,7 +85,7 @@ namespace RoboterApp
             CloseClampCommand = new ContinuousMoveAxisCommand(this.OpenCloseClampPositionController, Direction.Right);
 
             ReferenceAxisCommand = new ReferenceAxisCommand(TurnLeftRightPositionController, UpDownPositionController, BackwardForwardPositionController, OpenCloseClampPositionController);
-            SavePositionCommand = new SavePositionCommand(this.controllerSequencer);
+            SavePositionCommand = new SavePositionCommand(this.controllerSequencer, this.PositionNames);
             MoveToPositionCommand = new MoveToPositionCommand(this.controllerSequencer);
         }
 

@@ -123,14 +123,26 @@ namespace RoboticsTxt.Lib.Components.Sequencer
 
         public void SaveCurrentPosition(string positionName)
         {
-            var newPosition = new Position {PositionName = positionName};
+            var position = this.positions.FirstOrDefault(p => p.PositionName == positionName);
 
-            foreach (var motorPositionController in this.motorPositionControllers.Values)
+            if (position == null)
             {
-                newPosition.MotorPositionInfos.Add(motorPositionController.GetPositionInfo());
-            }
+                position = new Position {PositionName = positionName};
+                foreach (var motorPositionController in this.motorPositionControllers.Values)
+                {
+                    position.MotorPositionInfos.Add(motorPositionController.GetPositionInfo());
+                }
 
-            this.positions.Add(newPosition);
+                this.positions.Add(position);
+            }
+            else
+            {
+                position.MotorPositionInfos.Clear();
+                foreach (var motorPositionController in this.motorPositionControllers.Values)
+                {
+                    position.MotorPositionInfos.Add(motorPositionController.GetPositionInfo());
+                }
+            }
 
             this.positionWhyNotZoidberger.WritePositionsToFile(this.positions);
         }
