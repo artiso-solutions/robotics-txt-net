@@ -86,6 +86,8 @@ namespace RoboticsTxt.Lib.Components.Sequencer
 
         public async Task ReferenceAsync()
         {
+            this.motorDistanceInfo.IsTracking = false;
+
             if (controllerSequencer.GetDigitalInputState(MotorConfiguration.ReferencingInput) == MotorConfiguration.ReferencingInputState)
             {
                 var freeRunMovement = MotorConfiguration.ReferencingMovement == Movement.Left ? Movement.Right : Movement.Left;
@@ -95,7 +97,10 @@ namespace RoboticsTxt.Lib.Components.Sequencer
 
             await controllerSequencer.StartMotorStopWithDigitalInputInternalAsync(MotorConfiguration.Motor, MotorConfiguration.ReferencingSpeed, MotorConfiguration.ReferencingMovement, MotorConfiguration.ReferencingInput, MotorConfiguration.ReferencingInputState);
 
-            CurrentPosition = 0;
+            Interlocked.Exchange(ref currentPosition, 0);
+            this.OnPropertyChanged(nameof(CurrentPosition));
+
+            this.motorDistanceInfo.IsTracking = true;
         }
 
         public void Dispose()

@@ -19,6 +19,7 @@ namespace RoboticsTxt.Lib.Components.Communicator
         public MotorDistanceInfo(Motor motor)
         {
             this.Motor = motor;
+            this.IsTracking = true;
 
             distanceChangesSubject = new Subject<int>();
             commandIdChangesSubject = new Subject<short>();
@@ -26,25 +27,32 @@ namespace RoboticsTxt.Lib.Components.Communicator
 
         public Motor Motor { get; }
 
+        public bool IsTracking { get; set; }
+
         // TODO think about rename
         public IObservable<int> DistanceChanges => distanceChangesSubject.AsObservable();
 
         public IObservable<short> CommandIdChanges => commandIdChangesSubject.AsObservable();
 
-        public void SetCurrentDistanceValue(short distanceValue, short commandId, short counterCommandId)
+        public void SetCurrentDistanceValue(short distanceValue, short commandId)
         {
-            if (distanceValue == 0 && currentDistanceValue > 0)
+            if (!this.IsTracking)
+            {
+                this.currentDistanceValue = distanceValue;
+                return;
+            }
+
+            if ((distanceValue < currentDistanceValue))
             {
                 currentDistanceValue = 0;
                 logger.Info("reset currentDistance");
-                return;
             }
-            
-            if (currentDistanceValue == distanceValue && currentCommandId == commandId)
+
+            if (currentDistanceValue == distanceValue)
             {
                 return;
             }
-            
+
             var difference = distanceValue - currentDistanceValue;
 
             logger.Info($"d={distanceValue:000} - diff={difference:000} - c={commandId:000}");

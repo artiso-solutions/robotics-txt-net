@@ -14,7 +14,7 @@ namespace RoboticsTxt.Lib.Components.Communicator
 
             for (int i = 0; i < 4; i++)
             {
-                motorDistanceInfos[i].SetCurrentDistanceValue(responseMessage.CounterValue[i], responseMessage.MotorCommandId[i], responseMessage.CounterCommandId[i]);
+                motorDistanceInfos[i].SetCurrentDistanceValue(responseMessage.CounterValue[i], responseMessage.MotorCommandId[i]);
             }
         }
     }
