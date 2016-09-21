@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Net;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using RoboticsTxt.Lib.Commands;
 using RoboticsTxt.Lib.Components.Communicator;
 using RoboticsTxt.Lib.Contracts;
@@ -22,8 +20,9 @@ namespace RoboticsTxt.Lib.Components.Sequencer
     {
         private readonly ControllerCommunicator controllerCommunicator;
         private readonly Dictionary<Motor, MotorPositionController> motorPositionControllers;
+        private readonly PositionWhyNotZoidberger positionWhyNotZoidberger;
 
-        private List<Position> positions; 
+        private List<Position> positions;
 
         /// <summary>
         /// Creates a new instance of the <see cref="ControllerSequencer"/> and starts the communication with the controller. To stop the communication
@@ -34,9 +33,9 @@ namespace RoboticsTxt.Lib.Components.Sequencer
         {
             this.controllerCommunicator = new ControllerCommunicator(ipAddress);
             this.motorPositionControllers = new Dictionary<Motor, MotorPositionController>();
+            this.positionWhyNotZoidberger = new PositionWhyNotZoidberger();
 
-            this.positions = new List<Position>();
-            this.LoadPositionsFromFile();
+            this.positions = this.positionWhyNotZoidberger.LoadPositionsFromFile();
 
             this.controllerCommunicator.Start();
         }
@@ -131,42 +130,7 @@ namespace RoboticsTxt.Lib.Components.Sequencer
 
             this.positions.Add(newPosition);
 
-            this.SavePositionsToFile();
-        }
-
-        private void SavePositionsToFile()
-        {
-            try
-            {
-                var positionsJson = JsonConvert.SerializeObject(this.positions);
-
-                var stream = new FileStream("PositionFile.json", FileMode.Create);
-                var streamWriter = new StreamWriter(stream);
-
-                streamWriter.Write(positionsJson);
-                streamWriter.Flush();
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception);
-            }
-        }
-
-        private void LoadPositionsFromFile()
-        {
-            try
-            {
-                var stream = new FileStream("PositionFile.json", FileMode.Open);
-                var streamReader = new StreamReader(stream);
-
-                var positionsJson = streamReader.ReadToEnd();
-
-                this.positions = JsonConvert.DeserializeObject<List<Position>>(positionsJson);
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception);
-            }
+            this.positionWhyNotZoidberger.WritePositionsToFile(this.positions);
         }
 
         /// <summary>
