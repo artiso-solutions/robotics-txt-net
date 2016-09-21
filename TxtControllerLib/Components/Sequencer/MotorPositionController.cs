@@ -105,6 +105,15 @@ namespace RoboticsTxt.Lib.Components.Sequencer
             this.motorDistanceInfo.IsTracking = true;
         }
 
+        public MotorPositionInfo GetPositionInfo()
+        {
+            return new MotorPositionInfo
+            {
+                Motor = this.MotorConfiguration.Motor,
+                Position = this.CurrentPosition
+            };
+        }
+
         public void Dispose()
         {
         }

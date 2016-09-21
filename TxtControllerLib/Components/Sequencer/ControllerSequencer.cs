@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using RoboticsTxt.Lib.Commands;
 using RoboticsTxt.Lib.Components.Communicator;
 using RoboticsTxt.Lib.Contracts;
@@ -21,6 +23,8 @@ namespace RoboticsTxt.Lib.Components.Sequencer
         private readonly ControllerCommunicator controllerCommunicator;
         private readonly Dictionary<Motor, MotorPositionController> motorPositionControllers;
 
+        private List<Position> positions; 
+
         /// <summary>
         /// Creates a new instance of the <see cref="ControllerSequencer"/> and starts the communication with the controller. To stop the communication
         /// you have to dispose the <see cref="ControllerSequencer"/>.
@@ -30,6 +34,9 @@ namespace RoboticsTxt.Lib.Components.Sequencer
         {
             this.controllerCommunicator = new ControllerCommunicator(ipAddress);
             this.motorPositionControllers = new Dictionary<Motor, MotorPositionController>();
+
+            this.positions = new List<Position>();
+            this.LoadPositionsFromFile();
 
             this.controllerCommunicator.Start();
         }
@@ -111,6 +118,55 @@ namespace RoboticsTxt.Lib.Components.Sequencer
         public bool GetDigitalInputState(DigitalInput referenceInput)
         {
             return this.controllerCommunicator.UniversalInputs[(int)referenceInput].CurrentState;
+        }
+
+        public void SaveCurrentPosition(string positionName)
+        {
+            var newPosition = new Position {PositionName = positionName};
+
+            foreach (var motorPositionController in this.motorPositionControllers.Values)
+            {
+                newPosition.MotorPositionInfos.Add(motorPositionController.GetPositionInfo());
+            }
+
+            this.positions.Add(newPosition);
+
+            this.SavePositionsToFile();
+        }
+
+        private void SavePositionsToFile()
+        {
+            try
+            {
+                var positionsJson = JsonConvert.SerializeObject(this.positions);
+
+                var stream = new FileStream("PositionFile.json", FileMode.Create);
+                var streamWriter = new StreamWriter(stream);
+
+                streamWriter.Write(positionsJson);
+                streamWriter.Flush();
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception);
+            }
+        }
+
+        private void LoadPositionsFromFile()
+        {
+            try
+            {
+                var stream = new FileStream("PositionFile.json", FileMode.Open);
+                var streamReader = new StreamReader(stream);
+
+                var positionsJson = streamReader.ReadToEnd();
+
+                this.positions = JsonConvert.DeserializeObject<List<Position>>(positionsJson);
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception);
+            }
         }
 
         /// <summary>
