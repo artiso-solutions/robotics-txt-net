@@ -6,6 +6,7 @@ using log4net.Util;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RoboticsTxt.Lib.Commands;
 using RoboticsTxt.Lib.Components;
+using RoboticsTxt.Lib.Components.Communicator;
 using RoboticsTxt.Lib.Contracts;
 using TxtControllerLibTests.Properties;
 
@@ -30,7 +31,7 @@ namespace TxtControllerLibTests
 
             Thread.Sleep(TimeSpan.FromSeconds(1));
 
-            communicator.QueueCommand(new StartMotorCommand(Motor.Two, Speed.Maximal, Movement.Right));
+            communicator.QueueCommand(new StartMotorCommand(Motor.Two, Speed.Maximal, Direction.Right));
 
             Thread.Sleep(TimeSpan.FromSeconds(3));
 

@@ -1,11 +1,12 @@
 using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Net;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using JetBrains.Annotations;
 using RoboterApp.Commands;
-using RoboticsTxt.Lib.Components;
+using RoboticsTxt.Lib.Components.Sequencer;
 using RoboticsTxt.Lib.Contracts;
 
 namespace RoboterApp
@@ -13,6 +14,7 @@ namespace RoboterApp
     public class MainWindowViewModel : INotifyPropertyChanged, IDisposable
     {
         private readonly ControllerSequencer controllerSequencer;
+        private string positionName;
 
         public MainWindowViewModel()
         {
@@ -30,28 +32,77 @@ namespace RoboterApp
             }
 
             controllerSequencer = new ControllerSequencer(ipAddress);
+            this.PositionNames = new ObservableCollection<string>(this.controllerSequencer.GetPositionNames());
 
-            ReferenceAxisCommand = new ReferenceAxisCommand(controllerSequencer);
+            BackwardForwardPositionController = controllerSequencer.ConfigureMotorPositionController(new MotorConfiguration
+            {
+                Motor = Motor.Two,
+                ReferencingDirection = Direction.Left,
+                ReferencingSpeed = Speed.Maximal,
+                ReferencingInput = DigitalInput.Two,
+                ReferencingInputState = false,
+                Limit = 700
+            });
+            MoveBackwardCommand = new ContinuousMoveAxisCommand(this.BackwardForwardPositionController, Direction.Left);
+            MoveForwardCommand = new ContinuousMoveAxisCommand(this.BackwardForwardPositionController, Direction.Right);
 
-            MoveBackwardCommand = new ContinuousMoveAxisCommand(controllerSequencer, Motor.Two, Movement.Left, 100);
-            MoveForwardCommand = new ContinuousMoveAxisCommand(controllerSequencer, Motor.Two, Movement.Right, 100);
+            UpDownPositionController = controllerSequencer.ConfigureMotorPositionController(new MotorConfiguration
+            {
+                Motor = Motor.Three,
+                ReferencingDirection = Direction.Left,
+                ReferencingSpeed = Speed.Fast,
+                ReferencingInput = DigitalInput.Three,
+                ReferencingInputState = false,
+                Limit = 2000
+            });
+            MoveUpCommand = new ContinuousMoveAxisCommand(this.UpDownPositionController, Direction.Left);
+            MoveDownCommand = new ContinuousMoveAxisCommand(this.UpDownPositionController, Direction.Right);
 
-            MoveUpCommand = new ContinuousMoveAxisCommand(controllerSequencer, Motor.Three, Movement.Left, 100);
-            MoveDownCommand = new ContinuousMoveAxisCommand(controllerSequencer, Motor.Three, Movement.Right, 100);
+            TurnLeftRightPositionController = controllerSequencer.ConfigureMotorPositionController(new MotorConfiguration
+            {
+                Motor = Motor.One,
+                ReferencingDirection = Direction.Right,
+                ReferencingSpeed = Speed.Quick,
+                ReferencingInput = DigitalInput.One,
+                ReferencingInputState = false,
+                Limit = 2200
+            });
+            TurnLeftCommand = new ContinuousMoveAxisCommand(this.TurnLeftRightPositionController, Direction.Left);
+            TurnRightCommand = new ContinuousMoveAxisCommand(this.TurnLeftRightPositionController, Direction.Right);
 
-            TurnLeftCommand = new ContinuousMoveAxisCommand(controllerSequencer, Motor.One, Movement.Left, 100);
-            TurnRightCommand = new ContinuousMoveAxisCommand(controllerSequencer, Motor.One, Movement.Right, 100);
+            OpenCloseClampPositionController = controllerSequencer.ConfigureMotorPositionController(new MotorConfiguration
+            {
+                Motor = Motor.Four,
+                ReferencingDirection = Direction.Left,
+                ReferencingSpeed = Speed.Quick,
+                ReferencingInput = DigitalInput.Four,
+                ReferencingInputState = false,
+                Limit = 15
+            });
+            OpenClampCommand = new ContinuousMoveAxisCommand(this.OpenCloseClampPositionController, Direction.Left);
+            CloseClampCommand = new ContinuousMoveAxisCommand(this.OpenCloseClampPositionController, Direction.Right);
 
-            OpenClampCommand = new ContinuousMoveAxisCommand(controllerSequencer, Motor.Four, Movement.Left, 100);
-            CloseClampCommand = new ContinuousMoveAxisCommand(controllerSequencer, Motor.Four, Movement.Right, 100);
+            ReferenceAxisCommand = new ReferenceAxisCommand(TurnLeftRightPositionController, UpDownPositionController, BackwardForwardPositionController, OpenCloseClampPositionController);
+            SavePositionCommand = new SavePositionCommand(this.controllerSequencer, this.PositionNames);
+            MoveToPositionCommand = new MoveToPositionCommand(this.controllerSequencer);
         }
+
+        public MotorPositionController OpenCloseClampPositionController { get; }
+
+        public MotorPositionController TurnLeftRightPositionController { get; }
+
+        public MotorPositionController UpDownPositionController { get; }
+
+        public MotorPositionController BackwardForwardPositionController { get; }
 
         public void Dispose()
         {
             controllerSequencer.Dispose();
         }
 
+        public ICommand MoveToPositionCommand { get; set; }
         public ICommand ReferenceAxisCommand { get; }
+        public ICommand SavePositionCommand { get; set; }
         public ContinuousMoveAxisCommand MoveBackwardCommand { get; }
         public ContinuousMoveAxisCommand MoveForwardCommand { get; }
         public ContinuousMoveAxisCommand MoveUpCommand { get; }
@@ -60,6 +111,19 @@ namespace RoboterApp
         public ContinuousMoveAxisCommand TurnRightCommand { get; }
         public ContinuousMoveAxisCommand OpenClampCommand { get; }
         public ContinuousMoveAxisCommand CloseClampCommand { get; }
+
+        public string PositionName
+        {
+            get { return this.positionName; }
+            set
+            {
+                this.positionName = value;
+                this.OnPropertyChanged();
+            }
+        }
+
+        public ObservableCollection<string> PositionNames { get; }
+
 
         public event PropertyChangedEventHandler PropertyChanged;
 
