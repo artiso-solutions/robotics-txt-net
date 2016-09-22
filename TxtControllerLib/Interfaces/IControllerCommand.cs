@@ -1,9 +1,10 @@
-﻿using RoboticsTxt.Lib.Messages;
+﻿using RoboticsTxt.Lib.Components.Communicator;
+using RoboticsTxt.Lib.Messages;
 
 namespace RoboticsTxt.Lib.Interfaces
 {
     internal interface IControllerCommand
     {
-        void ApplyMessageChanges(ExchangeDataCommandMessage message);
+        void Execute(ControllerCommunicator controllerCommunicator, ExchangeDataCommandMessage message);
     }
 }
