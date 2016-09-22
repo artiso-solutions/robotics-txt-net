@@ -4,6 +4,11 @@ namespace RoboticsTxt.Lib.Components.Sequencer
 {
     public class MotorConfiguration
     {
+        public MotorConfiguration()
+        {
+            this.IsSaveable = true;
+        }
+
         public Motor Motor { get; set; }
 
         public DigitalInput ReferencingInput { get; set; }
@@ -15,5 +20,7 @@ namespace RoboticsTxt.Lib.Components.Sequencer
         public bool ReferencingInputState { get; set; }
 
         public int Limit { get; set; }
+
+        public bool IsSaveable { get; set; }
     }
 }

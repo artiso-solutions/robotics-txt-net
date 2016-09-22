@@ -130,7 +130,10 @@ namespace RoboticsTxt.Lib.Components.Sequencer
                 position = new Position {PositionName = positionName};
                 foreach (var motorPositionController in this.motorPositionControllers.Values)
                 {
-                    position.MotorPositionInfos.Add(motorPositionController.GetPositionInfo());
+                    if (motorPositionController.MotorConfiguration.IsSaveable)
+                    {
+                        position.MotorPositionInfos.Add(motorPositionController.GetPositionInfo());
+                    }
                 }
 
                 this.positions.Add(position);
@@ -140,7 +143,10 @@ namespace RoboticsTxt.Lib.Components.Sequencer
                 position.MotorPositionInfos.Clear();
                 foreach (var motorPositionController in this.motorPositionControllers.Values)
                 {
-                    position.MotorPositionInfos.Add(motorPositionController.GetPositionInfo());
+                    if (motorPositionController.MotorConfiguration.IsSaveable)
+                    {
+                        position.MotorPositionInfos.Add(motorPositionController.GetPositionInfo());
+                    }
                 }
             }
 
