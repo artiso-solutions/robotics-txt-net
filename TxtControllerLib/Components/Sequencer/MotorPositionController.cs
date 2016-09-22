@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -19,6 +20,7 @@ namespace RoboticsTxt.Lib.Components.Sequencer
         private Direction? currentDirection;
 
         private int currentPosition;
+        private bool currentReferenceState;
 
         public MotorConfiguration MotorConfiguration { get; }
 
@@ -62,6 +64,19 @@ namespace RoboticsTxt.Lib.Components.Sequencer
                     OnPropertyChanged(nameof(CurrentPosition));
                 }
             });
+
+            this.controllerCommunicator.UniversalInputs[(int) motorConfiguration.ReferencingInput].StateChanges
+                .Subscribe(s => this.currentReferenceState = s);
+
+            this.controllerCommunicator.UniversalInputs[(int) motorConfiguration.ReferencingInput].StateChanges.Where(s => s == this.MotorConfiguration.ReferencingInputState)
+                .Subscribe(
+                    s =>
+                    {
+                        if (this.motorDistanceInfo.IsTracking)
+                        {
+                            this.StopMotor();
+                        }
+                    });
         }
 
         /// <summary>
@@ -71,6 +86,12 @@ namespace RoboticsTxt.Lib.Components.Sequencer
         /// <param name="direction">The direction to movement.</param>
         public void StartMotor(Speed speed, Direction direction)
         {
+            if (direction == this.MotorConfiguration.ReferencingDirection &&
+                this.currentReferenceState == this.MotorConfiguration.ReferencingInputState)
+            {
+                return;
+            }
+
             this.StartMotorAndMoveDistance(speed, direction, (short) this.GetAvailableDistance(direction));
         }
 
@@ -90,6 +111,12 @@ namespace RoboticsTxt.Lib.Components.Sequencer
         /// <param name="distance">The distance to run.</param>
         public void StartMotorAndMoveDistance(Speed speed, Direction direction, short distance)
         {
+            if (direction == this.MotorConfiguration.ReferencingDirection &&
+                this.currentReferenceState == this.MotorConfiguration.ReferencingInputState)
+            {
+                return;
+            }
+
             if (direction != this.MotorConfiguration.ReferencingDirection)
             {
                 var availableDistance = this.GetAvailableDistance(direction);
