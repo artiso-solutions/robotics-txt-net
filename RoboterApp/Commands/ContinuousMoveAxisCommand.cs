@@ -31,7 +31,7 @@ namespace RoboterApp.Commands
             }
 
             previousSpeed = currentSpeed;
-            motorPositionController.StartMotor(currentSpeed, this.direction);
+            motorPositionController.StartMotorAsync(currentSpeed, this.direction);
         }
 
         public void OnStop()

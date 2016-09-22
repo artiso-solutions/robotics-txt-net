@@ -160,7 +160,7 @@ namespace RoboticsTxt.Lib.Components.Sequencer
         /// Moves all <see cref="MotorPositionController"/>s to the positions given in the position.
         /// </summary>
         /// <param name="positionName">Name of the position to be applied.</param>
-        public void MoveToPosition(string positionName)
+        public async Task MoveToPositionAsync(string positionName)
         {
             var position = this.positions.FirstOrDefault(p => p.PositionName == positionName);
 
@@ -168,7 +168,7 @@ namespace RoboticsTxt.Lib.Components.Sequencer
             {
                 foreach (var motorPositionInfo in position.MotorPositionInfos)
                 {
-                    this.motorPositionControllers[motorPositionInfo.Motor].MoveMotorToPosition(motorPositionInfo);
+                    await this.motorPositionControllers[motorPositionInfo.Motor].MoveMotorToPositionAsync(motorPositionInfo);
                 }
             }
         }

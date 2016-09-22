@@ -20,7 +20,7 @@ namespace RoboterApp.Commands
 
         public void Execute(object parameter)
         {
-            this.controllerSequencer.MoveToPosition(parameter.ToString());
+            this.controllerSequencer.MoveToPositionAsync(parameter.ToString());
         }
 
         public event EventHandler CanExecuteChanged;
