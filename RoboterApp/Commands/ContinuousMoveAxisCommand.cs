@@ -1,23 +1,20 @@
 using RoboticsTxt.Lib.Components;
+using RoboticsTxt.Lib.Components.Sequencer;
 using RoboticsTxt.Lib.Contracts;
 
 namespace RoboterApp.Commands
 {
     public class ContinuousMoveAxisCommand
     {
-        private readonly ControllerSequencer controllerSequencer;
-        private readonly Motor motor;
-        private readonly Movement movement;
-        private readonly short maxDistance;
+        private readonly MotorPositionController motorPositionController;
+        private readonly Direction direction;
         private Speed? previousSpeed;
         private bool isMoving;
 
-        public ContinuousMoveAxisCommand(ControllerSequencer controllerSequencer, Motor motor, Movement movement, short maxDistance)
+        public ContinuousMoveAxisCommand(MotorPositionController motorPositionController, Direction direction)
         {
-            this.controllerSequencer = controllerSequencer;
-            this.motor = motor;
-            this.movement = movement;
-            this.maxDistance = maxDistance;
+            this.motorPositionController = motorPositionController;
+            this.direction = direction;
         }
 
         public void OnMove(Speed currentSpeed)
@@ -35,7 +32,7 @@ namespace RoboterApp.Commands
             }
 
             previousSpeed = currentSpeed;
-            controllerSequencer.MotorRunDistance(motor, currentSpeed, movement, maxDistance);
+            motorPositionController.StartMotor(currentSpeed, this.direction);
         }
 
         public void OnStop()
@@ -43,7 +40,7 @@ namespace RoboterApp.Commands
             isMoving = false;
 
             previousSpeed = null;
-            controllerSequencer.StopMotor(motor);
+            motorPositionController.StopMotor();
         }
     }
 }

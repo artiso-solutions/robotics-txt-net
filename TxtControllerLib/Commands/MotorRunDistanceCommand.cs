@@ -9,14 +9,14 @@ namespace RoboticsTxt.Lib.Commands
     internal class MotorRunDistanceCommand : IControllerCommand
     {
         private readonly Speed speed;
-        private readonly Movement movement;
+        private readonly Direction direction;
         private readonly short distance;
 
-        public MotorRunDistanceCommand(Motor motor, Speed speed, Movement movement, short distance)
+        public MotorRunDistanceCommand(Motor motor, Speed speed, Direction direction, short distance)
         {
             this.Motor = motor;
             this.speed = speed;
-            this.movement = movement;
+            this.direction = direction;
             this.distance = distance;
         }
 
@@ -29,13 +29,13 @@ namespace RoboticsTxt.Lib.Commands
             var motorIndex = (int)this.Motor;
             var speedValue = (short)this.speed;
 
-            switch (this.movement)
+            switch (this.direction)
             {
-                case Movement.Left:
+                case Direction.Left:
                     message.PwmOutputValues[2 * motorIndex] = speedValue;
                     message.PwmOutputValues[2 * motorIndex + 1] = 0;
                     break;
-                case Movement.Right:
+                case Direction.Right:
                     message.PwmOutputValues[2 * motorIndex] = 0;
                     message.PwmOutputValues[2 * motorIndex + 1] = speedValue;
                     break;

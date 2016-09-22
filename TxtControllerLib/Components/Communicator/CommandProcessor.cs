@@ -3,7 +3,7 @@ using JetBrains.Annotations;
 using RoboticsTxt.Lib.Interfaces;
 using RoboticsTxt.Lib.Messages;
 
-namespace RoboticsTxt.Lib.Components
+namespace RoboticsTxt.Lib.Components.Communicator
 {
     internal class CommandProcessor
     {
