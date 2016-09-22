@@ -6,7 +6,6 @@ using System.Linq;
 using System.Net;
 using System.Threading;
 using RoboticsTxt.Lib.Configuration;
-using RoboticsTxt.Lib.Contracts;
 using RoboticsTxt.Lib.ControllerDriver;
 using RoboticsTxt.Lib.Messages;
 using TxtControllerLibTests.Properties;

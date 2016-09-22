@@ -1,11 +1,8 @@
 using System;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using log4net;
 using log4net.Util;
-using RoboticsTxt.Lib.Components;
 using RoboticsTxt.Lib.Components.Sequencer;
-using RoboticsTxt.Lib.Contracts;
 
 namespace RoboterApp.Commands
 {
