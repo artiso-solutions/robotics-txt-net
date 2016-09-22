@@ -121,6 +121,10 @@ namespace RoboticsTxt.Lib.Components.Sequencer
             return this.controllerCommunicator.UniversalInputs[(int)referenceInput].CurrentState;
         }
 
+        /// <summary>
+        /// Saves the current position of all saveable <see cref="MotorPositionController"/>s.
+        /// </summary>
+        /// <param name="positionName">Name of the position to be saved.</param>
         public void SaveCurrentPosition(string positionName)
         {
             var position = this.positions.FirstOrDefault(p => p.PositionName == positionName);
@@ -153,6 +157,10 @@ namespace RoboticsTxt.Lib.Components.Sequencer
             this.positionStorageAccessor.WritePositionsToFile(this.positions);
         }
 
+        /// <summary>
+        /// Moves all <see cref="MotorPositionController"/>s to the positions given in the position.
+        /// </summary>
+        /// <param name="positionName">Name of the position to be applied.</param>
         public void MoveToPosition(string positionName)
         {
             var position = this.positions.FirstOrDefault(p => p.PositionName == positionName);
