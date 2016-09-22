@@ -37,8 +37,6 @@ namespace RoboticsTxt.Lib.Components.Sequencer
             }
         }
 
-        public int AvailableDistance => this.MotorConfiguration.Limit - this.CurrentPosition;
-
         internal MotorPositionController(MotorConfiguration motorConfiguration, ControllerCommunicator controllerCommunicator, ControllerSequencer controllerSequencer)
         {
             this.controllerCommunicator = controllerCommunicator;
@@ -73,7 +71,7 @@ namespace RoboticsTxt.Lib.Components.Sequencer
         /// <param name="direction">The direction to movement.</param>
         public void StartMotor(Speed speed, Direction direction)
         {
-            this.StartMotorAndMoveDistance(speed, direction, (short) this.AvailableDistance);
+            this.StartMotorAndMoveDistance(speed, direction, (short) this.GetAvailableDistance(direction));
         }
 
         /// <summary>
@@ -94,14 +92,16 @@ namespace RoboticsTxt.Lib.Components.Sequencer
         {
             if (direction != this.MotorConfiguration.ReferencingDirection)
             {
-                if (this.AvailableDistance <= 0)
+                var availableDistance = this.GetAvailableDistance(direction);
+
+                if (availableDistance <= 0)
                 {
                     return;
                 }
                 
-                if (distance > this.AvailableDistance)
+                if (distance > availableDistance)
                 {
-                    distance = (short)this.AvailableDistance;
+                    distance = (short)availableDistance;
                 }
             }
 
@@ -194,6 +194,16 @@ namespace RoboticsTxt.Lib.Components.Sequencer
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private int GetAvailableDistance(Direction direction)
+        {
+            if (direction != this.MotorConfiguration.ReferencingDirection)
+            {
+                return this.MotorConfiguration.Limit - this.CurrentPosition;
+            }
+
+            return this.MotorConfiguration.Limit;
         }
     }
 }
