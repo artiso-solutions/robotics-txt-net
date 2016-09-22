@@ -11,7 +11,7 @@ namespace RoboticsTxt.Lib.Components.Communicator
     {
         private readonly ILog logger = LogManager.GetLogger(typeof(MotorDistanceInfo));
         private readonly Subject<short> commandIdChangesSubject;
-        private readonly Subject<int> distanceChangesSubject;
+        private readonly Subject<int> distanceDifferencesSubject;
 
         private short currentCommandId;
         private short currentDistanceValue;
@@ -21,7 +21,7 @@ namespace RoboticsTxt.Lib.Components.Communicator
             this.Motor = motor;
             this.IsTracking = true;
 
-            distanceChangesSubject = new Subject<int>();
+            distanceDifferencesSubject = new Subject<int>();
             commandIdChangesSubject = new Subject<short>();
         }
 
@@ -30,7 +30,7 @@ namespace RoboticsTxt.Lib.Components.Communicator
         public bool IsTracking { get; set; }
 
         // TODO think about rename
-        public IObservable<int> DistanceChanges => distanceChangesSubject.AsObservable();
+        public IObservable<int> DistanceDifferences => distanceDifferencesSubject.AsObservable();
 
         public IObservable<short> CommandIdChanges => commandIdChangesSubject.AsObservable();
 
@@ -58,7 +58,7 @@ namespace RoboticsTxt.Lib.Components.Communicator
             logger.Info($"d={distanceValue:000} - diff={difference:000} - c={commandId:000}");
 
             currentDistanceValue = distanceValue;
-            distanceChangesSubject.OnNext(difference);
+            this.distanceDifferencesSubject.OnNext(difference);
 
             currentCommandId = commandId;
             commandIdChangesSubject.OnNext(commandId);

@@ -46,7 +46,7 @@ namespace RoboticsTxt.Lib.Components.Sequencer
             MotorConfiguration = motorConfiguration;
 
             motorDistanceInfo = controllerCommunicator.MotorDistanceInfos.First(m => m.Motor == motorConfiguration.Motor);
-            motorDistanceInfo.DistanceChanges.Subscribe(diff =>
+            motorDistanceInfo.DistanceDifferences.Subscribe(diff =>
             {
                 if (currentDirection == null)
                 {
