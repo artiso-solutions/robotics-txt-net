@@ -66,13 +66,18 @@ namespace RoboticsTxt.Lib.Components.Sequencer
             });
         }
 
+        /// <summary>
+        /// Starts the <see cref="Motor"/> specified in the <see cref="MotorConfiguration"/> of the controller immediately.
+        /// </summary>
+        /// <param name="speed">The speed of the motor.</param>
+        /// <param name="direction">The direction to movement.</param>
         public void StartMotor(Speed speed, Direction direction)
         {
             this.StartMotorAndMoveDistance(speed, direction, (short) this.AvailableDistance);
         }
 
         /// <summary>
-        /// Stops the specified <see cref="MotorConfiguration"/> immediately.
+        /// Stops the <see cref="Motor"/> specified in the <see cref="MotorConfiguration"/> of the controller immediately.
         /// </summary>
         public void StopMotor()
         {
@@ -80,7 +85,7 @@ namespace RoboticsTxt.Lib.Components.Sequencer
         }
 
         /// <summary>
-        /// Starts the configured <see cref="MotorConfiguration"/> immediately and runs the specified <paramref name="distance"/>.
+        /// Starts the <see cref="Motor"/> specified in the <see cref="MotorConfiguration"/> immediately and runs the specified <paramref name="distance"/>.
         /// </summary>
         /// <param name="speed">The speed of the motor.</param>
         /// <param name="direction">The direction to start.</param>
@@ -104,6 +109,10 @@ namespace RoboticsTxt.Lib.Components.Sequencer
             controllerCommunicator.QueueCommand(new MotorRunDistanceCommand(MotorConfiguration.Motor, speed, direction, distance));
         }
 
+        /// <summary>
+        /// Moves the <see cref="Motor"/> specified in the <see cref="MotorConfiguration"/> to the given <see cref="MotorPositionInfo"/>.
+        /// </summary>
+        /// <param name="motorPositionInfo">Target position.</param>
         public void MoveMotorToPosition([NotNull] MotorPositionInfo motorPositionInfo)
         {
             if (motorPositionInfo == null) throw new ArgumentNullException(nameof(motorPositionInfo));
@@ -139,6 +148,9 @@ namespace RoboticsTxt.Lib.Components.Sequencer
             this.StartMotorAndMoveDistance(speed, direction, (short)distanceToPosition);
         }
 
+        /// <summary>
+        /// Moves the <see cref="Motor"/> specified in the <see cref="MotorConfiguration"/> to the given reference position and zeroes the tracked position.
+        /// </summary>
         public async Task MoveMotorToReferenceAsync()
         {
             this.motorDistanceInfo.IsTracking = false;
@@ -160,6 +172,9 @@ namespace RoboticsTxt.Lib.Components.Sequencer
             this.motorDistanceInfo.IsTracking = true;
         }
 
+        /// <summary>
+        /// Delivers the current <see cref="MotorPositionInfo"/> of the controller.
+        /// </summary>
         public MotorPositionInfo GetPositionInfo()
         {
             return new MotorPositionInfo
