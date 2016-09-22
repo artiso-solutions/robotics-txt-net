@@ -33,16 +33,16 @@ namespace RoboterApp.Commands
         {
             logger.InfoExt("Start referencing of axis...");
             logger.InfoExt("Reference \"Turn Left / Right\"");
-            await turnLeftRightPositionController.MoveMotorToReferenceAsync();
+            turnLeftRightPositionController.MoveMotorToReferenceAsync();
 
             logger.InfoExt("Reference \"Move Up / Down\"");
-            await upDownPositionController.MoveMotorToReferenceAsync();
+            upDownPositionController.MoveMotorToReferenceAsync();
 
             logger.InfoExt("Reference \"Move Backward / Forward\"");
-            await backwardForwardPositionController.MoveMotorToReferenceAsync();
+            backwardForwardPositionController.MoveMotorToReferenceAsync();
 
             logger.InfoExt("Reference \"Open / Close clamp\"");
-            await openCloseClampPositionController.MoveMotorToReferenceAsync();
+            openCloseClampPositionController.MoveMotorToReferenceAsync();
         }
 
         public event EventHandler CanExecuteChanged
