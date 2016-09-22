@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using JetBrains.Annotations;
 using RoboterApp.Commands;
+using RoboterApp.Components;
 using RoboticsTxt.Lib.Components.Sequencer;
 using RoboticsTxt.Lib.Contracts;
 
@@ -14,6 +15,8 @@ namespace RoboterApp
     public class MainWindowViewModel : INotifyPropertyChanged, IDisposable
     {
         private readonly ControllerSequencer controllerSequencer;
+        private readonly SequenceCommandLogic sequenceCommandLogic;
+
         private string positionName;
 
         public MainWindowViewModel()
@@ -77,7 +80,8 @@ namespace RoboterApp
                 ReferencingSpeed = Speed.Quick,
                 ReferencingInput = DigitalInput.Four,
                 ReferencingInputState = false,
-                Limit = 15
+                Limit = 15,
+                IsSaveable = false
             });
             OpenClampCommand = new ContinuousMoveAxisCommand(this.OpenCloseClampPositionController, Direction.Left);
             CloseClampCommand = new ContinuousMoveAxisCommand(this.OpenCloseClampPositionController, Direction.Right);
@@ -85,6 +89,9 @@ namespace RoboterApp
             ReferenceAxisCommand = new ReferenceAxisCommand(TurnLeftRightPositionController, UpDownPositionController, BackwardForwardPositionController, OpenCloseClampPositionController);
             SavePositionCommand = new SavePositionCommand(this.controllerSequencer, this.PositionNames);
             MoveToPositionCommand = new MoveToPositionCommand(this.controllerSequencer);
+
+            this.sequenceCommandLogic = new SequenceCommandLogic(this.controllerSequencer, this.BackwardForwardPositionController, this.UpDownPositionController, this.TurnLeftRightPositionController, this.OpenCloseClampPositionController);
+            StartSequenceCommand = new StartSequenceCommand(this.sequenceCommandLogic);
         }
 
         public MotorPositionController OpenCloseClampPositionController { get; }
@@ -103,6 +110,8 @@ namespace RoboterApp
         public ICommand MoveToPositionCommand { get; set; }
         public ICommand ReferenceAxisCommand { get; }
         public ICommand SavePositionCommand { get; set; }
+        public ICommand StartSequenceCommand { get; }
+
         public ContinuousMoveAxisCommand MoveBackwardCommand { get; }
         public ContinuousMoveAxisCommand MoveForwardCommand { get; }
         public ContinuousMoveAxisCommand MoveUpCommand { get; }
