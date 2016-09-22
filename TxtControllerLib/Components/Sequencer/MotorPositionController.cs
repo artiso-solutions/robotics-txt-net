@@ -7,6 +7,7 @@ using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
+using log4net;
 using RoboticsTxt.Lib.Commands;
 using RoboticsTxt.Lib.Components.Communicator;
 using RoboticsTxt.Lib.Contracts;
@@ -22,6 +23,7 @@ namespace RoboticsTxt.Lib.Components.Sequencer
 
         private int currentPosition;
         private bool currentReferenceState;
+        private ILog logger;
 
         public MotorConfiguration MotorConfiguration { get; }
 
@@ -45,6 +47,8 @@ namespace RoboticsTxt.Lib.Components.Sequencer
             this.controllerCommunicator = controllerCommunicator;
             this.controllerSequencer = controllerSequencer;
             MotorConfiguration = motorConfiguration;
+
+            this.logger = LogManager.GetLogger(typeof(MotorPositionController));
 
             motorDistanceInfo = controllerCommunicator.MotorDistanceInfos.First(m => m.Motor == motorConfiguration.Motor);
             motorDistanceInfo.DistanceDifferences.Subscribe(diff =>
@@ -138,9 +142,10 @@ namespace RoboticsTxt.Lib.Components.Sequencer
             currentDirection = direction;
             controllerCommunicator.QueueCommand(new MotorRunDistanceCommand(MotorConfiguration.Motor, speed, direction, distance));
 
-            while (Math.Abs(this.CurrentPosition - startPosition) >= (distance - 5))
+            while (Math.Abs(this.CurrentPosition - startPosition) < (distance - 10))
             {
-                Thread.Sleep(TimeSpan.FromMilliseconds(100));
+                this.logger.Debug($"Motor {this.MotorConfiguration.Motor}: {startPosition} -> {startPosition + distance}: {this.CurrentPosition}");
+                await Task.Delay(TimeSpan.FromMilliseconds(100));
             }
         }
 
