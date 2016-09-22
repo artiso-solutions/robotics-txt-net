@@ -65,7 +65,7 @@ namespace RoboterApp
                 ReferencingSpeed = Speed.Quick,
                 ReferencingInput = DigitalInput.One,
                 ReferencingInputState = false,
-                Limit = 1500
+                Limit = 2200
             });
             TurnLeftCommand = new ContinuousMoveAxisCommand(this.TurnLeftRightPositionController, Direction.Left);
             TurnRightCommand = new ContinuousMoveAxisCommand(this.TurnLeftRightPositionController, Direction.Right);
