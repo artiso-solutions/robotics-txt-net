@@ -68,7 +68,15 @@ namespace RoboticsTxt.Lib.Components.Sequencer
 
         public void StartMotor(Speed speed, Direction direction)
         {
-            MotorRunDistance(speed, direction, (short) this.AvailableDistance);
+            this.StartMotorAndMoveDistance(speed, direction, (short) this.AvailableDistance);
+        }
+
+        /// <summary>
+        /// Stops the specified <see cref="MotorConfiguration"/> immediately.
+        /// </summary>
+        public void StopMotor()
+        {
+            this.controllerCommunicator.QueueCommand(new StopMotorCommand(MotorConfiguration.Motor));
         }
 
         /// <summary>
@@ -77,7 +85,7 @@ namespace RoboticsTxt.Lib.Components.Sequencer
         /// <param name="speed">The speed of the motor.</param>
         /// <param name="direction">The direction to start.</param>
         /// <param name="distance">The distance to run.</param>
-        public void MotorRunDistance(Speed speed, Direction direction, short distance)
+        public void StartMotorAndMoveDistance(Speed speed, Direction direction, short distance)
         {
             if (direction != this.MotorConfiguration.ReferencingDirection)
             {
@@ -128,18 +136,10 @@ namespace RoboticsTxt.Lib.Components.Sequencer
 
             var speed = Speed.Maximal;
 
-            this.MotorRunDistance(speed, direction, (short)distanceToPosition);
+            this.StartMotorAndMoveDistance(speed, direction, (short)distanceToPosition);
         }
 
-        /// <summary>
-        /// Stops the specified <see cref="MotorConfiguration"/> immediately.
-        /// </summary>
-        public void StopMotor()
-        {
-            this.controllerCommunicator.QueueCommand(new StopMotorCommand(MotorConfiguration.Motor));
-        }
-
-        public async Task ReferenceAsync()
+        public async Task MoveMotorToReferenceAsync()
         {
             this.motorDistanceInfo.IsTracking = false;
 
