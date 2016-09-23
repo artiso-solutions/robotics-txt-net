@@ -65,7 +65,7 @@ namespace RoboterApp
             {
                 Motor = Motor.One,
                 ReferencingDirection = Direction.Right,
-                ReferencingSpeed = Speed.Quick,
+                ReferencingSpeed = Speed.Average,
                 ReferencingInput = DigitalInput.One,
                 ReferencingInputState = false,
                 Limit = 2200

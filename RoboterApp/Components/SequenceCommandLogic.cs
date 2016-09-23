@@ -36,20 +36,20 @@ namespace RoboterApp.Components
             var pickUpPositionName = $"Abholposition {batchIndex}";
             var removalPositionName = $"Entnahmeposition {batchIndex}";
 
-            this.logger.Info("Starting sequence...");
+            var clampController = new ClampController(this.openCloseClampPositionController);
 
-            //await this.turnLeftRightPositionController.StartMotorAndMoveDistanceAsync(Speed.Fast, Direction.Left, 1000);
+            this.logger.Info("Starting sequence...");
 
             await this.controllerSequencer.MoveToPositionAsync(waitingPositionName);
             this.logger.Info("Waiting position reached.");
 
-            await this.openCloseClampPositionController.StartMotorAndMoveDistanceAsync(Speed.Fast, Direction.Right, 8);
+            await this.openCloseClampPositionController.StartMotorAndMoveDistanceAsync(Speed.Fast, Direction.Right, 10, true);
             this.logger.Info("Clamp pre-closed.");
 
             await this.controllerSequencer.MoveToPositionAsync(pickUpPositionName);
             this.logger.Info("Pickup position reached.");
 
-            await this.openCloseClampPositionController.StartMotorAndMoveDistanceAsync(Speed.Quick, Direction.Right, 14);
+            await clampController.CloseClamp();
             this.logger.Info("Clamp closed.");
 
             await this.controllerSequencer.MoveToPositionAsync(removalPositionName);
@@ -57,6 +57,11 @@ namespace RoboterApp.Components
 
             await this.controllerSequencer.MoveToPositionAsync("Übergabeposition");
             this.logger.Info("Delivery position reached.");
+
+            await clampController.WaitForContainerRemoval();
+            this.logger.Info("Container removed.");
+
+            await this.openCloseClampPositionController.MoveMotorToReferenceAsync();
         }
     }
 }
