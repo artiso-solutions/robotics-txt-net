@@ -112,6 +112,7 @@
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
+            <Button Command="{Binding StartSequenceCommand}" Content="Start Sequence" HorizontalAlignment="Left"></Button>
         </StackPanel>
 
         <Viewbox Grid.Column="1">

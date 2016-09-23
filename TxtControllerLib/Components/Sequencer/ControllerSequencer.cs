@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net;
 using System.Reactive.Linq;
@@ -161,16 +160,16 @@ namespace RoboticsTxt.Lib.Components.Sequencer
         /// Moves all <see cref="MotorPositionController"/>s to the positions given in the position.
         /// </summary>
         /// <param name="positionName">Name of the position to be applied.</param>
-        public void MoveToPosition(string positionName)
+        public async Task MoveToPositionAsync(string positionName)
         {
             var position = this.positions.FirstOrDefault(p => p.PositionName == positionName);
 
             if (position != null)
             {
-                foreach (var motorPositionInfo in position.MotorPositionInfos)
+                Parallel.ForEach(position.MotorPositionInfos, (mpi) =>
                 {
-                    this.motorPositionControllers[motorPositionInfo.Motor].MoveMotorToPosition(motorPositionInfo);
-                }
+                    this.motorPositionControllers[mpi.Motor].MoveMotorToPositionAsync(mpi);
+                });
             }
         }
 

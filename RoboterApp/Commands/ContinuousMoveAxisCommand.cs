@@ -1,4 +1,3 @@
-using RoboticsTxt.Lib.Components;
 using RoboticsTxt.Lib.Components.Sequencer;
 using RoboticsTxt.Lib.Contracts;
 
@@ -32,7 +31,7 @@ namespace RoboterApp.Commands
             }
 
             previousSpeed = currentSpeed;
-            motorPositionController.StartMotor(currentSpeed, this.direction);
+            motorPositionController.StartMotorAsync(currentSpeed, this.direction);
         }
 
         public void OnStop()

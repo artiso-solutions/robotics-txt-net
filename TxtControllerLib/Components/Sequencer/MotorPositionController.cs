@@ -1,10 +1,14 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Linq;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Runtime.CompilerServices;
+using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
+using log4net;
 using RoboticsTxt.Lib.Commands;
 using RoboticsTxt.Lib.Components.Communicator;
 using RoboticsTxt.Lib.Contracts;
@@ -19,6 +23,10 @@ namespace RoboticsTxt.Lib.Components.Sequencer
         private Direction? currentDirection;
 
         private int currentPosition;
+        private ISubject<int> positionChangesSubject; 
+
+        private bool currentReferenceState;
+        private ILog logger;
 
         public MotorConfiguration MotorConfiguration { get; }
 
@@ -37,13 +45,15 @@ namespace RoboticsTxt.Lib.Components.Sequencer
             }
         }
 
-        public int AvailableDistance => this.MotorConfiguration.Limit - this.CurrentPosition;
+        public IObservable<int> PositionChanges => this.positionChangesSubject.AsObservable();
 
         internal MotorPositionController(MotorConfiguration motorConfiguration, ControllerCommunicator controllerCommunicator, ControllerSequencer controllerSequencer)
         {
             this.controllerCommunicator = controllerCommunicator;
             this.controllerSequencer = controllerSequencer;
             MotorConfiguration = motorConfiguration;
+
+            this.logger = LogManager.GetLogger(typeof(MotorPositionController));
 
             motorDistanceInfo = controllerCommunicator.MotorDistanceInfos.First(m => m.Motor == motorConfiguration.Motor);
             motorDistanceInfo.DistanceDifferences.Subscribe(diff =>
@@ -63,7 +73,24 @@ namespace RoboticsTxt.Lib.Components.Sequencer
                     Interlocked.Add(ref currentPosition, diff);
                     OnPropertyChanged(nameof(CurrentPosition));
                 }
+
+                this.positionChangesSubject.OnNext(this.currentPosition);
             });
+
+            this.controllerCommunicator.UniversalInputs[(int) motorConfiguration.ReferencingInput].StateChanges
+                .Subscribe(s => this.currentReferenceState = s);
+
+            this.controllerCommunicator.UniversalInputs[(int) motorConfiguration.ReferencingInput].StateChanges.Where(s => s == this.MotorConfiguration.ReferencingInputState)
+                .Subscribe(
+                    s =>
+                    {
+                        if (this.motorDistanceInfo.IsTracking)
+                        {
+                            this.StopMotor();
+                        }
+                    });
+            
+            this.positionChangesSubject = new Subject<int>();
         }
 
         /// <summary>
@@ -71,9 +98,15 @@ namespace RoboticsTxt.Lib.Components.Sequencer
         /// </summary>
         /// <param name="speed">The speed of the motor.</param>
         /// <param name="direction">The direction to movement.</param>
-        public void StartMotor(Speed speed, Direction direction)
+        public async Task StartMotorAsync(Speed speed, Direction direction)
         {
-            this.StartMotorAndMoveDistance(speed, direction, (short) this.AvailableDistance);
+            if (direction == this.MotorConfiguration.ReferencingDirection &&
+                this.currentReferenceState == this.MotorConfiguration.ReferencingInputState)
+            {
+                return;
+            }
+
+            await this.StartMotorAndMoveDistanceAsync(speed, direction, (short) this.GetAvailableDistance(direction));
         }
 
         /// <summary>
@@ -90,30 +123,45 @@ namespace RoboticsTxt.Lib.Components.Sequencer
         /// <param name="speed">The speed of the motor.</param>
         /// <param name="direction">The direction to start.</param>
         /// <param name="distance">The distance to run.</param>
-        public void StartMotorAndMoveDistance(Speed speed, Direction direction, short distance)
+        /// <param name="waitForCompletion"></param>
+        public async Task StartMotorAndMoveDistanceAsync(Speed speed, Direction direction, short distance, bool waitForCompletion = false)
         {
+            if (direction == this.MotorConfiguration.ReferencingDirection &&
+                this.currentReferenceState == this.MotorConfiguration.ReferencingInputState)
+            {
+                return;
+            }
+
             if (direction != this.MotorConfiguration.ReferencingDirection)
             {
-                if (this.AvailableDistance <= 0)
+                var availableDistance = this.GetAvailableDistance(direction);
+
+                if (availableDistance <= 0)
                 {
                     return;
                 }
                 
-                if (distance > this.AvailableDistance)
+                if (distance > availableDistance)
                 {
-                    distance = (short)this.AvailableDistance;
+                    distance = (short)availableDistance;
                 }
             }
 
             currentDirection = direction;
-            controllerCommunicator.QueueCommand(new MotorRunDistanceCommand(MotorConfiguration.Motor, speed, direction, distance));
+            var motorRunDistanceCommand = new MotorRunDistanceCommand(MotorConfiguration.Motor, speed, direction, distance);
+            controllerCommunicator.QueueCommand(motorRunDistanceCommand);
+
+            if (waitForCompletion)
+            {
+                motorRunDistanceCommand.WaitForCompletion();
+            }
         }
 
         /// <summary>
         /// Moves the <see cref="Motor"/> specified in the <see cref="MotorConfiguration"/> to the given <see cref="MotorPositionInfo"/>.
         /// </summary>
         /// <param name="motorPositionInfo">Target position.</param>
-        public void MoveMotorToPosition([NotNull] MotorPositionInfo motorPositionInfo)
+        public async Task MoveMotorToPositionAsync([NotNull] MotorPositionInfo motorPositionInfo)
         {
             if (motorPositionInfo == null) throw new ArgumentNullException(nameof(motorPositionInfo));
 
@@ -131,7 +179,6 @@ namespace RoboticsTxt.Lib.Components.Sequencer
                 return;
             }
 
-            Direction direction;
             var positiveMovement = this.MotorConfiguration.ReferencingDirection == Direction.Left
                 ? Direction.Right
                 : Direction.Left;
@@ -140,12 +187,11 @@ namespace RoboticsTxt.Lib.Components.Sequencer
                 ? Direction.Left
                 : Direction.Right;
 
-            direction = distanceToPosition > 0 ? positiveMovement : negativeMovement;
+            var direction = distanceToPosition > 0 ? positiveMovement : negativeMovement;
             distanceToPosition = Math.Abs(distanceToPosition);
 
-            var speed = Speed.Maximal;
 
-            this.StartMotorAndMoveDistance(speed, direction, (short)distanceToPosition);
+            await this.StartMotorAndMoveDistanceAsync(Speed.Maximal, direction, (short)distanceToPosition, true);
         }
 
         /// <summary>
@@ -167,7 +213,7 @@ namespace RoboticsTxt.Lib.Components.Sequencer
             Interlocked.Exchange(ref currentPosition, 0);
             this.OnPropertyChanged(nameof(CurrentPosition));
 
-            Thread.Sleep(TimeSpan.FromMilliseconds(500));
+            await Task.Delay(TimeSpan.FromMilliseconds(500));
 
             this.motorDistanceInfo.IsTracking = true;
         }
@@ -194,6 +240,16 @@ namespace RoboticsTxt.Lib.Components.Sequencer
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private int GetAvailableDistance(Direction direction)
+        {
+            if (direction != this.MotorConfiguration.ReferencingDirection)
+            {
+                return this.MotorConfiguration.Limit - this.CurrentPosition;
+            }
+
+            return this.MotorConfiguration.Limit;
         }
     }
 }

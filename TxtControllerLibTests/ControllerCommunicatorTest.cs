@@ -5,7 +5,6 @@ using log4net;
 using log4net.Util;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RoboticsTxt.Lib.Commands;
-using RoboticsTxt.Lib.Components;
 using RoboticsTxt.Lib.Components.Communicator;
 using RoboticsTxt.Lib.Contracts;
 using TxtControllerLibTests.Properties;

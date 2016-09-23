@@ -1,5 +1,6 @@
 ﻿using System;
 using JetBrains.Annotations;
+using RoboticsTxt.Lib.Components.Communicator;
 using RoboticsTxt.Lib.Contracts;
 using RoboticsTxt.Lib.Interfaces;
 using RoboticsTxt.Lib.Messages;
@@ -15,7 +16,7 @@ namespace RoboticsTxt.Lib.Commands
             this.motor = motor;
         }
 
-        public void ApplyMessageChanges([NotNull] ExchangeDataCommandMessage message)
+        public void Execute(ControllerCommunicator controllerCommunicator, [NotNull] ExchangeDataCommandMessage message)
         {
             if (message == null) throw new ArgumentNullException(nameof(message));
 
