@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Threading;
@@ -22,6 +23,8 @@ namespace RoboticsTxt.Lib.Components.Sequencer
         private Direction? currentDirection;
 
         private int currentPosition;
+        private ISubject<int> positionChangesSubject; 
+
         private bool currentReferenceState;
         private ILog logger;
 
@@ -41,6 +44,8 @@ namespace RoboticsTxt.Lib.Components.Sequencer
                 OnPropertyChanged();
             }
         }
+
+        public IObservable<int> PositionChanges => this.positionChangesSubject.AsObservable();
 
         internal MotorPositionController(MotorConfiguration motorConfiguration, ControllerCommunicator controllerCommunicator, ControllerSequencer controllerSequencer)
         {
@@ -68,6 +73,8 @@ namespace RoboticsTxt.Lib.Components.Sequencer
                     Interlocked.Add(ref currentPosition, diff);
                     OnPropertyChanged(nameof(CurrentPosition));
                 }
+
+                this.positionChangesSubject.OnNext(this.currentPosition);
             });
 
             this.controllerCommunicator.UniversalInputs[(int) motorConfiguration.ReferencingInput].StateChanges
@@ -82,6 +89,8 @@ namespace RoboticsTxt.Lib.Components.Sequencer
                             this.StopMotor();
                         }
                     });
+            
+            this.positionChangesSubject = new Subject<int>();
         }
 
         /// <summary>
