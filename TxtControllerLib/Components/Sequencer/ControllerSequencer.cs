@@ -166,10 +166,10 @@ namespace RoboticsTxt.Lib.Components.Sequencer
 
             if (position != null)
             {
-                foreach (var motorPositionInfo in position.MotorPositionInfos)
+                Parallel.ForEach(position.MotorPositionInfos, (mpi) =>
                 {
-                    await this.motorPositionControllers[motorPositionInfo.Motor].MoveMotorToPositionAsync(motorPositionInfo);
-                }
+                    this.motorPositionControllers[mpi.Motor].MoveMotorToPositionAsync(mpi);
+                });
             }
         }
 

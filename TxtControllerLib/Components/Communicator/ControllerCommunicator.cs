@@ -96,7 +96,7 @@ namespace RoboticsTxt.Lib.Components.Communicator
                     try
                     {
                         this.logger.DebugExt($"Process {command.GetType().Name}");
-                        this.commandProcessor.ProcessControllerCommand(command, currentCommandMessage);
+                        this.commandProcessor.ProcessControllerCommand(this, command, currentCommandMessage);
                     }
                     catch (Exception exception)
                     {

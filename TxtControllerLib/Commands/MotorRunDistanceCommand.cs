@@ -1,5 +1,9 @@
 using System;
+using System.Reactive.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using JetBrains.Annotations;
+using RoboticsTxt.Lib.Components.Communicator;
 using RoboticsTxt.Lib.Contracts;
 using RoboticsTxt.Lib.Interfaces;
 using RoboticsTxt.Lib.Messages;
@@ -12,18 +16,23 @@ namespace RoboticsTxt.Lib.Commands
         private readonly Direction direction;
         private readonly short distance;
 
+        private readonly AutoResetEvent completionHandle;
+
         public MotorRunDistanceCommand(Motor motor, Speed speed, Direction direction, short distance)
         {
             this.Motor = motor;
             this.speed = speed;
             this.direction = direction;
             this.distance = distance;
+
+            this.completionHandle = new AutoResetEvent(false);
         }
 
         public Motor Motor { get; }
 
-        public void ApplyMessageChanges([NotNull] ExchangeDataCommandMessage message)
+        public void Execute([NotNull] ControllerCommunicator controllerCommunicator, [NotNull] ExchangeDataCommandMessage message)
         {
+            if (controllerCommunicator == null) throw new ArgumentNullException(nameof(controllerCommunicator));
             if (message == null) throw new ArgumentNullException(nameof(message));
 
             var motorIndex = (int)this.Motor;
@@ -45,6 +54,14 @@ namespace RoboticsTxt.Lib.Commands
 
             message.MotorDistance[motorIndex] = this.distance;
             message.MotorCommandId[motorIndex]++;
+            
+            controllerCommunicator.MotorDistanceInfos[motorIndex].CommandIdChanges.FirstAsync(cc => cc == message.MotorCommandId[motorIndex]).Subscribe(cc => this.completionHandle.Set());
+        }
+
+        public void WaitForCompletion()
+        {
+            // TODO use TaskCompletionSource
+            WaitHandle.WaitAll(new WaitHandle[] {this.completionHandle});
         }
     }
 }

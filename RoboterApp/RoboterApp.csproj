@@ -95,6 +95,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Commands\SavePositionCommand.cs" />
+    <Compile Include="Commands\StartSequenceCommand.cs" />
+    <Compile Include="Components\ClampController.cs" />
+    <Compile Include="Components\SequenceCommandLogic.cs" />
     <Compile Include="Controls\MovementButton.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

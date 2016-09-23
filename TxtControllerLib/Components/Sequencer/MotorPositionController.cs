@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Threading;
@@ -22,6 +23,8 @@ namespace RoboticsTxt.Lib.Components.Sequencer
         private Direction? currentDirection;
 
         private int currentPosition;
+        private ISubject<int> positionChangesSubject; 
+
         private bool currentReferenceState;
         private ILog logger;
 
@@ -41,6 +44,8 @@ namespace RoboticsTxt.Lib.Components.Sequencer
                 OnPropertyChanged();
             }
         }
+
+        public IObservable<int> PositionChanges => this.positionChangesSubject.AsObservable();
 
         internal MotorPositionController(MotorConfiguration motorConfiguration, ControllerCommunicator controllerCommunicator, ControllerSequencer controllerSequencer)
         {
@@ -68,6 +73,8 @@ namespace RoboticsTxt.Lib.Components.Sequencer
                     Interlocked.Add(ref currentPosition, diff);
                     OnPropertyChanged(nameof(CurrentPosition));
                 }
+
+                this.positionChangesSubject.OnNext(this.currentPosition);
             });
 
             this.controllerCommunicator.UniversalInputs[(int) motorConfiguration.ReferencingInput].StateChanges
@@ -82,6 +89,8 @@ namespace RoboticsTxt.Lib.Components.Sequencer
                             this.StopMotor();
                         }
                     });
+            
+            this.positionChangesSubject = new Subject<int>();
         }
 
         /// <summary>
@@ -114,7 +123,8 @@ namespace RoboticsTxt.Lib.Components.Sequencer
         /// <param name="speed">The speed of the motor.</param>
         /// <param name="direction">The direction to start.</param>
         /// <param name="distance">The distance to run.</param>
-        public async Task StartMotorAndMoveDistanceAsync(Speed speed, Direction direction, short distance)
+        /// <param name="waitForCompletion"></param>
+        public async Task StartMotorAndMoveDistanceAsync(Speed speed, Direction direction, short distance, bool waitForCompletion = false)
         {
             if (direction == this.MotorConfiguration.ReferencingDirection &&
                 this.currentReferenceState == this.MotorConfiguration.ReferencingInputState)
@@ -137,15 +147,13 @@ namespace RoboticsTxt.Lib.Components.Sequencer
                 }
             }
 
-            var startPosition = this.CurrentPosition;
-
             currentDirection = direction;
-            controllerCommunicator.QueueCommand(new MotorRunDistanceCommand(MotorConfiguration.Motor, speed, direction, distance));
+            var motorRunDistanceCommand = new MotorRunDistanceCommand(MotorConfiguration.Motor, speed, direction, distance);
+            controllerCommunicator.QueueCommand(motorRunDistanceCommand);
 
-            while (Math.Abs(this.CurrentPosition - startPosition) < (distance - 10))
+            if (waitForCompletion)
             {
-                this.logger.Debug($"Motor {this.MotorConfiguration.Motor}: {startPosition} -> {startPosition + distance}: {this.CurrentPosition}");
-                await Task.Delay(TimeSpan.FromMilliseconds(100));
+                motorRunDistanceCommand.WaitForCompletion();
             }
         }
 
@@ -183,7 +191,7 @@ namespace RoboticsTxt.Lib.Components.Sequencer
             distanceToPosition = Math.Abs(distanceToPosition);
 
 
-            await this.StartMotorAndMoveDistanceAsync(Speed.Maximal, direction, (short)distanceToPosition);
+            await this.StartMotorAndMoveDistanceAsync(Speed.Maximal, direction, (short)distanceToPosition, true);
         }
 
         /// <summary>
@@ -205,7 +213,7 @@ namespace RoboticsTxt.Lib.Components.Sequencer
             Interlocked.Exchange(ref currentPosition, 0);
             this.OnPropertyChanged(nameof(CurrentPosition));
 
-            Thread.Sleep(TimeSpan.FromMilliseconds(500));
+            await Task.Delay(TimeSpan.FromMilliseconds(500));
 
             this.motorDistanceInfo.IsTracking = true;
         }

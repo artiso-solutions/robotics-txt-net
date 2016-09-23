@@ -7,12 +7,12 @@ namespace RoboticsTxt.Lib.Components.Communicator
 {
     internal class CommandProcessor
     {
-        public void ProcessControllerCommand([NotNull] IControllerCommand command, [NotNull] ExchangeDataCommandMessage currentCommandMessage)
+        public void ProcessControllerCommand(ControllerCommunicator controllerCommunicator, [NotNull] IControllerCommand command, [NotNull] ExchangeDataCommandMessage currentCommandMessage)
         {
             if (command == null) throw new ArgumentNullException(nameof(command));
             if (currentCommandMessage == null) throw new ArgumentNullException(nameof(currentCommandMessage));
 
-            command.ApplyMessageChanges(currentCommandMessage);
+            command.Execute(controllerCommunicator, currentCommandMessage);
         }
     }
 }
