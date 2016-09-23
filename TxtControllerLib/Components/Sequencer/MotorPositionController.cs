@@ -114,7 +114,8 @@ namespace RoboticsTxt.Lib.Components.Sequencer
         /// <param name="speed">The speed of the motor.</param>
         /// <param name="direction">The direction to start.</param>
         /// <param name="distance">The distance to run.</param>
-        public async Task StartMotorAndMoveDistanceAsync(Speed speed, Direction direction, short distance)
+        /// <param name="waitForCompletion"></param>
+        public async Task StartMotorAndMoveDistanceAsync(Speed speed, Direction direction, short distance, bool waitForCompletion = false)
         {
             if (direction == this.MotorConfiguration.ReferencingDirection &&
                 this.currentReferenceState == this.MotorConfiguration.ReferencingInputState)
@@ -137,15 +138,13 @@ namespace RoboticsTxt.Lib.Components.Sequencer
                 }
             }
 
-            var startPosition = this.CurrentPosition;
-
             currentDirection = direction;
-            controllerCommunicator.QueueCommand(new MotorRunDistanceCommand(MotorConfiguration.Motor, speed, direction, distance));
+            var motorRunDistanceCommand = new MotorRunDistanceCommand(MotorConfiguration.Motor, speed, direction, distance);
+            controllerCommunicator.QueueCommand(motorRunDistanceCommand);
 
-            while (Math.Abs(this.CurrentPosition - startPosition) < (distance - 10))
+            if (waitForCompletion)
             {
-                this.logger.Debug($"Motor {this.MotorConfiguration.Motor}: {startPosition} -> {startPosition + distance}: {this.CurrentPosition}");
-                await Task.Delay(TimeSpan.FromMilliseconds(100));
+                motorRunDistanceCommand.WaitForCompletion();
             }
         }
 
@@ -183,7 +182,7 @@ namespace RoboticsTxt.Lib.Components.Sequencer
             distanceToPosition = Math.Abs(distanceToPosition);
 
 
-            await this.StartMotorAndMoveDistanceAsync(Speed.Maximal, direction, (short)distanceToPosition);
+            await this.StartMotorAndMoveDistanceAsync(Speed.Maximal, direction, (short)distanceToPosition, true);
         }
 
         /// <summary>
