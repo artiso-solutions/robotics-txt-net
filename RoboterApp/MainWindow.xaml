@@ -97,10 +97,10 @@
                 <Run Text="O/C: "/>
                 <Run Text="{Binding OpenCloseClampPositionController.CurrentPosition}"/>
             </TextBlock>
-            <TextBox Text="{Binding PositionName}"></TextBox>
-            <Button Command="{Binding SavePositionCommand}" CommandParameter="{Binding PositionName}" Content="Save Position" HorizontalAlignment="Left"/>
+            <TextBox Text="{Binding PositionName}"/>
+            <Button Command="{Binding SavePositionCommand}" CommandParameter="{Binding PositionName}" Content="Save Position" HorizontalAlignment="Center"/>
             
-            <ItemsControl ItemsSource="{Binding PositionNames}">
+            <ItemsControl ItemsSource="{Binding PositionNames}" Margin="10">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel></StackPanel>
@@ -112,7 +112,7 @@
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
-            <Button Command="{Binding StartSequenceCommand}" Content="Start Sequence" HorizontalAlignment="Left"></Button>
+            <!--<Button Command="{Binding StartSequenceCommand}" Content="Start Test Sequence" HorizontalAlignment="Center" />-->
         </StackPanel>
 
         <Viewbox Grid.Column="1">
