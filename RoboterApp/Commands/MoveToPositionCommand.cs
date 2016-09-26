@@ -7,10 +7,12 @@ namespace RoboterApp.Commands
     public class MoveToPositionCommand : ICommand
     {
         private readonly ControllerSequencer controllerSequencer;
+        private readonly MainWindowViewModel mainWindowViewModel;
 
-        public MoveToPositionCommand(ControllerSequencer controllerSequencer)
+        public MoveToPositionCommand(ControllerSequencer controllerSequencer, MainWindowViewModel mainWindowViewModel)
         {
             this.controllerSequencer = controllerSequencer;
+            this.mainWindowViewModel = mainWindowViewModel;
         }
 
         public bool CanExecute(object parameter)
@@ -20,7 +22,10 @@ namespace RoboterApp.Commands
 
         public void Execute(object parameter)
         {
-            this.controllerSequencer.MoveToPositionAsync(parameter.ToString());
+            var positionName = parameter.ToString();
+
+            this.mainWindowViewModel.PositionName = positionName;
+            this.controllerSequencer.MoveToPositionAsync(positionName);
         }
 
         public event EventHandler CanExecuteChanged;

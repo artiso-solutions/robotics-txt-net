@@ -88,7 +88,7 @@ namespace RoboterApp
 
             ReferenceAxisCommand = new ReferenceAxisCommand(TurnLeftRightPositionController, UpDownPositionController, BackwardForwardPositionController, OpenCloseClampPositionController);
             SavePositionCommand = new SavePositionCommand(this.controllerSequencer, this.PositionNames);
-            MoveToPositionCommand = new MoveToPositionCommand(this.controllerSequencer);
+            MoveToPositionCommand = new MoveToPositionCommand(this.controllerSequencer, this);
 
             this.sequenceCommandLogic = new SequenceCommandLogic(this.controllerSequencer, this.BackwardForwardPositionController, this.UpDownPositionController, this.TurnLeftRightPositionController, this.OpenCloseClampPositionController);
             StartSequenceCommand = new StartSequenceCommand(this.sequenceCommandLogic);
