@@ -48,10 +48,6 @@
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="RoboticsTxt.Lib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Robotics.TXT.net.2016.9.23.1\lib\net46\RoboticsTxt.Lib.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Reactive.Core, Version=3.0.0.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
@@ -147,6 +143,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Robo.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TxtControllerLib\TxtControllerLib.csproj">
+      <Project>{877fae27-64df-4c56-b2ac-5e48cf35c151}</Project>
+      <Name>TxtControllerLib</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
