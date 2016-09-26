@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using RoboticsTxt.Lib.Components.Sequencer;
 
@@ -25,7 +26,7 @@ namespace RoboterApp.Commands
             var positionName = parameter.ToString();
 
             this.mainWindowViewModel.PositionName = positionName;
-            this.controllerSequencer.MoveToPositionAsync(positionName);
+            Task.Run(() => this.controllerSequencer.MoveToPositionAsync(positionName));
         }
 
         public event EventHandler CanExecuteChanged;
