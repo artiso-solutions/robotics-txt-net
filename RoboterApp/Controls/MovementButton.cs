@@ -17,6 +17,7 @@ namespace RoboterApp.Controls
             "MoveAxisCommand", typeof(ContinuousMoveAxisCommand), typeof(MovementButton), new PropertyMetadata(default(ContinuousMoveAxisCommand)));
 
         private Speed currentSpeed;
+        private short currentDistance;
 
         public ContinuousMoveAxisCommand MoveAxisCommand
         {
@@ -26,7 +27,9 @@ namespace RoboterApp.Controls
 
         public MovementButton()
         {
-            currentSpeed = Speed.Fast;
+            currentSpeed = Speed.Off;
+            currentDistance = -1;
+
             Interval = 100;
 
             PreviewMouseMove += OnPreviewMouseMove;
@@ -40,11 +43,13 @@ namespace RoboterApp.Controls
 
             if (relative < 0.5)
             {
-                currentSpeed = Speed.Slow;
+                currentSpeed = Speed.Maximal;
+                currentDistance = 50;
             }
             else
             {
                 currentSpeed = Speed.Maximal;
+                currentDistance = 0;
             }
         }
 
@@ -60,7 +65,7 @@ namespace RoboterApp.Controls
 
         private void ClickHandler(object sender, RoutedEventArgs e)
         {
-            MoveAxisCommand?.OnMove(currentSpeed);
+            MoveAxisCommand?.OnMove(this.currentSpeed, this.currentDistance);
         }
     }
 }

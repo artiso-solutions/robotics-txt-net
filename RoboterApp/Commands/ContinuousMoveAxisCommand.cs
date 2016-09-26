@@ -8,7 +8,7 @@ namespace RoboterApp.Commands
         private readonly MotorPositionController motorPositionController;
         private readonly Direction direction;
         private Speed? previousSpeed;
-        private bool isMoving;
+        private short previousDistance;
 
         public ContinuousMoveAxisCommand(MotorPositionController motorPositionController, Direction direction)
         {
@@ -16,29 +16,30 @@ namespace RoboterApp.Commands
             this.direction = direction;
         }
 
-        public void OnMove(Speed currentSpeed)
+        public void OnMove(Speed currentSpeed, short currentDistance = 0)
         {
-            if (isMoving)
-            {
-                return;
-            }
-
-            isMoving = true;
-
-            if (previousSpeed == currentSpeed)
+            if ((previousSpeed == currentSpeed) && (previousDistance == currentDistance))
             {
                 return;
             }
 
             previousSpeed = currentSpeed;
-            motorPositionController.StartMotorAsync(currentSpeed, this.direction);
+            previousDistance = currentDistance;
+
+            if (currentDistance > 0)
+            {
+                motorPositionController.StartMotorAndMoveDistanceAsync(currentSpeed, this.direction, currentDistance);
+            }
+            else
+            {
+                motorPositionController.StartMotorAsync(currentSpeed, this.direction);
+            }
         }
 
         public void OnStop()
         {
-            isMoving = false;
-
             previousSpeed = null;
+            previousDistance = -1;
             motorPositionController.StopMotor();
         }
     }
