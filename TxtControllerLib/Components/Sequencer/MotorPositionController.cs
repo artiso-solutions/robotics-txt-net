@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Runtime.CompilerServices;
-using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
@@ -23,7 +22,7 @@ namespace RoboticsTxt.Lib.Components.Sequencer
         private Direction? currentDirection;
 
         private int currentPosition;
-        private ISubject<int> positionChangesSubject; 
+        private readonly ISubject<int> positionChangesSubject; 
 
         private bool currentReferenceState;
         private ILog logger;

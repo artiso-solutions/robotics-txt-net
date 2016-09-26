@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using log4net;
-using RoboticsTxt.Lib.Components.Communicator;
 using RoboticsTxt.Lib.Components.Sequencer;
 using RoboticsTxt.Lib.Contracts;
 
