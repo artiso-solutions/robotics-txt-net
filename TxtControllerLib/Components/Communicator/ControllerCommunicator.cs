@@ -48,7 +48,7 @@ namespace RoboticsTxt.Lib.Components.Communicator
             var token = this.cancellationTokenSource.Token;
 
             this.communicationLoopTask
-                = new Task(() => this.CommunicationLoop(token), this.cancellationTokenSource.Token);
+                = new Task(async () => await this.CommunicationLoop(token), this.cancellationTokenSource.Token);
 
             this.communicationLoopTask.Start();
         }
@@ -69,7 +69,7 @@ namespace RoboticsTxt.Lib.Components.Communicator
 
         public MotorDistanceInfo[] MotorDistanceInfos { get; }
 
-        private void CommunicationLoop(CancellationToken cancellationToken)
+        private async Task CommunicationLoop(CancellationToken cancellationToken)
         {
             var driver = new TcpControllerDriver(ipAddress);
             var currentCommandMessage = new ExchangeDataCommandMessage();
@@ -108,7 +108,7 @@ namespace RoboticsTxt.Lib.Components.Communicator
 
                 this.responseProcessor.ProcessResponse(response, this.UniversalInputs, this.MotorDistanceInfos);
 
-                Thread.Sleep(TimeSpan.FromMilliseconds(10));
+                await Task.Delay(TimeSpan.FromMilliseconds(10));
             }
 
             driver.SendCommand(new StopOnlineCommandMessage());
