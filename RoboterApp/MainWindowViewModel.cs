@@ -21,20 +21,7 @@ namespace RoboterApp
 
         public MainWindowViewModel()
         {
-            IPAddress ipAddress;
-
-            if (!IPAddress.TryParse(Properties.Settings.Default.RoboAddress, out ipAddress))
-            {
-                var hostEntry = Dns.GetHostEntry(Properties.Settings.Default.RoboAddress);
-                if (hostEntry.AddressList.Length != 1)
-                {
-                    throw new InvalidOperationException($"Did not find ip address for hostname {Properties.Settings.Default.RoboAddress}");
-                }
-
-                ipAddress = hostEntry.AddressList[0];
-            }
-
-            controllerSequencer = new ControllerSequencer(ipAddress);
+            controllerSequencer = new ControllerSequencer(Properties.Settings.Default.RoboAddress);
             this.PositionNames = new ObservableCollection<string>(this.controllerSequencer.GetPositionNames());
 
             BackwardForwardPositionController = controllerSequencer.ConfigureMotorPositionController(new MotorConfiguration

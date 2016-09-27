@@ -29,7 +29,7 @@ namespace RoboticsTxt.Lib.Components.Sequencer
         /// Creates a new instance of the <see cref="ControllerSequencer"/> and starts the communication with the controller. To stop the communication
         /// you have to dispose the <see cref="ControllerSequencer"/>.
         /// </summary>
-        /// <param name="ipAddress"></param>
+        /// <param name="ipAddress">IP address of the controller.</param>
         public ControllerSequencer(IPAddress ipAddress)
         {
             this.controllerCommunicator = new ControllerCommunicator(ipAddress);
@@ -39,6 +39,15 @@ namespace RoboticsTxt.Lib.Components.Sequencer
             this.positions = this.positionStorageAccessor.LoadPositionsFromFile();
 
             this.controllerCommunicator.Start();
+        }
+
+        /// <summary>
+        /// Creates a new instance of the <see cref="ControllerSequencer"/> and starts the communication with the controller. To stop the communication
+        /// you have to dispose the <see cref="ControllerSequencer"/>.
+        /// </summary>
+        /// <param name="ipString">String with the IP address or a DNS name for the controller.</param>
+        public ControllerSequencer(string ipString) : this(ParseAndResolveIpString(ipString))
+        {
         }
 
         /// <summary>
@@ -205,6 +214,16 @@ namespace RoboticsTxt.Lib.Components.Sequencer
             motorPositionController.Dispose();
         }
 
+        public List<string> GetPositionNames()
+        {
+            var result = new List<string>();
+            foreach (var position in this.positions)
+            {
+                result.Add(position.PositionName);
+            }
+            return result;
+        }
+
         private async Task WaitForInputAsync(DigitalInput digitalInput, bool expectedValue)
         {
             await this.controllerCommunicator.UniversalInputs[(int)digitalInput].StateChanges.FirstAsync(b => b == expectedValue);
@@ -218,14 +237,22 @@ namespace RoboticsTxt.Lib.Components.Sequencer
             }
         }
 
-        public List<string> GetPositionNames()
+        private static IPAddress ParseAndResolveIpString(string ipString)
         {
-            var result = new List<string>();
-            foreach (var position in this.positions)
+            IPAddress robotIp;
+
+            if (IPAddress.TryParse(ipString, out robotIp))
+                return robotIp;
+
+            var hostEntry = Dns.GetHostEntry(ipString);
+            if (hostEntry.AddressList.Length != 1)
             {
-                result.Add(position.PositionName);
+                throw new InvalidOperationException($"Did not find ip address for hostname {ipString}");
             }
-            return result;
+
+            robotIp = hostEntry.AddressList[0];
+
+            return robotIp;
         }
     }
 }
