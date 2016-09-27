@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using log4net;
 using log4net.Util;
@@ -29,20 +30,21 @@ namespace RoboterApp.Commands
             return true;
         }
 
-        public async void Execute(object parameter)
+        public void Execute(object parameter)
         {
+            var referenceTasks = new[]
+            {
+                turnLeftRightPositionController.MoveMotorToReferenceAsync(),
+                upDownPositionController.MoveMotorToReferenceAsync(),
+                backwardForwardPositionController.MoveMotorToReferenceAsync(),
+                openCloseClampPositionController.MoveMotorToReferenceAsync()
+            };
+            
             logger.InfoExt("Start referencing of axis...");
-            logger.InfoExt("Reference \"Turn Left / Right\"");
-            turnLeftRightPositionController.MoveMotorToReferenceAsync();
-
-            logger.InfoExt("Reference \"Move Up / Down\"");
-            upDownPositionController.MoveMotorToReferenceAsync();
-
-            logger.InfoExt("Reference \"Move Backward / Forward\"");
-            backwardForwardPositionController.MoveMotorToReferenceAsync();
-
-            logger.InfoExt("Reference \"Open / Close clamp\"");
-            openCloseClampPositionController.MoveMotorToReferenceAsync();
+            foreach (var referenceTask in referenceTasks)
+            {
+                Task.Run(() => referenceTask);
+            }
         }
 
         public event EventHandler CanExecuteChanged
