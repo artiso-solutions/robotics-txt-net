@@ -1,6 +1,6 @@
 using System;
 using System.Reactive.Linq;
-using System.Threading;
+using System.Threading.Tasks;
 using JetBrains.Annotations;
 using RoboticsTxt.Lib.Components.Communicator;
 using RoboticsTxt.Lib.Contracts;
@@ -15,7 +15,7 @@ namespace RoboticsTxt.Lib.Commands
         private readonly Direction direction;
         private readonly short distance;
 
-        private readonly AutoResetEvent completionHandle;
+        private readonly TaskCompletionSource<object> taskCompletionSource;
 
         public MotorRunDistanceCommand(Motor motor, Speed speed, Direction direction, short distance)
         {
@@ -24,7 +24,7 @@ namespace RoboticsTxt.Lib.Commands
             this.direction = direction;
             this.distance = distance;
 
-            this.completionHandle = new AutoResetEvent(false);
+            this.taskCompletionSource = new TaskCompletionSource<object>();
         }
 
         public Motor Motor { get; }
@@ -54,13 +54,12 @@ namespace RoboticsTxt.Lib.Commands
             message.MotorDistance[motorIndex] = this.distance;
             message.MotorCommandId[motorIndex]++;
             
-            controllerCommunicator.MotorDistanceInfos[motorIndex].CommandIdChanges.FirstAsync(cc => cc == message.MotorCommandId[motorIndex]).Subscribe(cc => this.completionHandle.Set());
+            controllerCommunicator.MotorDistanceInfos[motorIndex].CommandIdChanges.FirstAsync(cc => cc == message.MotorCommandId[motorIndex]).Subscribe(cc => this.taskCompletionSource.SetResult(null));
         }
 
-        public void WaitForCompletion()
+        public async Task WaitForCompletionAsync()
         {
-            // TODO use TaskCompletionSource
-            WaitHandle.WaitAll(new WaitHandle[] {this.completionHandle});
+            await this.taskCompletionSource.Task;
         }
     }
 }
