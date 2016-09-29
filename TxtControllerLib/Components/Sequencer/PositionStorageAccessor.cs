@@ -45,9 +45,14 @@ namespace RoboticsTxt.Lib.Components.Sequencer
         {
             var positions = new List<Position>();
 
+            var filePath = string.Format(FileNamePattern, applicationConfiguration.ApplicationName);
+
+            if (!File.Exists(filePath))
+                return positions;
+
             try
             {
-                var stream = new FileStream(string.Format(FileNamePattern, applicationConfiguration.ApplicationName), FileMode.Open);
+                var stream = new FileStream(filePath, FileMode.Open);
                 var streamReader = new StreamReader(stream);
 
                 var positionsJson = streamReader.ReadToEnd();
