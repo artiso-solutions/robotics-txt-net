@@ -21,7 +21,7 @@ namespace RoboterApp
 
         public MainWindowViewModel()
         {
-            controllerSequencer = new ControllerSequencer(Properties.Settings.Default.RoboAddress, new ControllerConfiguration(), new ApplicationConfiguration());
+            controllerSequencer = new ControllerSequencer(Properties.Settings.Default.RoboAddress, new ControllerConfiguration(), new ApplicationConfiguration() {ApplicationName = "RoboterApp"});
             this.PositionNames = new ObservableCollection<string>(this.controllerSequencer.GetPositionNames());
 
             BackwardForwardPositionController = controllerSequencer.ConfigureMotorPositionController(new MotorConfiguration
