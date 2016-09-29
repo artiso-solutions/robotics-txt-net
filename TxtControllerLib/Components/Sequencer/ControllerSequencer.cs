@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using RoboticsTxt.Lib.Commands;
 using RoboticsTxt.Lib.Components.Communicator;
 using RoboticsTxt.Lib.Contracts;
+using RoboticsTxt.Lib.Contracts.Configuration;
 
 namespace RoboticsTxt.Lib.Components.Sequencer
 {
@@ -26,15 +27,17 @@ namespace RoboticsTxt.Lib.Components.Sequencer
         private List<Position> positions;
 
         /// <summary>
-        /// Creates a new instance of the <see cref="ControllerSequencer"/> and starts the communication with the controller. To stop the communication
-        /// you have to dispose the <see cref="ControllerSequencer"/>.
+        /// Creates a new instance of the <see cref="ControllerSequencer" /> and starts the communication with the controller. To stop the communication
+        /// you have to dispose the <see cref="ControllerSequencer" />.
         /// </summary>
         /// <param name="ipAddress">IP address of the controller.</param>
-        public ControllerSequencer(IPAddress ipAddress)
+        /// <param name="controllerConfiguration">The controller configuration.</param>
+        /// <param name="applicationConfiguration">The application configuration.</param>
+        public ControllerSequencer(IPAddress ipAddress, ControllerConfiguration controllerConfiguration, ApplicationConfiguration applicationConfiguration)
         {
-            this.controllerCommunicator = new ControllerCommunicator(ipAddress);
+            this.controllerCommunicator = new ControllerCommunicator(ipAddress, controllerConfiguration);
             this.motorPositionControllers = new Dictionary<Motor, MotorPositionController>();
-            this.positionStorageAccessor = new PositionStorageAccessor();
+            this.positionStorageAccessor = new PositionStorageAccessor(applicationConfiguration);
 
             this.positions = this.positionStorageAccessor.LoadPositionsFromFile();
 
@@ -42,11 +45,14 @@ namespace RoboticsTxt.Lib.Components.Sequencer
         }
 
         /// <summary>
-        /// Creates a new instance of the <see cref="ControllerSequencer"/> and starts the communication with the controller. To stop the communication
-        /// you have to dispose the <see cref="ControllerSequencer"/>.
+        /// Creates a new instance of the <see cref="ControllerSequencer" /> and starts the communication with the controller. To stop the communication
+        /// you have to dispose the <see cref="ControllerSequencer" />.
         /// </summary>
         /// <param name="ipString">String with the IP address or a DNS name for the controller.</param>
-        public ControllerSequencer(string ipString) : this(ParseAndResolveIpString(ipString))
+        /// <param name="controllerConfiguration">The controller configuration.</param>
+        /// <param name="applicationConfiguration">The application configuration.</param>
+        public ControllerSequencer(string ipString, ControllerConfiguration controllerConfiguration, ApplicationConfiguration applicationConfiguration) 
+            : this(ParseAndResolveIpString(ipString), controllerConfiguration, applicationConfiguration)
         {
         }
 

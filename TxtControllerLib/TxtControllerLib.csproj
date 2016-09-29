@@ -86,6 +86,8 @@
     <Compile Include="Components\Sequencer\MotorPositionController.cs" />
     <Compile Include="Components\Communicator\ResponseProcessor.cs" />
     <Compile Include="Components\Sequencer\PositionStorageAccessor.cs" />
+    <Compile Include="Contracts\Configuration\ApplicationConfiguration.cs" />
+    <Compile Include="Contracts\Configuration\ControllerConfiguration.cs" />
     <Compile Include="Contracts\DigitalInput.cs" />
     <Compile Include="Contracts\Motor.cs" />
     <Compile Include="Contracts\MotorPositionInfo.cs" />

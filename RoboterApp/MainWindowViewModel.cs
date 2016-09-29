@@ -8,6 +8,7 @@ using RoboterApp.Commands;
 using RoboterApp.Components;
 using RoboticsTxt.Lib.Components.Sequencer;
 using RoboticsTxt.Lib.Contracts;
+using RoboticsTxt.Lib.Contracts.Configuration;
 
 namespace RoboterApp
 {
@@ -20,7 +21,7 @@ namespace RoboterApp
 
         public MainWindowViewModel()
         {
-            controllerSequencer = new ControllerSequencer(Properties.Settings.Default.RoboAddress);
+            controllerSequencer = new ControllerSequencer(Properties.Settings.Default.RoboAddress, new ControllerConfiguration(), new ApplicationConfiguration());
             this.PositionNames = new ObservableCollection<string>(this.controllerSequencer.GetPositionNames());
 
             BackwardForwardPositionController = controllerSequencer.ConfigureMotorPositionController(new MotorConfiguration

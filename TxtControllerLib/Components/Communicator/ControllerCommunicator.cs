@@ -8,6 +8,7 @@ using log4net;
 using log4net.Util;
 using RoboticsTxt.Lib.Configuration;
 using RoboticsTxt.Lib.Contracts;
+using RoboticsTxt.Lib.Contracts.Configuration;
 using RoboticsTxt.Lib.ControllerDriver;
 using RoboticsTxt.Lib.Interfaces;
 using RoboticsTxt.Lib.Messages;
@@ -17,6 +18,7 @@ namespace RoboticsTxt.Lib.Components.Communicator
     internal class ControllerCommunicator
     {
         private readonly IPAddress ipAddress;
+        private readonly ControllerConfiguration controllerConfiguration;
         private readonly ILog logger;
 
         private readonly CommandProcessor commandProcessor;
@@ -27,9 +29,10 @@ namespace RoboticsTxt.Lib.Components.Communicator
         private Task communicationLoopTask;
         private CancellationTokenSource cancellationTokenSource;
 
-        public ControllerCommunicator(IPAddress ipAddress)
+        public ControllerCommunicator(IPAddress ipAddress, ControllerConfiguration controllerConfiguration)
         {
             this.ipAddress = ipAddress;
+            this.controllerConfiguration = controllerConfiguration;
             this.logger = LogManager.GetLogger(typeof(ControllerCommunicator));
 
             this.commandProcessor = new CommandProcessor();
@@ -88,6 +91,8 @@ namespace RoboticsTxt.Lib.Components.Communicator
             }; // TODO init config?
             driver.SendCommand(configMessage);
 
+            var delayTimeSpan = this.controllerConfiguration.CommunicationCycleTime;
+
             while (!cancellationToken.IsCancellationRequested || !this.commandQueue.IsEmpty)
             {
                 IControllerCommand command;
@@ -108,7 +113,7 @@ namespace RoboticsTxt.Lib.Components.Communicator
 
                 this.responseProcessor.ProcessResponse(response, this.UniversalInputs, this.MotorDistanceInfos);
 
-                await Task.Delay(TimeSpan.FromMilliseconds(10));
+                await Task.Delay(delayTimeSpan);
             }
 
             driver.SendCommand(new StopOnlineCommandMessage());

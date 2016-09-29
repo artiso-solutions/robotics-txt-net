@@ -7,6 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RoboticsTxt.Lib.Commands;
 using RoboticsTxt.Lib.Components.Communicator;
 using RoboticsTxt.Lib.Contracts;
+using RoboticsTxt.Lib.Contracts.Configuration;
 using TxtControllerLibTests.Properties;
 
 namespace TxtControllerLibTests
@@ -24,7 +25,7 @@ namespace TxtControllerLibTests
         [TestMethod]
         public void StartStopMotor()
         {
-            var communicator = new ControllerCommunicator(IPAddress.Parse(Settings.Default.TestDeviceIpAddress));
+            var communicator = new ControllerCommunicator(IPAddress.Parse(Settings.Default.TestDeviceIpAddress), new ControllerConfiguration());
 
             communicator.Start();
 
@@ -44,7 +45,7 @@ namespace TxtControllerLibTests
         [TestMethod]
         public void LogInputStateChanges()
         {
-            var communicator = new ControllerCommunicator(IPAddress.Parse(Settings.Default.TestDeviceIpAddress));
+            var communicator = new ControllerCommunicator(IPAddress.Parse(Settings.Default.TestDeviceIpAddress), new ControllerConfiguration());
 
             communicator.Start();
 

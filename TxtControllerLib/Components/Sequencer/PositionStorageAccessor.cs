@@ -4,14 +4,21 @@ using System.IO;
 using log4net;
 using Newtonsoft.Json;
 using RoboticsTxt.Lib.Contracts;
+using RoboticsTxt.Lib.Contracts.Configuration;
 
 namespace RoboticsTxt.Lib.Components.Sequencer
 {
     internal class PositionStorageAccessor
     {
+        private readonly ApplicationConfiguration applicationConfiguration;
         private readonly ILog logger = LogManager.GetLogger(typeof(PositionStorageAccessor));
 
-        private const string FileName = "Positions.json";
+        public PositionStorageAccessor(ApplicationConfiguration applicationConfiguration)
+        {
+            this.applicationConfiguration = applicationConfiguration;
+        }
+
+        private const string FileNamePattern = "Positions_{0}.json";
 
         public bool WritePositionsToFile(IEnumerable<Position> positions)
         {
@@ -19,7 +26,7 @@ namespace RoboticsTxt.Lib.Components.Sequencer
             {
                 var positionsJson = JsonConvert.SerializeObject(positions, Formatting.Indented);
 
-                var stream = new FileStream(FileName, FileMode.Create);
+                var stream = new FileStream(string.Format(FileNamePattern, applicationConfiguration.ApplicationName), FileMode.Create);
                 var streamWriter = new StreamWriter(stream);
 
                 streamWriter.Write(positionsJson);
@@ -40,7 +47,7 @@ namespace RoboticsTxt.Lib.Components.Sequencer
 
             try
             {
-                var stream = new FileStream(FileName, FileMode.Open);
+                var stream = new FileStream(string.Format(FileNamePattern, applicationConfiguration.ApplicationName), FileMode.Open);
                 var streamReader = new StreamReader(stream);
 
                 var positionsJson = streamReader.ReadToEnd();

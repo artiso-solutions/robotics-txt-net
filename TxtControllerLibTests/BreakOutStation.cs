@@ -6,6 +6,7 @@ using log4net.Util;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RoboticsTxt.Lib.Components.Sequencer;
 using RoboticsTxt.Lib.Contracts;
+using RoboticsTxt.Lib.Contracts.Configuration;
 using TxtControllerLibTests.Properties;
 
 namespace TxtControllerLibTests
@@ -28,7 +29,7 @@ namespace TxtControllerLibTests
 
         private async Task ProcessWorkpiece(bool breakoutFirstInterface, bool breakoutSecondInterface)
         {
-            using (var sequencer = new ControllerSequencer(IPAddress.Parse(Settings.Default.TestDeviceIpAddress)))
+            using (var sequencer = new ControllerSequencer(IPAddress.Parse(Settings.Default.TestDeviceIpAddress), new ControllerConfiguration(), new ApplicationConfiguration()))
             {
                 await sequencer.StartMotorStopWithDigitalInputAsync(Motor.Two, Speed.Fast, Direction.Right, DigitalInput.One, true);
 
