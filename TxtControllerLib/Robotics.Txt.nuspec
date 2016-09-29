@@ -6,6 +6,7 @@
         <title>Robotics TXT .Net Library</title>
         <authors>artiso solutions GmbH</authors>
         <owners>artiso solutions GmbH</owners>
+        <projectUrl>https://github.com/artiso-solutions/robotics-txt-net</projectUrl>
         <requireLicenseAcceptance>true</requireLicenseAcceptance>
         <licenseUrl>https://github.com/artiso-solutions/robotics-txt-net/blob/develop/LICENSE</licenseUrl>
         <description>Robotics TXT .Net Library</description>
