@@ -152,7 +152,7 @@ namespace RoboticsTxt.Lib.Components.Sequencer
 
             if (waitForCompletion)
             {
-                await motorRunDistanceCommand.WaitForCompletionAsync();
+                motorRunDistanceCommand.WaitForCompletion();
             }
         }
 
