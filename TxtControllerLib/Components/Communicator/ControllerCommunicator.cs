@@ -50,10 +50,7 @@ namespace RoboticsTxt.Lib.Components.Communicator
             this.cancellationTokenSource = new CancellationTokenSource();
             var token = this.cancellationTokenSource.Token;
 
-            this.communicationLoopTask
-                = new Task(async () => await this.CommunicationLoop(token), this.cancellationTokenSource.Token);
-
-            this.communicationLoopTask.Start();
+            this.communicationLoopTask = Task.Run(() => this.CommunicationLoop(token), this.cancellationTokenSource.Token);
         }
 
         public void Stop()

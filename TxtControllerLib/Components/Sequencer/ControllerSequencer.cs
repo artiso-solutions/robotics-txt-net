@@ -179,12 +179,15 @@ namespace RoboticsTxt.Lib.Components.Sequencer
         {
             var position = this.positions.FirstOrDefault(p => p.PositionName == positionName);
 
+            var positioningTasks = new List<Task>();
             if (position != null)
             {
-                Parallel.ForEach(position.MotorPositionInfos, (mpi) =>
+                foreach (var motorPositionInfo in position.MotorPositionInfos)
                 {
-                    this.motorPositionControllers[mpi.Motor].MoveMotorToPositionAsync(mpi);
-                });
+                    positioningTasks.Add(this.motorPositionControllers[motorPositionInfo.Motor].MoveMotorToPositionAsync(motorPositionInfo));
+                }
+
+                await Task.WhenAll(positioningTasks);
             }
         }
 
