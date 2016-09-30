@@ -54,7 +54,7 @@ namespace RoboticsTxt.Lib.Components.Communicator
 
             var difference = distanceValue - currentDistanceValue;
 
-            logger.Info($"d={distanceValue:000} - diff={difference:000} - c={commandId:000}");
+            logger.Debug($"d={distanceValue:000} - diff={difference:000} - c={commandId:000}");
 
             currentDistanceValue = distanceValue;
             this.distanceDifferencesSubject.OnNext(difference);
