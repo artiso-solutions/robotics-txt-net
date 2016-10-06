@@ -27,13 +27,12 @@ namespace RoboticsTxt.Lib.Components.Communicator
         public Motor Motor { get; }
 
         public bool IsTracking { get; set; }
-
-        // TODO think about rename
+        
         public IObservable<int> DistanceDifferences => distanceDifferencesSubject.AsObservable();
 
         public IObservable<short> CommandIdChanges => commandIdChangesSubject.AsObservable();
 
-        public void SetCurrentDistanceValue(short distanceValue, short commandId)
+        public void SetCurrentDistanceValue(short distanceValue)
         {
             if (!this.IsTracking)
             {
@@ -44,7 +43,7 @@ namespace RoboticsTxt.Lib.Components.Communicator
             if ((distanceValue < currentDistanceValue))
             {
                 currentDistanceValue = 0;
-                logger.Info("reset currentDistance");
+                logger.Debug($"Motor {Motor}: reset currentDistance");
             }
 
             if (currentDistanceValue == distanceValue)
@@ -54,24 +53,21 @@ namespace RoboticsTxt.Lib.Components.Communicator
 
             var difference = distanceValue - currentDistanceValue;
 
-            logger.Debug($"d={distanceValue:000} - diff={difference:000} - c={commandId:000}");
+            logger.Debug($"Motor {Motor}: d={distanceValue:000} | diff={difference:000}");
 
             currentDistanceValue = distanceValue;
             this.distanceDifferencesSubject.OnNext(difference);
-
-            currentCommandId = commandId;
-            commandIdChangesSubject.OnNext(commandId);
         }
 
         public void SetCurrentCommandId(short commandId)
         {
             if (currentCommandId == commandId)
-            {
                 return;
-            }
 
             currentCommandId = commandId;
             commandIdChangesSubject.OnNext(commandId);
+
+            this.logger.Debug($"Motor {Motor}: commandId changed to {commandId}");
         }
     }
 }

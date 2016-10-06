@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using log4net;
 using RoboticsTxt.Lib.Contracts;
 
 namespace RoboticsTxt.Lib.Components.Communicator
@@ -9,10 +10,14 @@ namespace RoboticsTxt.Lib.Components.Communicator
     {
         private readonly Subject<bool> stateChangesSubject;
 
+        private readonly ILog logger;
+
         public DigitalInputInfo(DigitalInput digitalInput)
         {
             DigitalInput = digitalInput;
             this.stateChangesSubject = new Subject<bool>();
+
+            this.logger = LogManager.GetLogger(nameof(DigitalInputInfo));
         }
 
         public DigitalInput DigitalInput { get; }
@@ -23,11 +28,13 @@ namespace RoboticsTxt.Lib.Components.Communicator
 
         public void SetNewState(bool newState)
         {
-            if (this.CurrentState != newState)
-            {
-                this.CurrentState = newState;
-                this.stateChangesSubject.OnNext(newState);
-            }
+            if (this.CurrentState == newState)
+                return;
+
+            this.CurrentState = newState;
+            this.stateChangesSubject.OnNext(newState);
+
+            this.logger.Debug($"I{this.DigitalInput}: state changed to {newState}");
         }
     }
 }

@@ -13,7 +13,6 @@ namespace RoboticsTxt.Lib.ControllerDriver
     internal class TcpControllerDriver : IDisposable
     {
         private readonly IPAddress ipAddress;
-        private readonly ILog logger = LogManager.GetLogger(typeof(TcpControllerDriver));
         private Socket socket;
 
         public TcpControllerDriver(IPAddress ipAddress)
@@ -41,7 +40,6 @@ namespace RoboticsTxt.Lib.ControllerDriver
             where TCmdMessage : CommandMessage
         {
             var cmdBytes = this.GetBytesOfMessage(command);
-            this.logger.DebugExt($"Sending {cmdBytes.Length} bytes");
             this.socket.Send(cmdBytes);
 
             using (var receiveStream = new MemoryStream())
@@ -107,17 +105,11 @@ namespace RoboticsTxt.Lib.ControllerDriver
         [NotNull]
         public byte[] GetBytesOfMessage([NotNull] CommandMessage message)
         {
-            this.logger.DebugExt($"Serialize message of type {message.GetType().FullName}");
             using (var memoryStream = new MemoryStream())
             {
-                long oldLength;
-                long newLength;
                 foreach (var propertySerializationInfo in message.SerializationProperties)
                 {
-                    oldLength = memoryStream.Length;
                     propertySerializationInfo.WriteValue(memoryStream);
-                    newLength = memoryStream.Length;
-                    this.logger.DebugExt(() => $"  {propertySerializationInfo.Name} -> {newLength - oldLength} added -> {string.Join("|", memoryStream.ToArray().Skip((int)oldLength))}");
                 }
 
                 return memoryStream.ToArray();
@@ -137,16 +129,11 @@ namespace RoboticsTxt.Lib.ControllerDriver
             where TResponseMessage : ResponseMessage, new()
         {
             var responseMessage = new TResponseMessage();
-            this.logger.DebugExt($"Deserialize message of type {responseMessage.GetType().FullName}");
             var deserializationContext = new DeserializationContext(bytes);
-            int oldPosition;
-            int newPosition;
+
             foreach (var propertyDeserializationInfo in responseMessage.DeserializationProperties)
             {
-                oldPosition = deserializationContext.CurrentPosition;
                 propertyDeserializationInfo.ReadValue(deserializationContext);
-                newPosition = deserializationContext.CurrentPosition;
-                this.logger.DebugExt(() => $"  {propertyDeserializationInfo.Name} -> {newPosition - oldPosition} read -> {string.Join("|", deserializationContext.Buffer.Skip(oldPosition).Take(newPosition - oldPosition))}");
             }
 
             return responseMessage;
