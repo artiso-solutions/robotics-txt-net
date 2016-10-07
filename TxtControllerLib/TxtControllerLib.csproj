@@ -88,6 +88,10 @@
     <Compile Include="Components\Sequencer\PositionStorageAccessor.cs" />
     <Compile Include="Contracts\Configuration\ApplicationConfiguration.cs" />
     <Compile Include="Contracts\Configuration\ControllerConfiguration.cs" />
+    <Compile Include="Contracts\Configuration\CounterMode.cs" />
+    <Compile Include="Contracts\Configuration\InputConfiguration.cs" />
+    <Compile Include="Contracts\Configuration\InputMode.cs" />
+    <Compile Include="Contracts\Configuration\MotorMode.cs" />
     <Compile Include="Contracts\DigitalInput.cs" />
     <Compile Include="Contracts\Motor.cs" />
     <Compile Include="Contracts\MotorPositionInfo.cs" />
@@ -107,10 +111,6 @@
     <Compile Include="Messages\Base\DeserializationContext.cs" />
     <Compile Include="Messages\Base\PropertyDeserializationInfo.cs" />
     <Compile Include="Messages\Base\PropertySerializationInfo.cs" />
-    <Compile Include="Configuration\CounterMode.cs" />
-    <Compile Include="Configuration\InputConfiguration.cs" />
-    <Compile Include="Configuration\InputMode.cs" />
-    <Compile Include="Configuration\MotorMode.cs" />
     <Compile Include="Messages\QueryStatusCommandMessage.cs" />
     <Compile Include="Messages\QueryStatusResponseMessage.cs" />
     <Compile Include="Messages\Base\ResponseMessage.cs" />

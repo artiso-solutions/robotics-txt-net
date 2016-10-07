@@ -1,5 +1,5 @@
 using System.Linq;
-using RoboticsTxt.Lib.Configuration;
+using RoboticsTxt.Lib.Contracts.Configuration;
 using RoboticsTxt.Lib.Messages.Base;
 
 namespace RoboticsTxt.Lib.Messages

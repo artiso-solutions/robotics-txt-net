@@ -1,4 +1,4 @@
-namespace RoboticsTxt.Lib.Configuration
+namespace RoboticsTxt.Lib.Contracts.Configuration
 {
     /// <summary>
     /// Specifies the motor mode.

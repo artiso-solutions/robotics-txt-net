@@ -6,7 +6,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using log4net;
 using log4net.Util;
-using RoboticsTxt.Lib.Configuration;
 using RoboticsTxt.Lib.Contracts;
 using RoboticsTxt.Lib.Contracts.Configuration;
 using RoboticsTxt.Lib.ControllerDriver;
@@ -56,6 +55,7 @@ namespace RoboticsTxt.Lib.Components.Communicator
         public void Stop()
         {
             this.cancellationTokenSource.Cancel();
+            this.communicationLoopTask.Wait(TimeSpan.FromSeconds(3));
             this.cancellationTokenSource.Dispose();
         }
 
@@ -77,15 +77,22 @@ namespace RoboticsTxt.Lib.Components.Communicator
             driver.StartCommunication();
             driver.SendCommand(new StartOnlineCommandMessage());
 
-            var configMessage = new UpdateConfigCommandMessage
-            {
-                ConfigId = 0,
-                MotorModes = new[] { MotorMode.O1O2, MotorMode.O1O2, MotorMode.O1O2, MotorMode.O1O2 },
-                InputConfigurations =
-                    Enumerable.Repeat(new InputConfiguration { InputMode = InputMode.Resistance, IsDigital = true }, 8)
-                        .ToArray(),
-                CounterModes = new[] { CounterMode.Normal, CounterMode.Normal, CounterMode.Normal, CounterMode.Normal }
-            }; // TODO init config?
+            var configMessage = new UpdateConfigCommandMessage {ConfigId = 0};
+
+            configMessage.MotorModes = this.controllerConfiguration.MotorModes ??
+                                       new[] {MotorMode.O1O2, MotorMode.O1O2, MotorMode.O1O2, MotorMode.O1O2};
+
+            configMessage.CounterModes = this.controllerConfiguration.CounterModes ??
+                                         new[] { CounterMode.Normal, CounterMode.Normal, CounterMode.Normal, CounterMode.Normal };
+
+            configMessage.InputConfigurations = this.controllerConfiguration.InputConfigurations ??
+                                                Enumerable.Repeat(
+                                                    new InputConfiguration
+                                                    {
+                                                        InputMode = InputMode.Resistance,
+                                                        IsDigital = true
+                                                    }, 8).ToArray();
+
             driver.SendCommand(configMessage);
 
             var delayTimeSpan = this.controllerConfiguration.CommunicationCycleTime;
