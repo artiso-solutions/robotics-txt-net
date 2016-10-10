@@ -45,4 +45,30 @@ namespace RoboticsTxt.Lib.Commands
             message.MotorDistance[motorIndex] = 0;
         }
     }
+
+    internal class SetMotorOutputCommand : IControllerCommand
+    {
+        private readonly Speed speedO1;
+        private readonly Speed speedO2;
+
+        public SetMotorOutputCommand(Motor motor, Speed speedO1, Speed speedO2)
+        {
+            this.speedO1 = speedO1;
+            this.speedO2 = speedO2;
+            this.Motor = motor;
+        }
+
+        public Motor Motor { get; }
+
+        public void Execute(ControllerCommunicator controllerCommunicator, [NotNull] ExchangeDataCommandMessage message)
+        {
+            if (message == null) throw new ArgumentNullException(nameof(message));
+
+            var motorIndex = (int)this.Motor;
+            message.PwmOutputValues[2 * motorIndex] = (short)speedO1;
+            message.PwmOutputValues[2 * motorIndex + 1] = (short)speedO2;
+            
+            message.MotorDistance[motorIndex] = 0;
+        }
+    }
 }
