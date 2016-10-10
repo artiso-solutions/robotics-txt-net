@@ -35,13 +35,13 @@ namespace RoboticsTxt.Lib.Components.Sequencer
         /// <param name="applicationConfiguration">The application configuration.</param>
         public ControllerSequencer(IPAddress ipAddress, ControllerConfiguration controllerConfiguration, ApplicationConfiguration applicationConfiguration)
         {
-            this.controllerCommunicator = new ControllerCommunicator(ipAddress, controllerConfiguration);
-            this.motorPositionControllers = new Dictionary<Motor, MotorPositionController>();
-            this.positionStorageAccessor = new PositionStorageAccessor(applicationConfiguration);
+            controllerCommunicator = new ControllerCommunicator(ipAddress, controllerConfiguration);
+            motorPositionControllers = new Dictionary<Motor, MotorPositionController>();
+            positionStorageAccessor = new PositionStorageAccessor(applicationConfiguration);
 
-            this.positions = this.positionStorageAccessor.LoadPositionsFromFile();
+            positions = positionStorageAccessor.LoadPositionsFromFile();
 
-            this.controllerCommunicator.Start();
+            controllerCommunicator.Start();
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace RoboticsTxt.Lib.Components.Sequencer
         {
             CheckMotorPositionMode(motor);
 
-            this.controllerCommunicator.QueueCommand(new StartMotorCommand(motor, speed, direction));
+            controllerCommunicator.QueueCommand(new StartMotorCommand(motor, speed, direction));
         }
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace RoboticsTxt.Lib.Components.Sequencer
         {
             CheckMotorPositionMode(motor);
 
-            this.controllerCommunicator.QueueCommand(new StopMotorCommand(motor));
+            controllerCommunicator.QueueCommand(new StopMotorCommand(motor));
         }
 
         /// <summary>
@@ -98,9 +98,9 @@ namespace RoboticsTxt.Lib.Components.Sequencer
 
         internal async Task StartMotorStopWithDigitalInputInternalAsync(Motor motor, Speed speed, Direction direction, DigitalInput digitalInput, bool expectedInputState)
         {
-            this.controllerCommunicator.QueueCommand(new StartMotorCommand(motor, speed, direction));
-            await this.WaitForInputAsync(digitalInput, expectedInputState);
-            this.controllerCommunicator.QueueCommand(new StopMotorCommand(motor));
+            controllerCommunicator.QueueCommand(new StartMotorCommand(motor, speed, direction));
+            await WaitForInputAsync(digitalInput, expectedInputState);
+            controllerCommunicator.QueueCommand(new StopMotorCommand(motor));
         }
 
         /// <summary>
@@ -120,9 +120,9 @@ namespace RoboticsTxt.Lib.Components.Sequencer
 
         internal async Task StartMotorStopAfterTimeSpanInternalAsync(Motor motor, Speed speed, Direction direction, TimeSpan stopAfterTimeSpan)
         {
-            this.controllerCommunicator.QueueCommand(new StartMotorCommand(motor, speed, direction));
+            controllerCommunicator.QueueCommand(new StartMotorCommand(motor, speed, direction));
             await Task.Delay(stopAfterTimeSpan);
-            this.controllerCommunicator.QueueCommand(new StopMotorCommand(motor));
+            controllerCommunicator.QueueCommand(new StopMotorCommand(motor));
         }
 
         /// <summary>
@@ -132,7 +132,17 @@ namespace RoboticsTxt.Lib.Components.Sequencer
         /// <returns><c>true</c> if the input is triggered, otherwise <c>false</c>.</returns>
         public bool GetDigitalInputState(DigitalInput referenceInput)
         {
-            return this.controllerCommunicator.UniversalInputs[(int)referenceInput].CurrentState;
+            return controllerCommunicator.UniversalInputs[(int)referenceInput].CurrentState;
+        }
+
+        /// <summary>
+        /// Gets the event stream for changes of the state of digital inputs. This can be used to observe the current state or react on state changes.
+        /// </summary>
+        /// <param name="digitalInput">The digital input to get the stream of changes.</param>
+        /// <returns>Observable stream of events representing the current state of the digital input.</returns>
+        public IObservable<bool> GetDigitalInputStateChanges(DigitalInput digitalInput)
+        {
+            return controllerCommunicator.UniversalInputs[(int)digitalInput].StateChanges;
         }
 
         /// <summary>
@@ -141,12 +151,12 @@ namespace RoboticsTxt.Lib.Components.Sequencer
         /// <param name="positionName">Name of the position to be saved.</param>
         public void SaveCurrentPosition(string positionName)
         {
-            var position = this.positions.FirstOrDefault(p => p.PositionName == positionName);
+            var position = positions.FirstOrDefault(p => p.PositionName == positionName);
 
             if (position == null)
             {
                 position = new Position {PositionName = positionName};
-                foreach (var motorPositionController in this.motorPositionControllers.Values)
+                foreach (var motorPositionController in motorPositionControllers.Values)
                 {
                     if (motorPositionController.MotorConfiguration.IsSaveable)
                     {
@@ -154,12 +164,12 @@ namespace RoboticsTxt.Lib.Components.Sequencer
                     }
                 }
 
-                this.positions.Add(position);
+                positions.Add(position);
             }
             else
             {
                 position.MotorPositionInfos.Clear();
-                foreach (var motorPositionController in this.motorPositionControllers.Values)
+                foreach (var motorPositionController in motorPositionControllers.Values)
                 {
                     if (motorPositionController.MotorConfiguration.IsSaveable)
                     {
@@ -168,7 +178,7 @@ namespace RoboticsTxt.Lib.Components.Sequencer
                 }
             }
 
-            this.positionStorageAccessor.WritePositionsToFile(this.positions);
+            positionStorageAccessor.WritePositionsToFile(positions);
         }
 
         /// <summary>
@@ -177,14 +187,14 @@ namespace RoboticsTxt.Lib.Components.Sequencer
         /// <param name="positionName">Name of the position to be applied.</param>
         public async Task MoveToPositionAsync(string positionName)
         {
-            var position = this.positions.FirstOrDefault(p => p.PositionName == positionName);
+            var position = positions.FirstOrDefault(p => p.PositionName == positionName);
 
             var positioningTasks = new List<Task>();
             if (position != null)
             {
                 foreach (var motorPositionInfo in position.MotorPositionInfos)
                 {
-                    positioningTasks.Add(this.motorPositionControllers[motorPositionInfo.Motor].MoveMotorToPositionAsync(motorPositionInfo));
+                    positioningTasks.Add(motorPositionControllers[motorPositionInfo.Motor].MoveMotorToPositionAsync(motorPositionInfo));
                 }
 
                 await Task.WhenAll(positioningTasks);
@@ -201,7 +211,7 @@ namespace RoboticsTxt.Lib.Components.Sequencer
                 motorPositionController.Value.Dispose();
             }
 
-            this.controllerCommunicator.Stop();
+            controllerCommunicator.Stop();
         }
 
         public MotorPositionController ConfigureMotorPositionController(MotorConfiguration motorConfiguration)
@@ -226,7 +236,7 @@ namespace RoboticsTxt.Lib.Components.Sequencer
         public List<string> GetPositionNames()
         {
             var result = new List<string>();
-            foreach (var position in this.positions)
+            foreach (var position in positions)
             {
                 result.Add(position.PositionName);
             }
@@ -235,7 +245,7 @@ namespace RoboticsTxt.Lib.Components.Sequencer
 
         private async Task WaitForInputAsync(DigitalInput digitalInput, bool expectedValue)
         {
-            await this.controllerCommunicator.UniversalInputs[(int)digitalInput].StateChanges.FirstAsync(b => b == expectedValue);
+            await controllerCommunicator.UniversalInputs[(int)digitalInput].StateChanges.FirstAsync(b => b == expectedValue);
         }
 
         private void CheckMotorPositionMode(Motor motor)
