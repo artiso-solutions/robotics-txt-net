@@ -196,18 +196,22 @@ namespace RoboticsTxt.Lib.Components.Sequencer
         /// <summary>
         /// Moves the <see cref="Motor"/> specified in the <see cref="MotorConfiguration"/> to the given reference position and zeroes the tracked position.
         /// </summary>
-        public async Task MoveMotorToReferenceAsync()
+        public async Task<bool> MoveMotorToReferenceAsync(TimeSpan? timeout = null)
         {
             this.motorDistanceInfo.IsTracking = false;
 
             if (controllerSequencer.GetDigitalInputState(MotorConfiguration.ReferencingInput) == MotorConfiguration.ReferencingInputState)
             {
                 var freeRunMovement = MotorConfiguration.ReferencingDirection == Direction.Left ? Direction.Right : Direction.Left;
-                await controllerSequencer.StartMotorStopWithDigitalInputInternalAsync(MotorConfiguration.Motor, MotorConfiguration.ReferencingSpeed, freeRunMovement, MotorConfiguration.ReferencingInput, !MotorConfiguration.ReferencingInputState);
+                var succeeded = await controllerSequencer.StartMotorStopWithDigitalInputInternalAsync(MotorConfiguration.Motor, MotorConfiguration.ReferencingSpeed, freeRunMovement, MotorConfiguration.ReferencingInput, !MotorConfiguration.ReferencingInputState, timeout);
+                if (!succeeded)
+                {
+                    return false;
+                }
                 await controllerSequencer.StartMotorStopAfterTimeSpanInternalAsync(MotorConfiguration.Motor, MotorConfiguration.ReferencingSpeed, freeRunMovement, TimeSpan.FromMilliseconds(100));
             }
 
-            await controllerSequencer.StartMotorStopWithDigitalInputInternalAsync(MotorConfiguration.Motor, MotorConfiguration.ReferencingSpeed, MotorConfiguration.ReferencingDirection, MotorConfiguration.ReferencingInput, MotorConfiguration.ReferencingInputState);
+            var positionReached = await controllerSequencer.StartMotorStopWithDigitalInputInternalAsync(MotorConfiguration.Motor, MotorConfiguration.ReferencingSpeed, MotorConfiguration.ReferencingDirection, MotorConfiguration.ReferencingInput, MotorConfiguration.ReferencingInputState, timeout);
 
             Interlocked.Exchange(ref currentPosition, 0);
             this.OnPropertyChanged(nameof(CurrentPosition));
@@ -215,6 +219,8 @@ namespace RoboticsTxt.Lib.Components.Sequencer
             await Task.Delay(TimeSpan.FromMilliseconds(500));
 
             this.motorDistanceInfo.IsTracking = true;
+
+            return positionReached;
         }
 
         /// <summary>

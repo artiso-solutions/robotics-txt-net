@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using log4net;
 using RoboticsTxt.Lib.Commands;
 using RoboticsTxt.Lib.Components.Communicator;
 using RoboticsTxt.Lib.Contracts;
@@ -20,6 +21,7 @@ namespace RoboticsTxt.Lib.Components.Sequencer
     /// </remarks>
     public class ControllerSequencer : IDisposable
     {
+        private readonly ILog logger;
         private readonly ControllerCommunicator controllerCommunicator;
         private readonly Dictionary<Motor, MotorPositionController> motorPositionControllers;
         private readonly PositionStorageAccessor positionStorageAccessor;
@@ -35,6 +37,7 @@ namespace RoboticsTxt.Lib.Components.Sequencer
         /// <param name="applicationConfiguration">The application configuration.</param>
         public ControllerSequencer(IPAddress ipAddress, ControllerConfiguration controllerConfiguration, ApplicationConfiguration applicationConfiguration)
         {
+            logger = LogManager.GetLogger(typeof(ControllerSequencer));
             controllerCommunicator = new ControllerCommunicator(ipAddress, controllerConfiguration);
             motorPositionControllers = new Dictionary<Motor, MotorPositionController>();
             positionStorageAccessor = new PositionStorageAccessor(applicationConfiguration);
@@ -89,18 +92,20 @@ namespace RoboticsTxt.Lib.Components.Sequencer
         /// <param name="digitalInput">The digital input to trigger the stop.</param>
         /// <param name="expectedInputState">The expected value for the state trigger.</param>
         /// <returns>This method is async. The returned task will be completed as soon as the movement is finished.</returns>
-        public async Task StartMotorStopWithDigitalInputAsync(Motor motor, Speed speed, Direction direction, DigitalInput digitalInput, bool expectedInputState)
+        public async Task<bool> StartMotorStopWithDigitalInputAsync(Motor motor, Speed speed, Direction direction, DigitalInput digitalInput, bool expectedInputState, TimeSpan? timeout = null)
         {
             CheckMotorPositionMode(motor);
 
-            await StartMotorStopWithDigitalInputInternalAsync(motor, speed, direction, digitalInput, expectedInputState);
+            return await StartMotorStopWithDigitalInputInternalAsync(motor, speed, direction, digitalInput, expectedInputState, timeout);
         }
 
-        internal async Task StartMotorStopWithDigitalInputInternalAsync(Motor motor, Speed speed, Direction direction, DigitalInput digitalInput, bool expectedInputState)
+        internal async Task<bool> StartMotorStopWithDigitalInputInternalAsync(Motor motor, Speed speed, Direction direction, DigitalInput digitalInput, bool expectedInputState, TimeSpan? timeout)
         {
             controllerCommunicator.QueueCommand(new StartMotorCommand(motor, speed, direction));
-            await WaitForInputAsync(digitalInput, expectedInputState);
+            var reachedInput = await WaitForInputAsync(digitalInput, expectedInputState, timeout);
             controllerCommunicator.QueueCommand(new StopMotorCommand(motor));
+
+            return reachedInput;
         }
 
         /// <summary>
@@ -243,9 +248,25 @@ namespace RoboticsTxt.Lib.Components.Sequencer
             return result;
         }
 
-        private async Task WaitForInputAsync(DigitalInput digitalInput, bool expectedValue)
+        private async Task<bool> WaitForInputAsync(DigitalInput digitalInput, bool expectedValue, TimeSpan? timeout)
         {
-            await controllerCommunicator.UniversalInputs[(int)digitalInput].StateChanges.FirstAsync(b => b == expectedValue);
+            try
+            {
+                var stateChanges = controllerCommunicator.UniversalInputs[(int)digitalInput].StateChanges;
+                if (timeout.HasValue)
+                {
+                    stateChanges = stateChanges.Timeout(timeout.Value);
+                }
+
+                await stateChanges.FirstAsync(b => b == expectedValue);
+
+                return true;
+            }
+            catch (TimeoutException)
+            {
+                logger.Warn($"Expected digital input {digitalInput} was not triggered to {expectedValue} in time.");
+                return false;
+            }
         }
 
         private void CheckMotorPositionMode(Motor motor)

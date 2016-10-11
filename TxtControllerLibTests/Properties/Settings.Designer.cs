@@ -25,7 +25,7 @@ namespace TxtControllerLibTests.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("192.168.178.64")]
+        [global::System.Configuration.DefaultSettingValueAttribute("192.168.71.119")]
         public string TestDeviceIpAddress {
             get {
                 return ((string)(this["TestDeviceIpAddress"]));

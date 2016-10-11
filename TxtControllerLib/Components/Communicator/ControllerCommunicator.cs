@@ -27,6 +27,7 @@ namespace RoboticsTxt.Lib.Components.Communicator
 
         private Task communicationLoopTask;
         private CancellationTokenSource cancellationTokenSource;
+        private ManualResetEvent waitForRunningLoop;
 
         public ControllerCommunicator(IPAddress ipAddress, ControllerConfiguration controllerConfiguration)
         {
@@ -46,10 +47,13 @@ namespace RoboticsTxt.Lib.Components.Communicator
 
         public void Start()
         {
+            waitForRunningLoop = new ManualResetEvent(false);
             this.cancellationTokenSource = new CancellationTokenSource();
             var token = this.cancellationTokenSource.Token;
 
             this.communicationLoopTask = Task.Run(() => this.CommunicationLoop(token), this.cancellationTokenSource.Token);
+
+            waitForRunningLoop.WaitOne();
         }
 
         public void Stop()
@@ -118,6 +122,7 @@ namespace RoboticsTxt.Lib.Components.Communicator
                 this.responseProcessor.ProcessResponse(response, this.UniversalInputs, this.MotorDistanceInfos);
 
                 await Task.Delay(delayTimeSpan);
+                waitForRunningLoop.Set();
             }
 
             driver.SendCommand(new StopOnlineCommandMessage());
