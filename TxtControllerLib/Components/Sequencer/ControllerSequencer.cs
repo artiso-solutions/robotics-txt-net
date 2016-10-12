@@ -60,6 +60,19 @@ namespace RoboticsTxt.Lib.Components.Sequencer
         }
 
         /// <summary>
+        /// Cleanup of all resrouces. This also stops the communication to the controller.
+        /// </summary>
+        public void Dispose()
+        {
+            foreach (var motorPositionController in motorPositionControllers)
+            {
+                motorPositionController.Value.Dispose();
+            }
+
+            controllerCommunicator.Stop();
+        }
+
+        /// <summary>
         /// Starts the specified <paramref name="motor"/> immediately.
         /// </summary>
         /// <param name="motor">The motor to start.</param>
@@ -204,19 +217,6 @@ namespace RoboticsTxt.Lib.Components.Sequencer
 
                 await Task.WhenAll(positioningTasks);
             }
-        }
-
-        /// <summary>
-        /// Cleanup of all resrouces. This also stops the communication to the controller.
-        /// </summary>
-        public void Dispose()
-        {
-            foreach (var motorPositionController in motorPositionControllers)
-            {
-                motorPositionController.Value.Dispose();
-            }
-
-            controllerCommunicator.Stop();
         }
 
         public MotorPositionController ConfigureMotorPositionController(MotorConfiguration motorConfiguration)
