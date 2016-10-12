@@ -17,7 +17,7 @@ namespace RoboticsTxt.Lib.Components.Communicator
             DigitalInput = digitalInput;
             this.stateChangesSubject = new Subject<bool>();
 
-            this.logger = LogManager.GetLogger(nameof(DigitalInputInfo));
+            this.logger = LogManager.GetLogger(typeof(DigitalInputInfo));
         }
 
         public DigitalInput DigitalInput { get; }

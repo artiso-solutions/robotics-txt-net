@@ -117,13 +117,30 @@ namespace RoboticsTxt.Lib.Components.Communicator
                     }
                 }
 
-                var response = driver.SendCommand<ExchangeDataCommandMessage, ExchangeDataResponseMessage>(currentCommandMessage);
+                ExchangeDataResponseMessage response;
+                try
+                {
+                    response = driver.SendCommand<ExchangeDataCommandMessage, ExchangeDataResponseMessage>(currentCommandMessage);
+                }
+                catch (Exception exception)
+                {
+                    logger.Error("Failed to send request", exception);
+                    continue;
+                }
 
-                this.responseProcessor.ProcessResponse(response, this.UniversalInputs, this.MotorDistanceInfos);
+                try
+                {
+                    this.responseProcessor.ProcessResponse(response, this.UniversalInputs, this.MotorDistanceInfos);
+                }
+                catch (Exception exception)
+                {
+                    logger.Error("Failed to process response", exception);
+                    continue;
+                }
 
                 await Task.Delay(delayTimeSpan);
                 waitForRunningLoop.Set();
-            }
+            }   
 
             driver.SendCommand(new StopOnlineCommandMessage());
         }
