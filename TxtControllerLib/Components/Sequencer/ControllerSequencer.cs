@@ -19,7 +19,7 @@ namespace RoboticsTxt.Lib.Components.Sequencer
     /// <remarks>
     /// The operations provided by the <see cref="ControllerSequencer"/> are not implemented completely. More operations will follow...
     /// </remarks>
-    public class ControllerSequencer : IDisposable
+    public class ControllerSequencer : IControllerSequencer
     {
         private readonly ILog logger;
         private readonly ControllerCommunicator controllerCommunicator;
