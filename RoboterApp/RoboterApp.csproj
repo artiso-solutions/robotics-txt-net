@@ -88,6 +88,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Commands\AlarmSoundCommand.cs" />
     <Compile Include="Commands\MoveToPositionCommand.cs" />
     <Compile Include="Commands\ReferenceAxisCommand.cs" />
     <Page Include="MainWindow.xaml">

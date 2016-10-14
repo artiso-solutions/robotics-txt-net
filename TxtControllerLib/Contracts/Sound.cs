@@ -1,0 +1,36 @@
+namespace RoboticsTxt.Lib.Contracts
+{
+    public enum Sound
+    {
+        None,
+        Airplane,
+        Alarm,
+        Bell,
+        Braking,
+        CarHornLong,
+        CarHornShort,
+        CracklingWood,
+        Excavator,
+        Fantasy1,
+        Fantasy2,
+        Fantasy3,
+        Fantasy4,
+        Farm,
+        FireDepartment,
+        FireNoises,
+        Formula1,
+        Helicopter,
+        Hydraulic,
+        MotorSound,
+        MotorStarting,
+        PropellerAirplane,
+        Rollercoaster,
+        ShipsHorn,
+        Tractor,
+        Truck,
+        Augenzwinkern,
+        Fahrgeraeusch,
+        KopfHeben,
+        KopfNeigen
+    }
+}

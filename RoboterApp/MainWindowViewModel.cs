@@ -79,6 +79,8 @@ namespace RoboterApp
 
             this.sequenceCommandLogic = new SequenceCommandLogic(this.controllerSequencer, this.BackwardForwardPositionController, this.UpDownPositionController, this.TurnLeftRightPositionController, this.OpenCloseClampPositionController);
             StartSequenceCommand = new StartSequenceCommand(this.sequenceCommandLogic);
+
+            AlarmSoundCommand = new AlarmSoundCommand(controllerSequencer);
         }
 
         public MotorPositionController OpenCloseClampPositionController { get; }
@@ -98,6 +100,7 @@ namespace RoboterApp
         public ICommand ReferenceAxisCommand { get; }
         public ICommand SavePositionCommand { get; set; }
         public ICommand StartSequenceCommand { get; }
+        public ICommand AlarmSoundCommand { get; }
 
         public ContinuousMoveAxisCommand MoveBackwardCommand { get; }
         public ContinuousMoveAxisCommand MoveForwardCommand { get; }

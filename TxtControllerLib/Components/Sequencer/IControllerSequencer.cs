@@ -73,6 +73,18 @@ namespace RoboticsTxt.Lib.Components.Sequencer
         Task MoveToPositionAsync(string positionName);
 
         /// <summary>
+        /// Plays a sound.
+        /// </summary>
+        /// <param name="sound">Sound to play.</param>
+        /// <param name="repetitions">Number of times to play the sound. 0 means indefinite.</param>
+        void PlaySound(Sound sound, ushort repetitions);
+
+        /// <summary>
+        /// Stops the current sound.
+        /// </summary>
+        void StopSound();
+
+        /// <summary>
         /// Cleanup of all resrouces. This also stops the communication to the controller.
         /// </summary>
         void Dispose();

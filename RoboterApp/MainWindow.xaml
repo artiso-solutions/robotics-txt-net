@@ -113,6 +113,7 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
             <!--<Button Command="{Binding StartSequenceCommand}" Content="Start Test Sequence" HorizontalAlignment="Center" />-->
+            <Button Command="{Binding AlarmSoundCommand}" Content="Alarm Sound" HorizontalAlignment="Center" />
         </StackPanel>
 
         <Viewbox Grid.Column="1">

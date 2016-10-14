@@ -219,6 +219,24 @@ namespace RoboticsTxt.Lib.Components.Sequencer
             }
         }
 
+        /// <summary>
+        /// Plays a sound.
+        /// </summary>
+        /// <param name="sound">Sound to play.</param>
+        /// <param name="repetitions">Number of times to play the sound. 0 means indefinite.</param>
+        public void PlaySound(Sound sound, ushort repetitions)
+        {
+            controllerCommunicator.QueueCommand(new PlaySoundCommand(sound, repetitions));
+        }
+
+        /// <summary>
+        /// Stops the current sound.
+        /// </summary>
+        public void StopSound()
+        {
+            controllerCommunicator.QueueCommand(new PlaySoundCommand(Sound.None, 0));
+        }
+
         public MotorPositionController ConfigureMotorPositionController(MotorConfiguration motorConfiguration)
         {
             MotorPositionController configureMotorPositionController;
