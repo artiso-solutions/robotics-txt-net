@@ -56,16 +56,20 @@ namespace RoboticsTxt.Lib.Components.Communicator
 
             waitForRunningLoop.WaitOne();
             Task.Delay(10, this.cancellationTokenSource.Token).Wait(this.cancellationTokenSource.Token);
-            if (this.communicationLoopTask.Exception != null )
+            if (this.communicationLoopTask.IsFaulted)
             {
-                throw new CommunicationFailedException("Unable to connect to the controller", this.communicationLoopTask.Exception.InnerException);
+                this.Stop();
+                throw new CommunicationFailedException("Unable to connect to the controller", this.communicationLoopTask.Exception?.InnerException);
             }
         }
 
         public void Stop()
         {
             this.cancellationTokenSource.Cancel();
-            this.communicationLoopTask.Wait(TimeSpan.FromSeconds(3));
+            if (!this.communicationLoopTask.IsCompleted)
+            {
+                this.communicationLoopTask.Wait(TimeSpan.FromSeconds(3));
+            }
             this.cancellationTokenSource.Dispose();
         }
 
