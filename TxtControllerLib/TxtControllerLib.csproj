@@ -102,6 +102,7 @@
     <Compile Include="Contracts\Position.cs" />
     <Compile Include="Contracts\Sound.cs" />
     <Compile Include="Contracts\Speed.cs" />
+    <Compile Include="DefaultValues\DefaultControllerIPs.cs" />
     <Compile Include="Interfaces\IControllerCommand.cs" />
     <Compile Include="Messages\Base\ArchiveReader.cs" />
     <Compile Include="Messages\Base\ArchiveWriter.cs" />
