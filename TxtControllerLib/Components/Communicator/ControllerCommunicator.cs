@@ -65,12 +65,15 @@ namespace RoboticsTxt.Lib.Components.Communicator
 
         public void Stop()
         {
-            this.cancellationTokenSource.Cancel();
-            if (!this.communicationLoopTask.IsCompleted)
+            if (!this.cancellationTokenSource.IsCancellationRequested)
             {
-                this.communicationLoopTask.Wait(TimeSpan.FromSeconds(3));
+                this.cancellationTokenSource.Cancel();
+                if (!this.communicationLoopTask.IsCompleted)
+                {
+                    this.communicationLoopTask.Wait(TimeSpan.FromSeconds(3));
+                }
+                this.cancellationTokenSource.Dispose();
             }
-            this.cancellationTokenSource.Dispose();
         }
 
         public void QueueCommand(IControllerCommand command)
