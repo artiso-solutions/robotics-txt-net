@@ -23,6 +23,8 @@
     </metadata>
     <files>
         <file src="bin\Release\RoboticsTxt.Lib.dll" target="lib\net46\RoboticsTxt.Lib.dll" />
+        <file src="bin\Release\RoboticsTxt.Lib.pdb" target="lib\net46\RoboticsTxt.Lib.pdb" />
         <file src="bin\Release\RoboticsTxt.Lib.xml" target="lib\net46\RoboticsTxt.Lib.xml" />
+        <file src="**\*.cs" target="src" />
     </files>
 </package>
