@@ -6,6 +6,13 @@ namespace RoboticsTxt.Lib.Components.Sequencer
     {
         public MotorConfiguration()
         {
+            Motor = Motor.Unknown;
+            ReferencingInput = DigitalInput.Unknown;
+            ReferencingDirection = Direction.Unknown;
+            ReferencingSpeed = Speed.Off;
+            ReferencingFinePositioningSpeed = Speed.Off;
+            Limit = 0;
+
             this.IsSaveable = true;
         }
 
@@ -16,6 +23,8 @@ namespace RoboticsTxt.Lib.Components.Sequencer
         public Direction ReferencingDirection { get; set; }
 
         public Speed ReferencingSpeed { get; set; }
+
+        public Speed ReferencingFinePositioningSpeed { get; set; }
 
         public bool ReferencingInputState { get; set; }
 
