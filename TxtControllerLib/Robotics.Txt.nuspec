@@ -2,7 +2,7 @@
 <package >
     <metadata>
         <id>Robotics.TXT.net</id>
-        <version>#{GitVersion.NuGetVersion}#</version>
+        <version>0.0.0</version>
         <title>Robotics TXT .Net Library</title>
         <authors>artiso solutions GmbH</authors>
         <owners>artiso solutions GmbH</owners>
