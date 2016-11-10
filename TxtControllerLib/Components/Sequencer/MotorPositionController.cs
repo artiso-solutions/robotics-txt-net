@@ -161,14 +161,18 @@ namespace RoboticsTxt.Lib.Components.Sequencer
         }
 
         /// <summary>
-        /// Moves the <see cref="Motor"/> specified in the <see cref="MotorConfiguration"/> to the given position.
+        /// Moves the <see cref="Motor" /> specified in the <see cref="MotorConfiguration" /> to the given position.
         /// </summary>
         /// <param name="targetPosition">The position to move to.</param>
+        /// <returns></returns>
+        /// <exception cref="System.InvalidOperationException">
+        /// If an invalid position is provided.
+        /// </exception>
         public async Task MoveMotorToPositionAsync(int targetPosition)
         {
             if (targetPosition < 0)
             {
-                throw new InvalidOperationException("Negativ positions not supported");
+                throw new InvalidOperationException("Negative positions not supported");
             }
 
             if (targetPosition > this.MotorConfiguration.Limit)
