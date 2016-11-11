@@ -1,4 +1,4 @@
-![Build status Develop](https://artiso.visualstudio.com/_apis/public/build/definitions/4fbc1b09-9da4-496f-9c69-3df7222e1274/49/badge)
+![Build status Develop](https://artiso.visualstudio.com/_apis/public/build/definitions/4fbc1b09-9da4-496f-9c69-3df7222e1274/54/badge)
 
 [![NuGet version](https://badge.fury.io/nu/Robotics.TXT.net.svg)](https://badge.fury.io/nu/Robotics.TXT.net)
 
@@ -18,7 +18,7 @@ PM> Install-Package Robotics.TXT.net
 
 ## Core Components of Robotics TXT .Net Library
 The main component to use is the `ControllerSequencer` which provides some high level functions to 
-operate motors and work with inputs and outputs. Further information can be found in the documentation of this class.
+operate motors and work with inputs and outputs. Further information can be found [here](Usage.md) or in the documentation of this class.
 
 ## Sample Application Manual Robot Controller
 As an example how the Robotics TXT .Net Library can be used there is a sample application included.

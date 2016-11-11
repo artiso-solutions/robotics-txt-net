@@ -97,8 +97,8 @@ namespace RoboticsTxt.Lib.Components.Sequencer
         /// <summary>
         /// Starts the <see cref="Motor"/> specified in the <see cref="MotorConfiguration"/> of the controller immediately.
         /// </summary>
-        /// <param name="speed">The speed of the motor.</param>
-        /// <param name="direction">The direction to movement.</param>
+        /// <param name="speed">The speed of movement.</param>
+        /// <param name="direction">The direction of movement.</param>
         public async Task StartMotorAsync(Speed speed, Direction direction)
         {
             if (direction == this.MotorConfiguration.ReferencingDirection &&
@@ -111,7 +111,7 @@ namespace RoboticsTxt.Lib.Components.Sequencer
         }
 
         /// <summary>
-        /// Stops the <see cref="Motor"/> specified in the <see cref="MotorConfiguration"/> of the controller immediately.
+        /// Stops the <see cref="Motor"/> specified in the <see cref="MotorConfiguration"/> of the controller "immediately".
         /// </summary>
         public void StopMotor()
         {
@@ -124,7 +124,7 @@ namespace RoboticsTxt.Lib.Components.Sequencer
         /// <param name="speed">The speed of the motor.</param>
         /// <param name="direction">The direction to start.</param>
         /// <param name="distance">The distance to run.</param>
-        /// <param name="waitForCompletion"></param>
+        /// <param name="waitForCompletion">Flag determining whether call should return immediately or after completion of the requested movement.</param>
         public async Task StartMotorAndMoveDistanceAsync(Speed speed, Direction direction, short distance,
             bool waitForCompletion = false)
         {
@@ -202,8 +202,14 @@ namespace RoboticsTxt.Lib.Components.Sequencer
         }
 
         /// <summary>
-        /// Moves the <see cref="Motor"/> specified in the <see cref="MotorConfiguration"/> to the given reference position and zeroes the tracked position.
+        /// References the <see cref="MotorPositionController"/> according to the <see cref="MotorPositionController.MotorConfiguration"/>.
+        /// Moves the Motor in ReferencingDirection with ReferencingSpeed until ReferencingInput reaches the ReferencingInputState. 
+        /// Then Motor moves in the opposite direction with ReferencingFinePositioningSpeed until ReferencingInput leaves ReferencingInputState. 
+        /// After that <see cref="MotorPositionController.CurrentPosition"/> is zeroed.
+        /// Position tracking is disabled during referencing. MotorPositionController has to be referenced before proper usage.
         /// </summary>
+        /// <param name="timeout">Timeout for the referencing operation.</param>
+        /// <returns>true, if successful; false, if unsuccessful</returns>
         public async Task<bool> MoveMotorToReferenceAsync(TimeSpan? timeout = null)
         {
             this.motorDistanceInfo.IsTracking = false;
