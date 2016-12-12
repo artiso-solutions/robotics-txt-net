@@ -8,7 +8,7 @@
         <owners>artiso solutions GmbH</owners>
         <projectUrl>https://github.com/artiso-solutions/robotics-txt-net</projectUrl>
         <requireLicenseAcceptance>true</requireLicenseAcceptance>
-        <licenseUrl>https://github.com/artiso-solutions/robotics-txt-net/blob/develop/LICENSE</licenseUrl>
+        <licenseUrl>https://github.com/artiso-solutions/robotics-txt-net/blob/master/LICENSE</licenseUrl>
         <description>
           A C# library for network communication with the fischertechnik ROBOTICS TXT controller.
         </description>
