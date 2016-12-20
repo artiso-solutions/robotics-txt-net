@@ -14,10 +14,13 @@ namespace RoboterApp
 {
     public class MainWindowViewModel : INotifyPropertyChanged, IDisposable
     {
-        private readonly ControllerSequencer controllerSequencer;
+        private readonly IControllerSequencer controllerSequencer;
         private readonly SequenceCommandLogic sequenceCommandLogic;
 
         private string positionName;
+        private TimeSpan currentCommunicationLoopCycleTime;
+        private Exception lastCommunicationLoopException;
+        private bool currentControllerConnectionState;
 
         public MainWindowViewModel()
         {
@@ -85,6 +88,32 @@ namespace RoboterApp
             StartSequenceCommand = new StartSequenceCommand(this.sequenceCommandLogic);
 
             AlarmSoundCommand = new AlarmSoundCommand(controllerSequencer);
+
+            controllerSequencer.CommunicationLoopCyleTimeChanges.Subscribe(OnCommunicationLoopCycleTimeUpdate);
+            controllerSequencer.CommunicationExceptions.Subscribe(OnCommunicationLoopExcpetion);
+            controllerSequencer.ControllerConnectionStateChanges.Subscribe(OnControllerConnectionStateChanged);
+            controllerSequencer.CommunicationLoopBlockingEvents.Subscribe(OnCommunicationLoopBlocked);
+            CurrentControllerConnectionState = controllerSequencer.CurrentlyConnectedToController;
+        }
+
+        private void OnCommunicationLoopBlocked(object parameter)
+        {
+            throw new InvalidOperationException("The communication loop is blocked");
+        }
+
+        private void OnControllerConnectionStateChanged(bool newConnectionState)
+        {
+            CurrentControllerConnectionState = newConnectionState;
+        }
+
+        private void OnCommunicationLoopExcpetion(Exception exception)
+        {
+            LastCommunicationLoopException = exception;
+        }
+
+        private void OnCommunicationLoopCycleTimeUpdate(TimeSpan timeSpan)
+        {
+            CurrentCommunicationLoopCycleTime = timeSpan;
         }
 
         public MotorPositionController OpenCloseClampPositionController { get; }
@@ -127,6 +156,38 @@ namespace RoboterApp
 
         public ObservableCollection<string> PositionNames { get; }
 
+        public TimeSpan CurrentCommunicationLoopCycleTime
+        {
+            get { return currentCommunicationLoopCycleTime; }
+            private set
+            {
+                if (value == currentCommunicationLoopCycleTime) return;
+                currentCommunicationLoopCycleTime = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public Exception LastCommunicationLoopException
+        {
+            get { return lastCommunicationLoopException; }
+            private set
+            {
+                if (value == lastCommunicationLoopException) return;
+                lastCommunicationLoopException = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool CurrentControllerConnectionState
+        {
+            get { return currentControllerConnectionState; }
+            private set
+            {
+                if (value == currentControllerConnectionState) return;
+                currentControllerConnectionState = value;
+                OnPropertyChanged();
+            }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
 

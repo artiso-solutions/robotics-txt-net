@@ -9,7 +9,7 @@ using RoboticsTxt.Lib.Commands;
 using RoboticsTxt.Lib.Components.Communicator;
 using RoboticsTxt.Lib.Contracts;
 using RoboticsTxt.Lib.Contracts.Configuration;
-using RoboticsTxt.Lib.ControllerDriver;
+using RoboticsTxt.Lib.Contracts.Exceptions;
 
 namespace RoboticsTxt.Lib.Components.Sequencer
 {
@@ -26,6 +26,7 @@ namespace RoboticsTxt.Lib.Components.Sequencer
         private readonly ControllerCommunicator controllerCommunicator;
         private readonly Dictionary<Motor, MotorPositionController> motorPositionControllers;
         private readonly PositionStorageAccessor positionStorageAccessor;
+        private readonly CommunicationLoopWatchDog communicationLoopWatchDog;
 
         private List<Position> positions;
 
@@ -43,10 +44,12 @@ namespace RoboticsTxt.Lib.Components.Sequencer
             controllerCommunicator = new ControllerCommunicator(ipAddress, controllerConfiguration);
             motorPositionControllers = new Dictionary<Motor, MotorPositionController>();
             positionStorageAccessor = new PositionStorageAccessor(applicationConfiguration);
+            communicationLoopWatchDog = new CommunicationLoopWatchDog(controllerCommunicator.CommunicationInfo.LoopReactionEvents);
 
             positions = positionStorageAccessor.LoadPositionsFromFile();
 
             controllerCommunicator.Start();
+            communicationLoopWatchDog.StartWatching();
         }
 
         /// <summary>
@@ -72,6 +75,7 @@ namespace RoboticsTxt.Lib.Components.Sequencer
                 motorPositionController.Value.Dispose();
             }
 
+            communicationLoopWatchDog.StopWatching();
             controllerCommunicator.Stop();
         }
 
@@ -124,10 +128,20 @@ namespace RoboticsTxt.Lib.Components.Sequencer
             return controllerCommunicator.UniversalInputs[(int)referenceInput].CurrentState;
         }
 
+        public bool CurrentlyConnectedToController => controllerCommunicator.CommunicationInfo.ConnectedToController;
+
         public IObservable<bool> GetDigitalInputStateChanges(DigitalInput digitalInput)
         {
             return controllerCommunicator.UniversalInputs[(int)digitalInput].StateChanges;
         }
+
+        public IObservable<TimeSpan> CommunicationLoopCyleTimeChanges => controllerCommunicator.CommunicationInfo.CommunicationLoopCycleTimeChanges;
+
+        public IObservable<Exception> CommunicationExceptions => controllerCommunicator.CommunicationInfo.CommunicationLoopExceptions;
+
+        public IObservable<bool> ControllerConnectionStateChanges => controllerCommunicator.CommunicationInfo.ControllerConnectionStateChanges;
+
+        public IObservable<object> CommunicationLoopBlockingEvents => communicationLoopWatchDog.CommunicationLoopBlockEvents;
 
         public void SaveCurrentPosition(string positionName)
         {
