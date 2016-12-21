@@ -40,7 +40,7 @@ namespace RoboticsTxt.Lib.ControllerDriver
             this.socket.ReceiveTimeout = (int)TimeSpan.FromSeconds(2).TotalMilliseconds;
             try
             {
-                var cts = new CancellationTokenSource(TimeSpan.FromSeconds(2));
+                var cts = new CancellationTokenSource(TimeSpan.FromSeconds(4));
                 Task.Run(() => this.socket.Connect(this.ipAddress, 65000), cts.Token).Wait(cts.Token);
             }
             catch (OperationCanceledException)
