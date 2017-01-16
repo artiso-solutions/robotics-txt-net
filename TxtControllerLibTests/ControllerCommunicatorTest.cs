@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Threading;
+using System.Threading.Tasks;
 using log4net;
 using log4net.Util;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

@@ -78,6 +78,7 @@
   <ItemGroup>
     <Compile Include="Commands\MotorRunDistanceCommand.cs" />
     <Compile Include="Commands\PlaySoundCommand.cs" />
+    <Compile Include="Commands\SetOutputCommand.cs" />
     <Compile Include="Commands\StartMotorCommand.cs" />
     <Compile Include="Commands\StopMotorCommand.cs" />
     <Compile Include="Components\Communicator\CommandProcessor.cs" />
@@ -104,6 +105,7 @@
     <Compile Include="Contracts\Motor.cs" />
     <Compile Include="Contracts\MotorPositionInfo.cs" />
     <Compile Include="Contracts\Direction.cs" />
+    <Compile Include="Contracts\Output.cs" />
     <Compile Include="Contracts\Position.cs" />
     <Compile Include="Contracts\Sound.cs" />
     <Compile Include="Contracts\Speed.cs" />
