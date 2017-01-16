@@ -86,6 +86,11 @@ namespace RoboticsTxt.Lib.Components.Sequencer
 
         public void StartMotor(Motor motor, Speed speed, Direction direction)
         {
+            StartMotor(motor, (short)speed, direction);
+        }
+
+        public void StartMotor(Motor motor, short speed, Direction direction)
+        {
             CheckMotorPositionMode(motor);
 
             controllerCommunicator.QueueCommand(new StartMotorCommand(motor, speed, direction));
@@ -100,12 +105,17 @@ namespace RoboticsTxt.Lib.Components.Sequencer
 
         public async Task<bool> StartMotorStopWithDigitalInputAsync(Motor motor, Speed speed, Direction direction, DigitalInput digitalInput, bool expectedInputState, TimeSpan? timeout = null)
         {
+            return await StartMotorStopWithDigitalInputAsync(motor, (short)speed, direction, digitalInput, expectedInputState, timeout);
+        }
+
+        public async Task<bool> StartMotorStopWithDigitalInputAsync(Motor motor, short speed, Direction direction, DigitalInput digitalInput, bool expectedInputState, TimeSpan? timeout = null)
+        {
             CheckMotorPositionMode(motor);
 
             return await StartMotorStopWithDigitalInputInternalAsync(motor, speed, direction, digitalInput, expectedInputState, timeout);
         }
 
-        internal async Task<bool> StartMotorStopWithDigitalInputInternalAsync(Motor motor, Speed speed, Direction direction, DigitalInput digitalInput, bool expectedInputState, TimeSpan? timeout)
+        internal async Task<bool> StartMotorStopWithDigitalInputInternalAsync(Motor motor, short speed, Direction direction, DigitalInput digitalInput, bool expectedInputState, TimeSpan? timeout)
         {
             controllerCommunicator.QueueCommand(new StartMotorCommand(motor, speed, direction));
             var reachedInput = await WaitForInputAsync(digitalInput, expectedInputState, timeout);
@@ -114,7 +124,17 @@ namespace RoboticsTxt.Lib.Components.Sequencer
             return reachedInput;
         }
 
+        internal async Task<bool> StartMotorStopWithDigitalInputInternalAsync(Motor motor, Speed speed, Direction direction, DigitalInput digitalInput, bool expectedInputState, TimeSpan? timeout)
+        {
+            return await StartMotorStopWithDigitalInputInternalAsync(motor, (short)speed, direction, digitalInput, expectedInputState, timeout);
+        }
+
         public async Task StartMotorStopAfterTimeSpanAsync(Motor motor, Speed speed, Direction direction, TimeSpan stopAfterTimeSpan)
+        {
+            await StartMotorStopAfterTimeSpanAsync(motor, (short) speed, direction, stopAfterTimeSpan);
+        }
+
+        public async Task StartMotorStopAfterTimeSpanAsync(Motor motor, short speed, Direction direction, TimeSpan stopAfterTimeSpan)
         {
             CheckMotorPositionMode(motor);
 
@@ -122,6 +142,11 @@ namespace RoboticsTxt.Lib.Components.Sequencer
         }
 
         internal async Task StartMotorStopAfterTimeSpanInternalAsync(Motor motor, Speed speed, Direction direction, TimeSpan stopAfterTimeSpan)
+        {
+            await StartMotorStopAfterTimeSpanInternalAsync(motor, (short) speed, direction, stopAfterTimeSpan);
+        }
+
+        internal async Task StartMotorStopAfterTimeSpanInternalAsync(Motor motor, short speed, Direction direction, TimeSpan stopAfterTimeSpan)
         {
             controllerCommunicator.QueueCommand(new StartMotorCommand(motor, speed, direction));
             await Task.Delay(stopAfterTimeSpan);
