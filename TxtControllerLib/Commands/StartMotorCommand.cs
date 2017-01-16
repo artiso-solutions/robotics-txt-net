@@ -9,11 +9,15 @@ namespace RoboticsTxt.Lib.Commands
 {
     internal class StartMotorCommand : IControllerCommand
     {
-        private readonly Speed speed;
+        private readonly short speed;
         private readonly Direction direction;
 
-        public StartMotorCommand(Motor motor, Speed speed, Direction direction)
+        public StartMotorCommand(Motor motor, short speed, Direction direction)
         {
+            if (speed < 0 || speed > 512)
+            {
+                throw new ArgumentOutOfRangeException("Parameter \"speed\" is out of range. (min: 0, max: 512)");
+            }
             this.Motor = motor;
             this.speed = speed;
             this.direction = direction;
@@ -26,7 +30,7 @@ namespace RoboticsTxt.Lib.Commands
             if (message == null) throw new ArgumentNullException(nameof(message));
 
             var motorIndex = (int)this.Motor;
-            var speedValue = (short)this.speed;
+            var speedValue = this.speed;
 
             switch (this.direction)
             {
