@@ -79,6 +79,11 @@ namespace RoboticsTxt.Lib.Components.Sequencer
             controllerCommunicator.Stop();
         }
 
+        public void SetOutput(Output output, short outputValue)
+        {
+            this.controllerCommunicator.QueueCommand(new SetOutputCommand(output, outputValue));
+        }
+
         public void StartMotor(Motor motor, Speed speed, Direction direction)
         {
             CheckMotorPositionMode(motor);
