@@ -12,13 +12,13 @@ namespace RoboticsTxt.Lib.Components.Sequencer
 
         private readonly IObservable<object> communicationLoopReactionEvents;
 
-        private Task observerTask;
         private bool loopBlocking;
         private readonly object loopBlockingLock;
 
         private readonly CancellationTokenSource cancellationTokenSource;
 
         private IDisposable cycleTimeChangesSubscription;
+        private Timer watchDogTimer;
 
         public CommunicationLoopWatchDog(IObservable<object> communicationLoopReactionEvents)
         {
@@ -33,17 +33,13 @@ namespace RoboticsTxt.Lib.Components.Sequencer
         public void StartWatching()
         {
             cycleTimeChangesSubscription = communicationLoopReactionEvents.Subscribe(OnCommunicationLoopReaction);
-            observerTask = Task.Run(() => WatchDogLoop(cancellationTokenSource.Token));
+            watchDogTimer = new Timer(CheckIfTimedOut, null, TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(5));
         }
 
         public void StopWatching()
         {
             cancellationTokenSource.Cancel();
-            while (!observerTask.IsCompleted)
-            {
-                Task.Delay(TimeSpan.FromMilliseconds(100)).Wait();
-            }
-
+            watchDogTimer.Dispose();
             cycleTimeChangesSubscription.Dispose();
         }
 
@@ -55,29 +51,17 @@ namespace RoboticsTxt.Lib.Components.Sequencer
             }
         }
 
-        private void WatchDogLoop(CancellationToken cancellationToken)
+        private void CheckIfTimedOut(object state)
         {
-            while (!cancellationToken.IsCancellationRequested)
+            lock (loopBlockingLock)
             {
-                try
+                if (loopBlocking)
                 {
-                    Task.Delay(TimeSpan.FromSeconds(5), cancellationToken).Wait(cancellationToken);
+                    Task.Run(() => communicationLoopBlockSubject.OnNext(null));
                 }
-                catch (OperationCanceledException)
+                else
                 {
-                    continue;
-                }
-                
-                lock (loopBlockingLock)
-                {
-                    if (loopBlocking)
-                    {
-                        Task.Run(() => communicationLoopBlockSubject.OnNext(null));
-                    }
-                    else
-                    {
-                        loopBlocking = true;
-                    }
+                    loopBlocking = true;
                 }
             }
         }
