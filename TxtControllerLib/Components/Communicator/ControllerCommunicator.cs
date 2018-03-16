@@ -55,13 +55,18 @@ namespace RoboticsTxt.Lib.Components.Communicator
 
             this.communicationLoopTask = Task.Run(() => this.CommunicationLoop(token), this.cancellationTokenSource.Token);
 
-            waitForRunningLoop.WaitOne();
-            Task.Delay(10, this.cancellationTokenSource.Token).Wait(this.cancellationTokenSource.Token);
-            if (this.communicationLoopTask.IsFaulted)
+            var signal = waitForRunningLoop.WaitOne(TimeSpan.FromSeconds(10));
+            // timeout case
+            if (!signal)
             {
-                this.Stop();
-                throw new CommunicationFailedException("Unable to connect to the controller", this.communicationLoopTask.Exception?.InnerException);
-            }
+                if (this.communicationLoopTask.IsFaulted)
+                {
+                    this.Stop();
+                    throw new CommunicationFailedException("Unable to connect to the controller", this.communicationLoopTask.Exception?.InnerException);
+                }
+
+                throw new CommunicationFailedException("Connection establish timed out without an error.");
+            }           
         }
 
         public void Stop()
